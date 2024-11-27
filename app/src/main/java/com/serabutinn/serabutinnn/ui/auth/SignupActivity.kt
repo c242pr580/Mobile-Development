@@ -1,9 +1,14 @@
 package com.serabutinn.serabutinnn.ui.auth
 
+import android.R
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +19,8 @@ import com.serabutinn.serabutinnn.databinding.ActivitySignupBinding
 import com.serabutinn.serabutinnn.utils.SessionManager
 import com.serabutinn.serabutinnn.viewmodel.SignupViewModel
 
-class SignupActivity : AppCompatActivity() {
+
+class SignupActivity  : AppCompatActivity(){
     private lateinit var binding: ActivitySignupBinding
     private val viewModel by viewModels<SignupViewModel>()
 
@@ -27,6 +33,22 @@ class SignupActivity : AppCompatActivity() {
         if (!token.isNullOrBlank()) {
             navigateToHome()
         }
+        // Spinner Drop down elements
+        val categories: MutableList<String> = ArrayList()
+        categories.add("Customer")
+        categories.add("Mitra")
+
+
+
+        // Creating adapter for spinner
+        val dataAdapter = ArrayAdapter(this, R.layout.simple_spinner_item, categories)
+
+        // attaching data adapter to spinner
+        binding.spinner.adapter = dataAdapter
+
+
+
+
 
         viewModel.signupResult.observe(this) {
             when (it) {
@@ -78,7 +100,7 @@ class SignupActivity : AppCompatActivity() {
         val pwd = binding.txtPass.text.toString()
         val name = binding.txtInputName.text.toString()
         val username = binding.txtInputUsername.text.toString()
-        val roleId = "0"
+        val roleId = if(binding.spinner.selectedItem.toString()=="Customer") "1" else "0"
         val location = binding.txtInputLocation.text.toString()
         val phone = binding.txtInputPhone.text.toString()
         viewModel.signupUser(email = email, pwd = pwd,name = name,username = username,role_id = roleId,location = location,phone = phone)

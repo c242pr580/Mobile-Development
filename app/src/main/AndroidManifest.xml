@@ -17,20 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.serabutinn.serabutinnn.ui.MainActivity2"
+            android:name=".ui.DetailJobActivity"
             android:exported="false" />
         <activity
-            android:name="com.serabutinn.serabutinnn.ui.HomeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_home" />
-        <activity
-            android:name="com.serabutinn.serabutinnn.ui.auth.SignupActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.serabutinn.serabutinnn.ui.auth.LogoutActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.serabutinn.serabutinnn.ui.auth.MainActivity"
+            android:name=".ui.MainActivity2"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,6 +28,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".ui.auth.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.LogoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.auth.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

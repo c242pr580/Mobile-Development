@@ -1,5 +1,5 @@
 package com.serabutinn.serabutinnn.utils
 
 object Constant {
-    const val BASE_URL = "http:192.168.101.78:8080"
+    const val BASE_URL = "https://serabutinn-1079606741730.asia-southeast2.run.app/"
 }

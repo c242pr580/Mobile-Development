@@ -1,6 +1,7 @@
 package com.serabutinn.serabutinnn.ui
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -19,6 +20,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
+        enableEdgeToEdge()
 
         val navView: BottomNavigationView = binding.navView
 

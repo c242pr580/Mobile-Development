@@ -23,4 +23,5 @@
     <string name="don_t_have_account">Don\'t Have account?</string>
     <string name="create_an_account">Create an Account!</string>
     <string name="fill_your_information_below_nor_else">Fill your information below\nOr else!</string>
+    <string name="pick_a_role">Pick a Role</string>
 </resources>

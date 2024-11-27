@@ -70,9 +70,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun doLogin() {
-        val email = binding.txtInputEmail.text.toString()
-        val pwd = binding.txtPass.text.toString()
-        viewModel.loginUser(email = email, pwd = pwd)
+        navigateToHome()
+//        val email = binding.txtInputEmail.text.toString()
+//        val pwd = binding.txtPass.text.toString()
+//        viewModel.loginUser(email = email, pwd = pwd)
     }
 
     fun doSignup() {
