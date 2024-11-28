@@ -1,34 +1,40 @@
 package com.serabutinn.serabutinnn.ui.auth
 
-import android.R
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.serabutinn.serabutinnn.data.api.response.BaseResponse
-import com.serabutinn.serabutinnn.data.api.response.LoginResponse
-import com.serabutinn.serabutinnn.data.api.response.SignupResponse
 import com.serabutinn.serabutinnn.databinding.ActivitySignupBinding
+import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.utils.SessionManager
 import com.serabutinn.serabutinnn.viewmodel.SignupViewModel
+import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 
 class SignupActivity  : AppCompatActivity(){
     private lateinit var binding: ActivitySignupBinding
-    private val viewModel by viewModels<SignupViewModel>()
+    private val viewModel by viewModels<SignupViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        viewModel.getSession().observe(this) { user ->
+            Log.e("token",user.toString())
+            if (user.isLogin) {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+            }
+        }
         val token = SessionManager.getToken(this)
         if (!token.isNullOrBlank()) {
             navigateToHome()
@@ -41,46 +47,41 @@ class SignupActivity  : AppCompatActivity(){
 
 
         // Creating adapter for spinner
-        val dataAdapter = ArrayAdapter(this, R.layout.simple_spinner_item, categories)
+        val dataAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
 
         // attaching data adapter to spinner
         binding.spinner.adapter = dataAdapter
-
-
-
-
-
-        viewModel.signupResult.observe(this) {
-            when (it) {
-                is BaseResponse.Loading -> {
-                    showLoading()
-                }
-
-                is BaseResponse.Success -> {
-                    stopLoading()
-                    processSignup(it.data)
-                }
-
-                is BaseResponse.Error -> {
-                    processError(it.msg)
-                }
-                else -> {
-                    stopLoading()
-                }
+        viewModel.signed.observe(this) {
+            stopLoading()
+            if (it) {
+                Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            else{
+                AlertDialog.Builder(this).apply {
+                    setTitle("Oops!")
+                    setMessage("Gagal Register")
+                    setPositiveButton("OK") { _, _ ->
+                        finish()
+                    }
+                }.show()
             }
         }
-
+        viewModel.error.observe(this) {
+            stopLoading()
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
         binding.btnLogin.setOnClickListener {
             doLogin()
-
         }
-
         binding.btnRegister.setOnClickListener {
+            showLoading()
             doSignup()
         }
-
     }
-
     private fun navigateToHome() {
         val intent = Intent(this, LogoutActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -88,54 +89,30 @@ class SignupActivity  : AppCompatActivity(){
         startActivity(intent)
     }
 
-    fun doLogin() {
+    private fun doLogin() {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
         startActivity(intent)
     }
 
-    fun doSignup() {
+    private fun doSignup() {
         val email = binding.txtInputEmail.text.toString()
         val pwd = binding.txtPass.text.toString()
         val name = binding.txtInputName.text.toString()
         val username = binding.txtInputUsername.text.toString()
-        val roleId = if(binding.spinner.selectedItem.toString()=="Customer") "1" else "0"
+        val roleId = if(binding.spinner.selectedItem.toString()=="Customer") 1 else 2
         val location = binding.txtInputLocation.text.toString()
         val phone = binding.txtInputPhone.text.toString()
-        viewModel.signupUser(email = email, pwd = pwd,name = name,username = username,role_id = roleId,location = location,phone = phone)
+        viewModel.signUp(email = email, password = pwd,name = name,username = username,roleid = roleId,location = location,phone = phone)
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         binding.prgbar.visibility = View.VISIBLE
     }
 
-    fun stopLoading() {
+    private fun stopLoading() {
         binding.prgbar.visibility = View.GONE
     }
 
-    fun processLogin(data: LoginResponse?) {
-        showToast("Success:" + data?.message)
-        if (!data?.data?.token.isNullOrEmpty()) {
-            data?.data?.token?.let { SessionManager.saveAuthToken(this, it) }
-            navigateToHome()
-        }
-    }
-
-    fun processSignup(data: SignupResponse?) {
-        if (data?.code!=201) {
-            showToast("Success:" + data?.message)
-            doLogin()
-        }else{
-            processError(data.message)
-        }
-    }
-
-    fun processError(msg: String?) {
-        showToast("Error:" + msg)
-    }
-
-    fun showToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
 }

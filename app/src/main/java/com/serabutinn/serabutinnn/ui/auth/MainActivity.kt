@@ -7,51 +7,61 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.data.api.response.BaseResponse
-import com.serabutinn.serabutinnn.data.api.response.LoginResponse
+import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
 import com.serabutinn.serabutinnn.databinding.ActivityMainBinding
 import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.utils.SessionManager
 import com.serabutinn.serabutinnn.viewmodel.LoginViewModel
+import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by viewModels<LoginViewModel>()
+    private val viewModel by viewModels<LoginViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        viewModel.getSession().observe(this) { user ->
+            Log.e("token", user.toString())
+            if (user.isLogin) {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+            }
+        }
         val token = SessionManager.getToken(this)
         if (!token.isNullOrBlank()) {
-           navigateToHome()
+            navigateToHome()
+        }
+        viewModel.message.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
 
-        viewModel.loginResult.observe(this) {
-            when (it) {
-                is BaseResponse.Loading -> {
-                    showLoading()
-                }
-
-                is BaseResponse.Success -> {
-                    stopLoading()
-                    processLogin(it.data)
-                }
-
-                is BaseResponse.Error -> {
-                    processError(it.msg)
-                }
-                else -> {
-                    stopLoading()
-                }
+        viewModel.loggedIn.observe(this) {
+            if (it) {
+                stopLoading()
+                navigateToHome()
+            } else {
+                stopLoading()
+                AlertDialog.Builder(this).apply {
+                    setTitle("Oops!")
+                    setMessage("Login Gagal")
+                    setPositiveButton("OK") { _, _ ->
+                    }
+                }.show()
             }
         }
 
         binding.btnLogin.setOnClickListener {
+            showLoading()
             doLogin()
 
         }
@@ -69,44 +79,24 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun doLogin() {
-        navigateToHome()
-//        val email = binding.txtInputEmail.text.toString()
-//        val pwd = binding.txtPass.text.toString()
-//        viewModel.loginUser(email = email, pwd = pwd)
+    private fun doLogin() {
+        val email = binding.txtInputEmail.text.toString()
+        val pwd = binding.txtPass.text.toString()
+        viewModel.loginCustomer(email = email, password = pwd)
     }
 
-    fun doSignup() {
+    private fun doSignup() {
         val intent = Intent(this, SignupActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
         startActivity(intent)
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         binding.prgbar.visibility = View.VISIBLE
     }
 
-    fun stopLoading() {
+    private fun stopLoading() {
         binding.prgbar.visibility = View.GONE
     }
-
-    fun processLogin(data: LoginResponse?) {
-        showToast("Success:" + data?.message)
-        if (!data?.data?.token.isNullOrEmpty()) {
-            Log.d("TAG", "processLogin: " + data?.data)
-            data?.data?.token?.let { SessionManager.saveAuthToken(this, it) }
-            navigateToHome()
-        }
-    }
-
-    fun processError(msg: String?) {
-        showToast("Error:" + msg)
-    }
-
-    fun showToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
-
-
 }

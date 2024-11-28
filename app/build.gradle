@@ -46,6 +46,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.8.3'
     implementation 'androidx.activity:activity:1.9.3'
     implementation 'com.google.android.gms:play-services-maps:19.0.0'
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation 'androidx.datastore:datastore-preferences-core-jvm:1.1.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

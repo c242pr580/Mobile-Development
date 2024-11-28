@@ -13,6 +13,8 @@ class DetailJobActivity : AppCompatActivity() {
         binding = ActivityDetailJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
+
         binding.judulJob.text
         binding.namaCust.text
         binding.biaya.text

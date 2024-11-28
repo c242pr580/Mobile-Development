@@ -1,6 +1,7 @@
 package com.serabutinn.serabutinnn.data.api.request
 
 
+import android.annotation.SuppressLint
 import com.google.gson.annotations.SerializedName
 
 data class LoginRequest(

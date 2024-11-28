@@ -6,11 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.data.api.response.HomeResponse
 import com.serabutinn.serabutinnn.databinding.ItemsBinding
 import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter.MyViewHolder.Companion.DIFF_CALLBACK
 
-class HomeAdapter : ListAdapter<HomeResponse.Data, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class HomeAdapter : ListAdapter<DataAllJobs, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,25 +24,25 @@ class HomeAdapter : ListAdapter<HomeResponse.Data, HomeAdapter.MyViewHolder>(DIF
 
     class MyViewHolder(private val binding: ItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: HomeResponse.Data) {
-            binding.tvJudul.text = data.isinya
-//            Glide.with(binding.root)
-//                .load(data.image)
-//                .centerCrop()
-//                .into(binding.imgJobs)
+        fun bind(data: DataAllJobs) {
+            binding.tvJudul.text = data.title
+            Glide.with(binding.root)
+                .load(data.image)
+                .centerCrop()
+                .into(binding.imgJobs)
         }
         companion object {
-            val DIFF_CALLBACK = object : DiffUtil.ItemCallback<HomeResponse.Data>() {
+            val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataAllJobs>() {
                 override fun areItemsTheSame(
-                    oldItem: HomeResponse.Data,
-                    newItem: HomeResponse.Data
+                    oldItem: DataAllJobs,
+                    newItem: DataAllJobs
                 ): Boolean {
                     return oldItem == newItem
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: HomeResponse.Data,
-                    newItem: HomeResponse.Data
+                    oldItem: DataAllJobs,
+                    newItem: DataAllJobs
                 ): Boolean {
                     return oldItem == newItem
                 }

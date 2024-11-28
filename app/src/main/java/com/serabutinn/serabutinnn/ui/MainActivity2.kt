@@ -3,23 +3,36 @@ package com.serabutinn.serabutinnn.ui
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivityMain2Binding
 import com.serabutinn.serabutinnn.ui.auth.MainActivity
 import com.serabutinn.serabutinnn.ui.auth.SignupActivity
+import com.serabutinn.serabutinnn.viewmodel.LoginViewModel
+import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class MainActivity2 : AppCompatActivity() {
 
     private lateinit var binding: ActivityMain2Binding
+
+    private val viewModel by viewModels<LoginViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMain2Binding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        viewModel.getSession().observe(this) { user ->
+            Log.e("token",user.toString())
+            if (user.isLogin) {
+                startActivity(Intent(this, HomeActivity::class.java))
+                finish()
+            }
+        }
 
         binding.btnregisters.setOnClickListener {navigateToRegis()}
         binding.btnlogins.setOnClickListener {navigateToLogin()}

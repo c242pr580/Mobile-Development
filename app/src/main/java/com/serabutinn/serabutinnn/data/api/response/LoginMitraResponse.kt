@@ -28,6 +28,9 @@ data class DataMitra(
 	@field:SerializedName("mitra_id")
 	val mitraId: String? = null,
 
+	@field:SerializedName("customer_id")
+	val customerId: String? = null,
+
 	@field:SerializedName("name")
 	val name: String? = null,
 
