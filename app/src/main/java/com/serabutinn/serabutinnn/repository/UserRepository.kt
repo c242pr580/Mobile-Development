@@ -1,17 +1,17 @@
 package com.serabutinn.serabutinnn.repository
 
+import com.serabutinn.serabutinnn.data.api.ApiClient
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.UserPreference
 import com.serabutinn.serabutinnn.data.api.methods.UserApi
-import com.serabutinn.serabutinnn.data.api.request.LoginRequest
-import com.serabutinn.serabutinnn.data.api.request.SignupRequest
-import com.serabutinn.serabutinnn.data.api.request.UpdateBioRequest
-import com.serabutinn.serabutinnn.data.api.response.BiodataResponse
-import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
-import com.serabutinn.serabutinnn.data.api.response.LoginMitraResponse
-import com.serabutinn.serabutinnn.data.api.response.SignupResponse
-import com.serabutinn.serabutinnn.data.api.response.UpdateBioResponse
+import com.serabutinn.serabutinnn.data.api.response.CreateJobsResponse
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class UserRepository private constructor(
@@ -29,30 +29,6 @@ class UserRepository private constructor(
     suspend fun logout() {
         userPreference.logout()
     }
-
-//    suspend fun loginCustomer(email: String, password: String): Response<LoginCustResponse>? {
-//        return userApi.loginCustomer(email = email, password = password)
-//    }
-//
-//    suspend fun loginMitra(loginRequest: LoginRequest): Response<LoginMitraResponse>? {
-//        return userApi.loginMitra(loginRequest = loginRequest)
-//    }
-//
-//    suspend fun signupUser(signupRequest: SignupRequest): Response<SignupResponse>? {
-//        return userApi.signupUser(signupRequest = signupRequest)
-//    }
-//
-//    suspend fun getBiodata(token: String): Response<BiodataResponse>? {
-//        return userApi.getBiodata(token = token)
-//    }
-//
-//    suspend fun updateBiodata(
-//        updateBioRequest: UpdateBioRequest,
-//        token: String
-//    ): Response<UpdateBioResponse>? {
-//        return userApi.updateBiodata(updateBioRequest = updateBioRequest, token = token)
-//
-//    }
 
     companion object {
         @Volatile

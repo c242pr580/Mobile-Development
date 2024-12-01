@@ -1,4 +1,4 @@
-package com.serabutinn.serabutinnn.ui
+package com.serabutinn.serabutinnn.ui.auth
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
@@ -7,15 +7,13 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityMain2Binding
-import com.serabutinn.serabutinnn.ui.auth.MainActivity
-import com.serabutinn.serabutinnn.ui.auth.SignupActivity
+import com.serabutinn.serabutinnn.ui.HomeActivity
+import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.viewmodel.LoginViewModel
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class MainActivity2 : AppCompatActivity() {
-
     private lateinit var binding: ActivityMain2Binding
-
     private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -27,16 +25,23 @@ class MainActivity2 : AppCompatActivity() {
         setContentView(view)
 
         viewModel.getSession().observe(this) { user ->
-            Log.e("token",user.toString())
+            Log.e("token", user.roleid.toString())
             if (user.isLogin) {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+                if (user.roleid == "1") {
+                    val intent = Intent(this, HomeCustomerActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    startActivity(intent)
+                }
             }
         }
-
-        binding.btnregisters.setOnClickListener {navigateToRegis()}
-        binding.btnlogins.setOnClickListener {navigateToLogin()}
-
+        binding.btnregisters.setOnClickListener { navigateToRegis() }
+        binding.btnlogins.setOnClickListener { navigateToLogin() }
     }
 
     private fun navigateToLogin() {

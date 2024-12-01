@@ -5,7 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.serabutinn.serabutinnn.data.api.methods.Injection
 import com.serabutinn.serabutinnn.repository.UserRepository
-import com.serabutinn.serabutinnn.ui.home.HomeViewModel
+import com.serabutinn.serabutinnn.ui.customerpage.AddJobsViewModel
+import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerViewModel
+import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerViewModel
+import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileViewModel
+import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardViewModel
+import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeViewModel
 
 class ViewModelFactory (private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -20,6 +25,21 @@ class ViewModelFactory (private val repository: UserRepository) : ViewModelProvi
             }
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
                 HomeViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(HomeCustomerViewModel::class.java) -> {
+                HomeCustomerViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(AddJobsViewModel::class.java) -> {
+                AddJobsViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DetailJobCustomerViewModel::class.java) -> {
+                DetailJobCustomerViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> {
+                DashboardViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

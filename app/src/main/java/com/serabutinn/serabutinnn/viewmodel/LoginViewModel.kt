@@ -1,6 +1,5 @@
 package com.serabutinn.serabutinnn.viewmodel
 
-import android.R.attr
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +8,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.serabutinn.serabutinnn.data.api.ApiClient
 import com.serabutinn.serabutinnn.data.api.UserModel
-import com.serabutinn.serabutinnn.data.api.request.LoginRequest
 import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -46,23 +44,26 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                 call: Call<LoginCustResponse>,
                 response: Response<LoginCustResponse>
             ) {
-                Log.e("success", response.toString())
                 if (!response.isSuccessful) {
                     _loggedIn.value = false
-                    _message.value = response.message().toString()
-                } else {
-                    saveSession(
-                        UserModel(
-                            email,
-                            response.body()?.data?.customerId.toString(),
-                            response.body()?.data?.roleId.toString(),
-                            response.body()?.data?.token.toString(),
-                            true
-                        )
-                    )
-                    _loggedIn.value = true
+                    _message.value = response.message()
+                    return
                 }
+                Log.e("success", response.body()?.data?.token.toString())
+                val userdata = UserModel(
+                    email,
+                    response.body()?.data?.customerId.toString(),
+                    response.body()?.data?.roleId.toString(),
+                    response.body()?.data?.token.toString(),
+                    true,
+                    response.body()?.data?.name.toString(),
+                    response.body()?.data?.customerId.toString()
+                )
+                Log.e("userdata",userdata.toString())
+                saveSession(userdata)
+                _loggedIn.value=true
             }
+
         })
     }
 }

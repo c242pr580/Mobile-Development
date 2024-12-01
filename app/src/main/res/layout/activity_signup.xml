@@ -73,8 +73,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/pucet1"
-                android:maxLength="20"
-                android:maxLines="1" />
+                android:maxLength="50"
+                android:maxLines="1"
+                android:singleLine="true"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -122,11 +123,12 @@
                 android:layout_height="wrap_content"
                 android:background="@color/pucet1"
                 android:maxLength="20"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/txtLay_UsernameAdd"
+            android:id="@+id/txtLay_username"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -140,12 +142,13 @@
             app:layout_constraintWidth_percent="0.9">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtInput_Username"
+                android:id="@+id/txtInputUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/pucet1"
                 android:maxLength="20"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -159,7 +162,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtLay_UsernameAdd"
+            app:layout_constraintTop_toBottomOf="@+id/txtLay_username"
             app:layout_constraintWidth_percent="0.9">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -168,7 +171,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/pucet1"
                 android:maxLength="20"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -191,7 +195,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/pucet1"
                 android:maxLength="20"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView

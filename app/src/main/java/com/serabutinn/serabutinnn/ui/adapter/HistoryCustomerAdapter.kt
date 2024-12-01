@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.serabutinn.serabutinnn.data.api.response.DataJobsMitra
-import com.serabutinn.serabutinnn.data.api.response.ListJobsMitraResponse
+import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.databinding.ItemsBinding
-import com.serabutinn.serabutinnn.ui.DetailJobActivity
-import com.serabutinn.serabutinnn.ui.adapter.HistoryAdapter.MyViewHolder.Companion.DIFF_CALLBACK
+import com.serabutinn.serabutinnn.ui.adapter.HistoryCustomerAdapter.MyViewHolder.Companion.DIFF_CALLBACK
+import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerActivity
 
-class HistoryAdapter : ListAdapter<DataJobsMitra, HistoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class HistoryCustomerAdapter : ListAdapter<DataJobsCustomer, HistoryCustomerAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,9 +25,9 @@ class HistoryAdapter : ListAdapter<DataJobsMitra, HistoryAdapter.MyViewHolder>(D
 
     class MyViewHolder(private val binding: ItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: DataJobsMitra) {
+        fun bind(data: DataJobsCustomer) {
             binding.root.setOnClickListener {
-                val intent = Intent(binding.root.context, DetailJobActivity::class.java)
+                val intent = Intent(binding.root.context, DetailJobCustomerActivity::class.java)
                 intent.putExtra("id", data.jobId)
                 binding.root.context.startActivity(intent)
             }
@@ -39,17 +38,17 @@ class HistoryAdapter : ListAdapter<DataJobsMitra, HistoryAdapter.MyViewHolder>(D
                 .into(binding.imgJobs)
         }
         companion object {
-            val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataJobsMitra>() {
+            val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataJobsCustomer>() {
                 override fun areItemsTheSame(
-                    oldItem: DataJobsMitra,
-                    newItem: DataJobsMitra
+                    oldItem: DataJobsCustomer,
+                    newItem: DataJobsCustomer
                 ): Boolean {
                     return oldItem == newItem
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: DataJobsMitra,
-                    newItem: DataJobsMitra
+                    oldItem: DataJobsCustomer,
+                    newItem: DataJobsCustomer
                 ): Boolean {
                     return oldItem == newItem
                 }

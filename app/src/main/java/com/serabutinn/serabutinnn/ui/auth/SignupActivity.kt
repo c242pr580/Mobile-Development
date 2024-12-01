@@ -16,8 +16,7 @@ import com.serabutinn.serabutinnn.utils.SessionManager
 import com.serabutinn.serabutinnn.viewmodel.SignupViewModel
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
-
-class SignupActivity  : AppCompatActivity(){
+class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     private val viewModel by viewModels<SignupViewModel> {
         ViewModelFactory.getInstance(this)
@@ -29,21 +28,16 @@ class SignupActivity  : AppCompatActivity(){
         val view = binding.root
         setContentView(view)
         viewModel.getSession().observe(this) { user ->
-            Log.e("token",user.toString())
+            Log.e("token", user.toString())
             if (user.isLogin) {
                 startActivity(Intent(this, HomeActivity::class.java))
                 finish()
             }
         }
-        val token = SessionManager.getToken(this)
-        if (!token.isNullOrBlank()) {
-            navigateToHome()
-        }
         // Spinner Drop down elements
         val categories: MutableList<String> = ArrayList()
         categories.add("Customer")
         categories.add("Mitra")
-
 
 
         // Creating adapter for spinner
@@ -54,13 +48,12 @@ class SignupActivity  : AppCompatActivity(){
         viewModel.signed.observe(this) {
             stopLoading()
             if (it) {
-                Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-            }
-            else{
+            } else {
                 AlertDialog.Builder(this).apply {
                     setTitle("Oops!")
                     setMessage("Gagal Register")
@@ -82,12 +75,6 @@ class SignupActivity  : AppCompatActivity(){
             doSignup()
         }
     }
-    private fun navigateToHome() {
-        val intent = Intent(this, LogoutActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
-        startActivity(intent)
-    }
 
     private fun doLogin() {
         val intent = Intent(this, MainActivity::class.java)
@@ -101,10 +88,18 @@ class SignupActivity  : AppCompatActivity(){
         val pwd = binding.txtPass.text.toString()
         val name = binding.txtInputName.text.toString()
         val username = binding.txtInputUsername.text.toString()
-        val roleId = if(binding.spinner.selectedItem.toString()=="Customer") 1 else 2
+        val roleId = if (binding.spinner.selectedItem.toString() == "Customer") 1 else 2
         val location = binding.txtInputLocation.text.toString()
         val phone = binding.txtInputPhone.text.toString()
-        viewModel.signUp(email = email, password = pwd,name = name,username = username,roleid = roleId,location = location,phone = phone)
+        viewModel.signUp(
+            email = email,
+            password = pwd,
+            name = name,
+            username = username,
+            roleid = roleId,
+            location = location,
+            phone = phone
+        )
     }
 
     private fun showLoading() {

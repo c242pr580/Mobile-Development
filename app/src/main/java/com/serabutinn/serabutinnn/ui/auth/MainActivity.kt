@@ -9,10 +9,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.serabutinn.serabutinnn.data.api.response.BaseResponse
-import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
 import com.serabutinn.serabutinnn.databinding.ActivityMainBinding
 import com.serabutinn.serabutinnn.ui.HomeActivity
+import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.utils.SessionManager
 import com.serabutinn.serabutinnn.viewmodel.LoginViewModel
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         viewModel.getSession().observe(this) { user ->
-            Log.e("token", user.toString())
+            Log.e("token123", user.token.toString())
             if (user.isLogin) {
                 startActivity(Intent(this, HomeActivity::class.java))
                 finish()
@@ -73,10 +72,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToHome() {
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
-        startActivity(intent)
+        viewModel.getSession().observe(this) { user ->
+            Log.e("token12", (user.roleid == "1").toString())
+            if (user.roleid == "1") {
+                val intent = Intent(this, HomeCustomerActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
+            } else if (user.roleid == "2") {
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
+            }
+        }
     }
 
     private fun doLogin() {

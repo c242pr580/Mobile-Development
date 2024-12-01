@@ -3,7 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.serabutinn.serabutinnn">
 
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:allowBackup="true"
@@ -17,10 +26,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.customerpage.DetailJobCustomerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.customerpage.AddJobsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.DetailJobActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.MainActivity2"
+            android:name=".ui.auth.MainActivity2"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,11 +51,11 @@
             android:name=".ui.auth.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.auth.LogoutActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.auth.MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".ui.customerpage.HomeCustomerActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

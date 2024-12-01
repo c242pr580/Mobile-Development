@@ -2,23 +2,23 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home_customer"
+    android:id="@+id/customer_navigation">
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.serabutinn.serabutinnn.ui.mitrapage.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_dashboard2"
         android:name="com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_notifications2"
         android:name="com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/navigation_home_customer"
+        android:name="com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home_customer"/>
+
 </navigation>

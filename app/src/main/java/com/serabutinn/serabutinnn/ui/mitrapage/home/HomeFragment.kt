@@ -1,5 +1,6 @@
-package com.serabutinn.serabutinnn.ui.home
+package com.serabutinn.serabutinnn.ui.mitrapage.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,15 +36,21 @@ class HomeFragment : Fragment() {
         return root
 
     }
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Observe LiveData from the ViewModel
+        viewModel.getSession().observe(viewLifecycleOwner) { user ->
+            viewModel.findJobs(user)
+            binding.tvHiNama.text="Hi, ${user.name}"
+        }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             showLoading(isLoading)
         }
         viewModel.message.observe(viewLifecycleOwner) { message ->
             showError(message)
         }
+        viewModel.data.observe(viewLifecycleOwner) { data ->setJobsData(data)}
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvJobs.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)

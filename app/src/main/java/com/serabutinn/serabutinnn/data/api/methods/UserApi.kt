@@ -1,4 +1,5 @@
 package com.serabutinn.serabutinnn.data.api.methods
+import com.google.gson.annotations.SerializedName
 import com.serabutinn.serabutinnn.data.api.request.CreateJobsRequest
 import com.serabutinn.serabutinnn.data.api.request.CreatePaymentRequest
 import com.serabutinn.serabutinnn.data.api.request.UpdateBioRequest
@@ -25,14 +26,16 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface UserApi {
-    @FormUrlEncoded
+
     @POST("/login")
+    @FormUrlEncoded
     fun loginCustomer(
         @Field("email") email: String,
         @Field("password") password: String
@@ -44,8 +47,9 @@ interface UserApi {
         @Field("password") password: String
     ): Call<LoginMitraResponse>
 
+
+    @POST("/register")
     @FormUrlEncoded
-    @POST("/signup")
     fun signupUser(
         @Field("username") username: String,
         @Field("name") name: String,
@@ -53,33 +57,37 @@ interface UserApi {
         @Field("password") password: String,
         @Field("phone") phone: String,
         @Field("location") location: String,
-        @Field("roleid") roleid: Int
+        @Field("role_id") roleid: String
     ): Call<SignupResponse>
 
     @GET("/biodata")
     fun getBiodata(
-        @Header("Auth") token: String
+        @Header("Authorization") token: String
     ): Call<BiodataResponse>
 
     @Multipart
     @POST("/biodata/update")
     fun updateBiodata(
         @Body updateBioRequest: UpdateBioRequest,
-        @Header("Auth") token: String
+        @Header("Authorization") token: String
     ): Call<UpdateBioResponse>
 
     @Multipart
     @POST("/customer/jobs/create")
     fun createJob(
-        @Header("Auth") token: String,
-        @Body createJobRequest: CreateJobsRequest,
-        @Part image: MultipartBody.Part
+        @Header("Authorization") token: String,
+        @Part("title") title: String,
+        @Part("description") description: String,
+        @Part("deadline") deadline: String,
+        @Part("cost") price: Int,
+        @Part("location") location: String,
+        @Part image: MultipartBody.Part?
     ): Call<CreateJobsResponse>
 
     @Multipart
     @POST("/customer/jobs/update/{job_id}")
     fun updateJob(
-        @Header("Auth") token: String,
+        @Header("Authorization") token: String,
         @Body createJobRequest: CreateJobsRequest,
         @Part image: MultipartBody.Part,
         @Path("job_id") jobId: String
@@ -87,37 +95,37 @@ interface UserApi {
 
     @DELETE("/customer/jobs/delete/{job_id}")
     fun deleteJob(
-        @Header("Auth") token: String,
+        @Header("Authorization") token: String,
         @Path("job_id") jobId: String
     ): Call<DeleteJobsResponse>
 
     @GET("/customer/jobs")
     fun getCustomerJobs(
-        @Header("Auth") token: String
+        @Header("Authorization") token: String
     ): Call<ListCustomerJobsResponse>
 
     @POST("/customer/payment/create")
     fun createPayment(
-        @Header("Auth") token: String,
+        @Header("Authorization") token: String,
         @Body createJobRequest: CreatePaymentRequest,
         @Part image: MultipartBody.Part
     ): Call<CreatePaymentResponse>
 
     @GET("/customer/jobs/complete/{job_id}")
     fun completeJob(
-        @Header("Auth") token: String,
+        @Header("Authorization") token: String,
         @Path("job_id") jobId: String
     ): Call<CompleteJobResponse>
 
     @POST("/mitra/jobs/assign/{job_id}")
     fun assignJob(
-        @Header("Auth") token: String,
+        @Header("Authorization") token: String,
         @Path("job_id") jobId: String
     ): Call<TakeJobResponse>
 
     @GET("/mitra/jobs")
     fun getMitraJobs(
-        @Header("Auth") token: String
+        @Header("Authorization") token: String
     ): Call<ListJobsMitraResponse>
 
     @GET("/alljobs")
@@ -127,12 +135,13 @@ interface UserApi {
 
     @GET("/jobs/pending")
     fun getPending(
-        @Header("Auth") token: String
+        @Header("Authorization") token: String
     ): Call<ListPendingJobsResponse>
 
     @GET("/jobs/detail/{job_id}")
     fun getDetail(
-        @Header("Auth") token: String
+        @Header("Authorization") token: String,
+        @Path("job_id") jobId: String
     ):Call<DetailJobResponse>
 
 }
