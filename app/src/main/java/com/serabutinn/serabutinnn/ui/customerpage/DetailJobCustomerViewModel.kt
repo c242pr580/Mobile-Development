@@ -25,7 +25,6 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
     val isSuccess: LiveData<Boolean> = _isSuccess
 
     fun getSession() = repository.getSession().asLiveData()
-
     fun getJobDetailCust(token: String, id: String) {
         _isLoading.value = true
         val client = ApiClient.getApiService().getDetail("Bearer $token",id)
@@ -49,9 +48,9 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
         })
 }
 
-    fun deleteJob(id: String) {
+    fun deleteJob(id: String,token:String) {
         _isLoading.value = true
-        val client = ApiClient.getApiService().deleteJob("Bearer ${getSession().value?.token}",id)
+        val client = ApiClient.getApiService().deleteJob("Bearer $token",id)
         client.enqueue(object : Callback<DeleteJobsResponse> {
             override fun onResponse(
                 call: Call<DeleteJobsResponse>,

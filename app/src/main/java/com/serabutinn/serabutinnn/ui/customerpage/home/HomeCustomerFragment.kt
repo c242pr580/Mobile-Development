@@ -2,7 +2,6 @@ package com.serabutinn.serabutinnn.ui.customerpage.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,13 +22,7 @@ class HomeCustomerFragment : Fragment() {
     private val viewModel by viewModels<HomeCustomerViewModel> {
         ViewModelFactory.getInstance(requireActivity())
     }
-    companion object {
-        fun newInstance() = HomeCustomerFragment()
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    companion object;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +43,7 @@ class HomeCustomerFragment : Fragment() {
 
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.findJobs(user)
-            binding.tvHiNama.text="Hi, ${user.name.toString()}"
+            binding.tvHiNama.text="Hi, ${user.name}"
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             showLoading(isLoading)
@@ -60,7 +53,6 @@ class HomeCustomerFragment : Fragment() {
         }
         viewModel.data.observe(viewLifecycleOwner) { data ->
             setJobsData(data)
-            Log.e("cekdata",data.toString())
         }
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvJobs.layoutManager = layoutManager
@@ -77,8 +69,11 @@ class HomeCustomerFragment : Fragment() {
             .setPositiveButton("Okay"){_,_ -> }
     }
     private fun setJobsData(consumerReviews: List<DataJobsCustomer>) {
-        val adapter = HomeCustomerAdapter()
-        adapter.submitList(consumerReviews)
-        binding.rvJobs.adapter = adapter
+        viewModel.getSession().observe(viewLifecycleOwner){
+            val adapter = HomeCustomerAdapter(it)
+            adapter.submitList(consumerReviews)
+            binding.rvJobs.adapter = adapter
+        }
+
     }
 }

@@ -37,6 +37,9 @@ data class DataDetail(
 	@field:SerializedName("createdAt")
 	val createdAt: String? = null,
 
+	@field:SerializedName("phone")
+	val phone: String? = null,
+
 	@field:SerializedName("canceledAt")
 	val canceledAt: String? = null,
 

@@ -3,7 +3,6 @@ package com.serabutinn.serabutinnn.ui.auth
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityMain2Binding
@@ -25,17 +24,14 @@ class MainActivity2 : AppCompatActivity() {
         setContentView(view)
 
         viewModel.getSession().observe(this) { user ->
-            Log.e("token", user.roleid.toString())
             if (user.isLogin) {
                 if (user.roleid == "1") {
                     val intent = Intent(this, HomeCustomerActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                 } else {
                     val intent = Intent(this, HomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                 }
             }

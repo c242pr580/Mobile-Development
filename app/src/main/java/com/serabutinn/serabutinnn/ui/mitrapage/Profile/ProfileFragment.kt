@@ -2,6 +2,7 @@ package com.serabutinn.serabutinnn.ui.mitrapage.Profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.getSession().observe(viewLifecycleOwner) { user ->
+            viewModel.getBiodata(user.token)
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
         binding.buttonLogout.setOnClickListener {
             viewModel.logout()
             val intent = Intent(requireContext(), MainActivity2::class.java)
@@ -44,11 +51,20 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.data.observe(viewLifecycleOwner){
-            binding.textView12.text = it.data?.name
+            Log.e("Data",it.toString())
+            if (it != null) {
+                binding.textView12.text = it.name
+                binding.textView13.text = it.username
+            }
             Glide.with(this)
-                .load(it.data?.profilePicture)
+                .load(it?.profilePicture)
+                .circleCrop()
                 .into(binding.imageView2)
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar3.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

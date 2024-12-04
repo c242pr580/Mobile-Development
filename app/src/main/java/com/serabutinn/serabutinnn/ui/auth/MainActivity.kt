@@ -3,7 +3,6 @@ package com.serabutinn.serabutinnn.ui.auth
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -30,10 +29,16 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         viewModel.getSession().observe(this) { user ->
-            Log.e("token123", user.token.toString())
-            if (user.isLogin) {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+            if (user.roleid == "1") {
+                val intent = Intent(this, HomeCustomerActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
+            } else if (user.roleid == "2") {
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
             }
         }
         val token = SessionManager.getToken(this)
@@ -62,18 +67,15 @@ class MainActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             showLoading()
             doLogin()
-
         }
 
         binding.btnRegister.setOnClickListener {
             doSignup()
         }
-
     }
 
     private fun navigateToHome() {
         viewModel.getSession().observe(this) { user ->
-            Log.e("token12", (user.roleid == "1").toString())
             if (user.roleid == "1") {
                 val intent = Intent(this, HomeCustomerActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)

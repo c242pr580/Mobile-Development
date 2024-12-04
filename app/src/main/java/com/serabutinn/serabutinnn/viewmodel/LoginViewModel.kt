@@ -50,16 +50,18 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                     return
                 }
                 Log.e("success", response.body()?.data?.token.toString())
+                Log.e("success", response.body()?.data?.roleId.toString())
                 val userdata = UserModel(
                     email,
-                    response.body()?.data?.customerId.toString(),
-                    response.body()?.data?.roleId.toString(),
+                    (response.body()?.data?.customerId?.filter{ true } ?: "") + (response.body()?.data?.mitraId?.filter{ true }  ?:"" ),
+
+                    response.body()?.data?.roleId.toString() ,
                     response.body()?.data?.token.toString(),
                     true,
                     response.body()?.data?.name.toString(),
                     response.body()?.data?.customerId.toString()
                 )
-                Log.e("userdata",userdata.toString())
+                Log.e("success", userdata.id)
                 saveSession(userdata)
                 _loggedIn.value=true
             }

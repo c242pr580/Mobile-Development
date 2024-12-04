@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -38,10 +37,7 @@ class AddJobsActivity : AppCompatActivity() {
 
     private var currentImageUri: Uri? = null
     private var datepicked: String? = ""
-    private lateinit var btnDatePicker: Button
     private lateinit var tvSelectedDate: TextView
-
-    private val calendar = Calendar.getInstance()
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
@@ -60,7 +56,6 @@ class AddJobsActivity : AppCompatActivity() {
         binding.btnGalery.setOnClickListener { startGallery() }
         binding.btnCamera.setOnClickListener { startCamera() }
         binding.buttonUpload.setOnClickListener { uploadImage() }
-        viewModel.getSession().observe(this) { Log.e("token", it.token.toString()) }
         if (!allPermissionsGranted()) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -71,10 +66,19 @@ class AddJobsActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
         viewModel.isSuccess.observe(this) {
-            showLoading(false)
             if (it) {
                 Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-                finish()
+                val intent = Intent(this, HomeCustomerActivity::class.java)
+                intent.flags= Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+        }
+        viewModel.message.observe(this){
+            Log.e("Tes Activity",it)
+            AlertDialog.Builder(this).apply {
+                setTitle("Oops")
+                setMessage(it)
+                setPositiveButton("OK") { _, _ -> }
             }
         }
     }
@@ -85,7 +89,7 @@ class AddJobsActivity : AppCompatActivity() {
             this, { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, monthOfYear, dayOfMonth)
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
                 datepicked = formattedDate.toString()
                 tvSelectedDate.text = "Deadline : $datepicked"
@@ -157,17 +161,17 @@ class AddJobsActivity : AppCompatActivity() {
     }
 
     private fun showImage() {
-        currentImageUri?.let {
-            binding.ivJobs.setImageURI(it)
-        }
+        currentImageUri?.let { binding.ivJobs.setImageURI(it) }
     }
 
     private fun uploadImage() {
+        showLoading(true)
         if (binding.txtInputDesc.text.toString().isEmpty() ||
             binding.txtInputLocation.text.toString().isEmpty() ||
             binding.txtInputPrice.text.toString().isEmpty() ||
-            binding.txtInputTitle.text.toString().isEmpty())
-        {
+            binding.txtInputTitle.text.toString().isEmpty()
+        ) {
+            showLoading(false)
             AlertDialog.Builder(this).apply {
                 setTitle("Oops!")
                 setMessage("Please fill all fields")
@@ -177,11 +181,10 @@ class AddJobsActivity : AppCompatActivity() {
         } else {
             showLoading(true)
             viewModel.getSession().observe(this) { user ->
-                Log.e("TES", user.token)
                 val token = user.token
                 if (currentImageUri == null) {
                     val description = binding.txtInputDesc.text.toString()
-                    viewModel.addJobs(
+                    viewModel.checkTitle(
                         token,
                         null,
                         description,
@@ -191,7 +194,6 @@ class AddJobsActivity : AppCompatActivity() {
                         binding.txtInputLocation.text.toString()
                     )
                 }
-
                 currentImageUri?.let { uri ->
                     val imageFile = uriToFile(uri, this).reduceFileImage()
                     Log.d("Image File", "showImage: ${imageFile.path}")
@@ -201,22 +203,17 @@ class AddJobsActivity : AppCompatActivity() {
                         imageFile,
                         description,
                         binding.txtInputTitle.text.toString(),
-                        tvSelectedDate.text.toString(),
+                        datepicked.toString(),
                         binding.txtInputPrice.text.toString(),
                         binding.txtInputLocation.text.toString()
                     )
                 }
             }
         }
-
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

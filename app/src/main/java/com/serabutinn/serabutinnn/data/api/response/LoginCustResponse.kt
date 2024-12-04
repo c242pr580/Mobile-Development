@@ -29,6 +29,9 @@ data class DataCust(
     @field:SerializedName("customer_id")
     val customerId: String?,
 
+    @field:SerializedName("mitra_id")
+    val mitraId: String?,
+
     @field:SerializedName("user_id")
     val userId: String?,
 

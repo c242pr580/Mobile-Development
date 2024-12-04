@@ -39,4 +39,10 @@
     <string name="kamera">Kamera</string>
     <string name="galeri">Galeri</string>
     <string name="create_jobs">Create Jobs</string>
+    <string name="alamat">Alamat</string>
+    <string name="daftar_kerja">Daftar Kerja</string>
+    <string name="deskripsi">Deskripsi :</string>
+    <string name="lokasi">Lokasi :</string>
+    <string name="biaya">Biaya :</string>
+    <string name="deadlines">Deadline :</string>
 </resources>

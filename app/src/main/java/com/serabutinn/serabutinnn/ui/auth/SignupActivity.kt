@@ -3,7 +3,6 @@ package com.serabutinn.serabutinnn.ui.auth
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -12,7 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivitySignupBinding
 import com.serabutinn.serabutinnn.ui.HomeActivity
-import com.serabutinn.serabutinnn.utils.SessionManager
+import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.viewmodel.SignupViewModel
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
@@ -28,10 +27,18 @@ class SignupActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         viewModel.getSession().observe(this) { user ->
-            Log.e("token", user.toString())
             if (user.isLogin) {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
+                if (user.roleid == "1") {
+                    val intent = Intent(this, HomeCustomerActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.setFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.setFlags(FLAG_ACTIVITY_NO_HISTORY)
+                    startActivity(intent)
+                }
             }
         }
         // Spinner Drop down elements

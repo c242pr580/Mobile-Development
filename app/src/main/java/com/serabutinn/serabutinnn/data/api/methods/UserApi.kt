@@ -1,5 +1,4 @@
 package com.serabutinn.serabutinnn.data.api.methods
-import com.google.gson.annotations.SerializedName
 import com.serabutinn.serabutinnn.data.api.request.CreateJobsRequest
 import com.serabutinn.serabutinnn.data.api.request.CreatePaymentRequest
 import com.serabutinn.serabutinnn.data.api.request.UpdateBioRequest
@@ -17,8 +16,10 @@ import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
 import com.serabutinn.serabutinnn.data.api.response.LoginMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.SignupResponse
 import com.serabutinn.serabutinnn.data.api.response.TakeJobResponse
+import com.serabutinn.serabutinnn.data.api.response.TitleCheckResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateBioResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,7 +27,6 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -72,19 +72,32 @@ interface UserApi {
         @Header("Authorization") token: String
     ): Call<UpdateBioResponse>
 
+    @FormUrlEncoded
+    @POST("/customer/validate/jobs")
+    fun checkTitle(
+        @Header("Authorization") token: String,
+        @Field("title") title: String
+    ):Call<TitleCheckResponse>
+
     @Multipart
     @POST("/customer/jobs/create")
     fun createJob(
         @Header("Authorization") token: String,
-        @Part("title") title: String,
-        @Part("description") description: String,
-        @Part("deadline") deadline: String,
-        @Part("cost") price: Int,
-        @Part("location") location: String,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("deadline") deadline: RequestBody,
+        @Part("cost") price: RequestBody,
+        @Part("location") location: RequestBody,
         @Part image: MultipartBody.Part?
     ): Call<CreateJobsResponse>
 
-    @Multipart
+    @FormUrlEncoded
+    @POST("/customer/payment/create")
+    fun createPayment(
+        @Header("Authorization") token: String,
+        @Field("job_id") jobId:String
+    ): Call<CreatePaymentResponse>
+
     @POST("/customer/jobs/update/{job_id}")
     fun updateJob(
         @Header("Authorization") token: String,
@@ -130,7 +143,7 @@ interface UserApi {
 
     @GET("/alljobs")
     fun getHome(
-        @Header("Authentication") token: String
+        @Header("Authorization") token: String
     ): Call<ListAllJobsResponse>
 
     @GET("/jobs/pending")

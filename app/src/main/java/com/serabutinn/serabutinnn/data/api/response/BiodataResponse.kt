@@ -1,7 +1,6 @@
 package com.serabutinn.serabutinnn.data.api.response
 
 import com.google.gson.annotations.SerializedName
-import java.io.File
 
 data class BiodataResponse(
 
@@ -21,7 +20,7 @@ data class BiodataResponse(
 data class DataBio(
 
 	@field:SerializedName("profilePicture")
-	val profilePicture: File? = null,
+	val profilePicture: String? = null,
 
 	@field:SerializedName("createdAt")
 	val createdAt: String? = null,

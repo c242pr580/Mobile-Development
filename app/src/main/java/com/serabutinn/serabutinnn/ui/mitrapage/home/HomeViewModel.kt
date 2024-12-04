@@ -30,7 +30,6 @@ class HomeViewModel(private val repository: UserRepository) : ViewModel() {
     }
     fun findJobs(user:UserModel){
         _isLoading.value = true
-        Log.e("token123",getSession().value.toString())
         val client = ApiClient.getApiService().getHome("Bearer ${user.token}")
         client.enqueue(object:Callback<ListAllJobsResponse>{
             override fun onResponse(

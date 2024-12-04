@@ -2,6 +2,7 @@ package com.serabutinn.serabutinnn.ui.mitrapage.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +23,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -36,13 +35,15 @@ class HomeFragment : Fragment() {
         return root
 
     }
+
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Observe LiveData from the ViewModel
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.findJobs(user)
-            binding.tvHiNama.text="Hi, ${user.name}"
+            binding.tvHiNama.text = "Hi, ${user.name}"
+            Log.e("token", user.id)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             showLoading(isLoading)
@@ -50,16 +51,36 @@ class HomeFragment : Fragment() {
         viewModel.message.observe(viewLifecycleOwner) { message ->
             showError(message)
         }
-        viewModel.data.observe(viewLifecycleOwner) { data ->setJobsData(data)}
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            viewModel.getSession().observe(viewLifecycleOwner) { user ->
+                val pending: MutableList<DataAllJobs> = data.filter { it.status == "Pending" }.toMutableList()
+                val inProgress: MutableList<DataAllJobs> =
+                    data.filter { it.status == "In Progress" && it.mitraId != user.id.trim() }.toMutableList()
+                val completed: MutableList<DataAllJobs> = data.filter { it.status == "Completed" }.toMutableList()
+                val takenByMe: MutableList<DataAllJobs> =
+                    data.filter { it.mitraId == user.id.trim() && it.status == "In Progress" }.toMutableList()
+                val dataAllJobs: MutableList<DataAllJobs> = mutableListOf()
+                if (takenByMe.isNotEmpty()) {takenByMe.map {dataAllJobs.add(it)} }
+                if (pending.isNotEmpty()) {pending.map { dataAllJobs.add(it) }}
+                if (inProgress.isNotEmpty()) {inProgress.map { dataAllJobs.add(it) }}
+                if (completed.isNotEmpty()) { completed.map {dataAllJobs.add(it)} }
+
+                setJobsData(dataAllJobs)
+            }
+        }
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvJobs.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvJobs.addItemDecoration(itemDecoration)
     }
+
     private fun setJobsData(consumerReviews: List<DataAllJobs>) {
-        val adapter = HomeAdapter()
-        adapter.submitList(consumerReviews)
-        binding.rvJobs.adapter = adapter
+        viewModel.getSession().observe(viewLifecycleOwner) { user ->
+            val adapter = HomeAdapter(user)
+            adapter.submitList(consumerReviews)
+            binding.rvJobs.adapter = adapter
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -70,7 +91,7 @@ class HomeFragment : Fragment() {
         AlertDialog.Builder(requireActivity())
             .setTitle("Terjadi Kesalahan")
             .setMessage(message)
-            .setPositiveButton("Okay"){_,_ -> }
+            .setPositiveButton("Okay") { _, _ -> }
     }
 
     override fun onDestroyView() {

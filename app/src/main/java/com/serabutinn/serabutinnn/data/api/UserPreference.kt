@@ -20,6 +20,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[ID_KEY] =user.id
             preferences[ROLE_KEY] = user.roleid
             preferences[TOKEN_KEY] = user.token
+            preferences[NAME_KEY] = user.name
             preferences[IS_LOGIN_KEY] = true
         }
     }

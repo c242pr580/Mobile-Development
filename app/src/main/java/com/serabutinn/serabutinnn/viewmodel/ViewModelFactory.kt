@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.serabutinn.serabutinnn.data.api.methods.Injection
 import com.serabutinn.serabutinnn.repository.UserRepository
+import com.serabutinn.serabutinnn.ui.DetailJobMitraViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.AddJobsViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerViewModel
+import com.serabutinn.serabutinnn.ui.customerpage.PaymentViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardViewModel
@@ -40,6 +42,12 @@ class ViewModelFactory (private val repository: UserRepository) : ViewModelProvi
             }
             modelClass.isAssignableFrom(DashboardViewModel::class.java) -> {
                 DashboardViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(PaymentViewModel::class.java) -> {
+                PaymentViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(DetailJobMitraViewModel::class.java) -> {
+                DetailJobMitraViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
