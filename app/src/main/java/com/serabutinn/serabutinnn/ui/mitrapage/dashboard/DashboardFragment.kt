@@ -70,14 +70,20 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setJobsData(consumerReviews: List<DataJobsMitra?>?) {
-        val adapter = HistoryAdapter()
-        adapter.submitList(consumerReviews)
-        binding.rvJobs.adapter = adapter
+        viewModel.getSession().observe(viewLifecycleOwner){user->
+            val adapter = HistoryAdapter(user)
+            adapter.submitList(consumerReviews)
+            binding.rvJobs.adapter = adapter
+        }
+
     }
     private fun setJobsDataCustomer(consumerReviews: List<DataJobsCustomer?>?) {
-        val adapter = HistoryCustomerAdapter()
-        adapter.submitList(consumerReviews)
-        binding.rvJobs.adapter = adapter
+        viewModel.getSession().observe(viewLifecycleOwner){
+            val adapter = HistoryCustomerAdapter(it)
+            adapter.submitList(consumerReviews)
+            binding.rvJobs.adapter = adapter
+        }
+
     }
 
     private fun showLoading(isLoading: Boolean) {

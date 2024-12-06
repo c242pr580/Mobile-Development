@@ -9,7 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.serabutinn.serabutinnn.R
+import com.serabutinn.serabutinnn.data.ListItem
 import com.serabutinn.serabutinnn.databinding.FragmentProfileBinding
+import com.serabutinn.serabutinnn.ui.UpdateBioActivity
+import com.serabutinn.serabutinnn.ui.adapter.CustomAdapter
 import com.serabutinn.serabutinnn.ui.auth.MainActivity2
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
@@ -60,7 +64,24 @@ class ProfileFragment : Fragment() {
                 .load(it?.profilePicture)
                 .circleCrop()
                 .into(binding.imageView2)
+            val listViews= binding.lvBio
+            val item= listOf(
+                ListItem("Nama",it?.name.toString()) { update("Nama", it?.name.toString()) },
+                ListItem("Username",it?.username.toString()){},
+                ListItem("Email",it?.email.toString()){},
+                ListItem("No. Telepon",it?.phone.toString()){ update("No. Telepon", it?.phone.toString()) },
+                ListItem("Alamat",it?.location.toString()){ update("Lokasi", it?.location.toString()) },
+            )
+            val adapter= CustomAdapter(requireContext(), R.layout.item_list,item)
+            listViews.adapter=adapter
         }
+
+    }
+    private fun update(title:String,subtitle:String){
+        val intent = Intent(requireContext(), UpdateBioActivity::class.java)
+        intent.putExtra(UpdateBioActivity.TITLE, title)
+        intent.putExtra(UpdateBioActivity.SUBTITLE, subtitle)
+        startActivity(intent)
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -43,7 +43,13 @@ class HomeCustomerFragment : Fragment() {
 
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.findJobs(user)
-            binding.tvHiNama.text="Hi, ${user.name}"
+            viewModel.getBiodata(user.token)
+
+        }
+        viewModel.dataBio.observe(viewLifecycleOwner){
+            if (it != null) {
+                binding.tvHiNama.text="Hi, ${it.name}"
+            }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             showLoading(isLoading)

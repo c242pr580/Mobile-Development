@@ -18,6 +18,7 @@ import com.serabutinn.serabutinnn.data.api.response.SignupResponse
 import com.serabutinn.serabutinnn.data.api.response.TakeJobResponse
 import com.serabutinn.serabutinnn.data.api.response.TitleCheckResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateBioResponse
+import com.serabutinn.serabutinnn.data.api.response.UpdateJobsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -41,13 +42,6 @@ interface UserApi {
         @Field("password") password: String
     ): Call<LoginCustResponse>
 
-    @POST("/login")
-    fun loginMitra(
-        @Field("email") email: String,
-        @Field("password") password: String
-    ): Call<LoginMitraResponse>
-
-
     @POST("/register")
     @FormUrlEncoded
     fun signupUser(
@@ -68,8 +62,11 @@ interface UserApi {
     @Multipart
     @POST("/biodata/update")
     fun updateBiodata(
-        @Body updateBioRequest: UpdateBioRequest,
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Part("name") name: RequestBody?,
+        @Part("phone") phone: RequestBody?,
+        @Part("location") location: RequestBody?,
+        @Part image: MultipartBody.Part?
     ): Call<UpdateBioResponse>
 
     @FormUrlEncoded
@@ -101,10 +98,14 @@ interface UserApi {
     @POST("/customer/jobs/update/{job_id}")
     fun updateJob(
         @Header("Authorization") token: String,
-        @Body createJobRequest: CreateJobsRequest,
-        @Part image: MultipartBody.Part,
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("deadline") deadline: RequestBody,
+        @Part("cost") price: RequestBody,
+        @Part("location") location: RequestBody,
+        @Part image: MultipartBody.Part?,
         @Path("job_id") jobId: String
-    ): Call<String>
+    ): Call<UpdateJobsResponse>
 
     @DELETE("/customer/jobs/delete/{job_id}")
     fun deleteJob(
@@ -116,13 +117,6 @@ interface UserApi {
     fun getCustomerJobs(
         @Header("Authorization") token: String
     ): Call<ListCustomerJobsResponse>
-
-    @POST("/customer/payment/create")
-    fun createPayment(
-        @Header("Authorization") token: String,
-        @Body createJobRequest: CreatePaymentRequest,
-        @Part image: MultipartBody.Part
-    ): Call<CreatePaymentResponse>
 
     @GET("/customer/jobs/complete/{job_id}")
     fun completeJob(

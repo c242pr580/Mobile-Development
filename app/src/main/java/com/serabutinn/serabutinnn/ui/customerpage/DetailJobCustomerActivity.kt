@@ -1,5 +1,6 @@
 package com.serabutinn.serabutinnn.ui.customerpage
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -18,12 +19,13 @@ class DetailJobCustomerActivity : AppCompatActivity() {
     companion object {
         const val ID = "id"
     }
-
     private val viewModel by viewModels<DetailJobCustomerViewModel> {
         ViewModelFactory.getInstance(this)
     }
+
     private lateinit var binding: ActivityDetailJobCustomerBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,22 +51,26 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 if (data.image == null) {
                     binding.imgJob.visibility = View.GONE
                 }
-                if (data.status == "Pending") {
-                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                    binding.tvStatus.setTextColor(Color.parseColor("#000000"))
-                    binding.btnCompleted.visibility = View.GONE
-                } else if (data.status == "In Progress") {
-                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
-                    binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
-                    binding.btnCompleted.visibility = View.VISIBLE
-                    binding.btnUpdate.visibility = View.GONE
-                    binding.btnHapus.visibility = View.GONE
-                } else if (data.status == "Completed") {
-                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
-                    binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
-                    binding.btnCompleted.visibility = View.GONE
-                    binding.btnUpdate.visibility = View.GONE
-                    binding.btnHapus.visibility = View.GONE
+                when (data.status) {
+                    "Pending" -> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                        binding.btnCompleted.visibility = View.GONE
+                    }
+                    "In Progress" -> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
+                        binding.btnCompleted.visibility = View.VISIBLE
+                        binding.btnUpdate.visibility = View.GONE
+                        binding.btnHapus.visibility = View.GONE
+                    }
+                    "Completed" -> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+                        binding.btnCompleted.visibility = View.GONE
+                        binding.btnUpdate.visibility = View.GONE
+                        binding.btnHapus.visibility = View.GONE
+                    }
                 }
 
             }
@@ -74,18 +80,23 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 viewModel.deleteJob(id.toString(), it.token)
                 finish()
             }
-
         }
+
         viewModel.getSession().observe(this) {
             viewModel.getJobDetailCust(it.token, id.toString())
         }
-        binding.btnUpdate.setOnClickListener { }
+
+        binding.btnUpdate.setOnClickListener {
+            val intent = Intent(this, UpdateJobActivity::class.java)
+            intent.putExtra("id", id)
+            startActivity(intent)
+        }
         binding.btnCompleted.setOnClickListener {
             val intent = Intent(this, PaymentActivity::class.java)
             intent.putExtra("id", id)
             startActivity(intent)
-
         }
+
         onBackPressedDispatcher.addCallback(this) {
             val intent = Intent(this@DetailJobCustomerActivity, HomeCustomerActivity::class.java)
             startActivity(intent)
@@ -93,7 +104,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         }
     }
 
-    fun formatToRupiah(number: String): String {
+    private fun formatToRupiah(number: String): String {
         val amount = number.toLongOrNull() ?: 0L
         val decimalFormatSymbols = DecimalFormatSymbols().apply {
             groupingSeparator = '.'

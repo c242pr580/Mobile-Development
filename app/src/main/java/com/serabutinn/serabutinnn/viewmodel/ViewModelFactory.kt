@@ -13,6 +13,8 @@ import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeViewModel
+import com.serabutinn.serabutinnn.ui.UpdateBioViewModel
+import com.serabutinn.serabutinnn.ui.customerpage.UpdateJobViewModel
 
 class ViewModelFactory (private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -48,6 +50,12 @@ class ViewModelFactory (private val repository: UserRepository) : ViewModelProvi
             }
             modelClass.isAssignableFrom(DetailJobMitraViewModel::class.java) -> {
                 DetailJobMitraViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(UpdateBioViewModel::class.java) -> {
+                UpdateBioViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(UpdateJobViewModel::class.java) -> {
+                UpdateJobViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

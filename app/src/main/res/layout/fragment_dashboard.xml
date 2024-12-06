@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:text="History"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext"
             android:backgroundTint="@color/pucet1"
-            android:hint="hint" />
+            android:hint="Search" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView

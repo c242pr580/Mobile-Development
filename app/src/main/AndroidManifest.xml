@@ -27,6 +27,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.customerpage.UpdateJobActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.UpdateBioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.updateBioActivity"
+            android:exported="false"
+            android:label="@string/title_activity_update_bio" />
+        <activity
             android:name=".ui.customerpage.UpdateActivity"
             android:exported="false" />
         <activity

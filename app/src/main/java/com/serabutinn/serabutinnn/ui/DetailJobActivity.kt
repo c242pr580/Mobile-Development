@@ -2,12 +2,9 @@ package com.serabutinn.serabutinnn.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -15,10 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityDetailJobBinding
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
-import java.net.URLEncoder
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-
 
 class DetailJobActivity : AppCompatActivity() {
     companion object {
@@ -85,37 +80,6 @@ class DetailJobActivity : AppCompatActivity() {
         binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun openWhatsApp(numero: String, mensaje: String) {
-        try {
-            val packageManager: PackageManager = this.packageManager
-            val i = Intent(Intent.ACTION_VIEW)
-            val url =
-                "https://api.whatsapp.com/send?phone=$numero&text=" + URLEncoder.encode(
-                    mensaje,
-                    "UTF-8"
-                )
-            i.setPackage("com.whatsapp")
-            i.setData(Uri.parse(url))
-            startActivity(i)
-            if (i.resolveActivity(packageManager) != null) {
-                startActivity(i)
-            } else {
-                Toast.makeText(
-                    this,
-                    numero,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        } catch (e: Exception) {
-            Log.e("ERROR WHATSAPP", e.toString())
-            Toast.makeText(
-                this,
-                numero,
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
     private fun formatToRupiah(number: String): String {
         val amount = number.toLongOrNull() ?: 0L
         val decimalFormatSymbols = DecimalFormatSymbols().apply {
@@ -124,5 +88,27 @@ class DetailJobActivity : AppCompatActivity() {
         }
         val decimalFormat = DecimalFormat("Rp #,###", decimalFormatSymbols)
         return decimalFormat.format(amount)
+    }
+    private fun openWhatsApp(phoneNumber: String, message: String) {
+        try {
+            // Encode the message
+            val encodedMessage = Uri.encode(message)
+
+            // Create the WhatsApp URL
+            val url = "https://wa.me/$phoneNumber?text=$encodedMessage"
+
+            // Create the Intent
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+
+            // Start the activity
+            intent.resolveActivity(packageManager)?.let {
+                startActivity(intent)
+            } ?: run {
+                println("WhatsApp is not installed.")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

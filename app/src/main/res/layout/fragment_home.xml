@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext"
             android:backgroundTint="@color/pucet1"
-            android:hint="hint" />
+            android:hint="Search" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
