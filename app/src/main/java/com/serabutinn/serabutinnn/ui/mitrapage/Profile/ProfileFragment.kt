@@ -20,6 +20,8 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.R
@@ -73,10 +75,18 @@ class ProfileFragment : Fragment() {
             if(it){
                 Toast.makeText(requireContext(), "Berhasil Update", Toast.LENGTH_SHORT).show()
                 viewModel.getSession().observe(viewLifecycleOwner) { user ->
-                    if(user.roleid=="1"){findNavController().navigate(R.id.navigation_notifications2)}
-                    else if(user.roleid=="2"){findNavController().navigate(R.id.navigation_notifications)}
-                }
 
+                    if(user.roleid=="1"){val navController = requireActivity().findNavController(R.id.nav_host_fragment_activity_main_customer)
+                        val navOptions = NavOptions.Builder()
+                            .setPopUpTo(navController.graph.startDestinationId, false) // Clear stack up to start destination
+                            .build()
+                        navController.navigate(R.id.navigation_notifications2,null, navOptions)}
+                    else if(user.roleid=="2"){val navController = requireActivity().findNavController(R.id.nav_host_fragment_activity_home)
+                        val navOptions = NavOptions.Builder()
+                            .setPopUpTo(navController.graph.startDestinationId, false) // Clear stack up to start destination
+                            .build()
+                        navController.navigate(R.id.navigation_notifications,null, navOptions)}
+                }
             }
         }
         return root

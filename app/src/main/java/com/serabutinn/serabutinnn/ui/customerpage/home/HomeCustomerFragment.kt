@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.databinding.FragmentHomeCustomerBinding
@@ -39,7 +42,9 @@ class HomeCustomerFragment : Fragment() {
             startActivity(intent)
         }
         binding.Profile.setOnClickListener{
-            findNavController().navigate(R.id.navigation_notifications2)
+            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+                bottomNavigationView.selectedItemId = R.id.navigation_notifications2
+
         }
         return view
     }
