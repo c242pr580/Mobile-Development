@@ -69,16 +69,18 @@ class AddJobsActivity : AppCompatActivity() {
             if (it) {
                 Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeCustomerActivity::class.java)
-                intent.flags= Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
         }
-        viewModel.message.observe(this){
-            Log.e("Tes Activity",it)
-            AlertDialog.Builder(this).apply {
-                setTitle("Oops")
-                setMessage(it)
-                setPositiveButton("OK") { _, _ -> }
+        viewModel.message.observe(this) {
+            if (it != null) {
+                Log.e("Tes Activity", it)
+                AlertDialog.Builder(this).apply {
+                    setTitle("Oops")
+                    setMessage(it)
+                    setPositiveButton("OK") { _, _ -> }
+                }.show()
             }
         }
     }
@@ -176,7 +178,7 @@ class AddJobsActivity : AppCompatActivity() {
                 setTitle("Oops!")
                 setMessage("Please fill all fields")
                 setPositiveButton("OK") { _, _ -> }
-            }
+            }.show()
             return
         } else {
             showLoading(true)
@@ -198,9 +200,9 @@ class AddJobsActivity : AppCompatActivity() {
                     val imageFile = uriToFile(uri, this).reduceFileImage()
                     Log.d("Image File", "showImage: ${imageFile.path}")
                     val description = binding.txtInputDesc.text.toString()
-                    viewModel.addJobs(
+                    viewModel.checkTitle(
                         token,
-                        imageFile,
+                        null,
                         description,
                         binding.txtInputTitle.text.toString(),
                         datepicked.toString(),

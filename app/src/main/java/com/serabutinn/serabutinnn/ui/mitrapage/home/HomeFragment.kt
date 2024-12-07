@@ -2,15 +2,17 @@ package com.serabutinn.serabutinnn.ui.mitrapage.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.databinding.FragmentHomeBinding
 import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter
@@ -32,6 +34,9 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        binding.Profile.setOnClickListener{
+            findNavController().navigate(R.id.navigation_notifications)
+        }
         return root
 
     }
@@ -42,8 +47,17 @@ class HomeFragment : Fragment() {
         // Observe LiveData from the ViewModel
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.findJobs(user)
-            binding.tvHiNama.text = "Hi, ${user.name}"
-            Log.e("token", user.id)
+            viewModel.getBiodata(user.token)
+
+        }
+        viewModel.dataBio.observe(viewLifecycleOwner){
+            if (it != null) {
+                binding.tvHiNama.text="Hi, ${it.name}"
+                Glide.with(this)
+                    .load(it.profilePicture)
+                    .circleCrop()
+                    .into(binding.Profile)
+            }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             showLoading(isLoading)

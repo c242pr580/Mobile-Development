@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.serabutinn.serabutinnn.data.api.ApiClient
 import com.serabutinn.serabutinnn.data.api.UserModel
+import com.serabutinn.serabutinnn.data.api.response.BiodataResponse
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
+import com.serabutinn.serabutinnn.data.api.response.DataBio
 import com.serabutinn.serabutinnn.data.api.response.ListAllJobsResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
 import retrofit2.Call
@@ -21,12 +23,39 @@ class HomeViewModel(private val repository: UserRepository) : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
+    private val _dataBio = MutableLiveData<DataBio?>()
+    val dataBio: LiveData<DataBio?> = _dataBio
 
     init {
 
     }
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
+    }
+    fun getBiodata(token:String){
+        _isLoading.value = true
+        val client = ApiClient.getApiService().getBiodata("Bearer $token")
+        client.enqueue(object : Callback<BiodataResponse> {
+            override fun onResponse(
+                call: Call<BiodataResponse>,
+                response: Response<BiodataResponse>
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    Log.e("Data", response.body()?.data.toString())
+                    _dataBio.value = response.body()?.data
+                } else {
+                    _message.value = response.message()
+                }
+            }
+
+            override fun onFailure(call: Call<BiodataResponse>, t: Throwable) {
+                Log.e("error2", t.message.toString())
+                _isLoading.value = false
+                _message.value = t.message.toString()
+            }
+        })
+
     }
     fun findJobs(user:UserModel){
         _isLoading.value = true

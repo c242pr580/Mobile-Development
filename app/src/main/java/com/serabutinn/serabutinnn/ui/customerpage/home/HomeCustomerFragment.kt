@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.databinding.FragmentHomeCustomerBinding
 import com.serabutinn.serabutinnn.ui.adapter.HomeCustomerAdapter
@@ -35,6 +38,9 @@ class HomeCustomerFragment : Fragment() {
             val intent = Intent(requireContext(), AddJobsActivity::class.java)
             startActivity(intent)
         }
+        binding.Profile.setOnClickListener{
+            findNavController().navigate(R.id.navigation_notifications2)
+        }
         return view
     }
 
@@ -49,6 +55,10 @@ class HomeCustomerFragment : Fragment() {
         viewModel.dataBio.observe(viewLifecycleOwner){
             if (it != null) {
                 binding.tvHiNama.text="Hi, ${it.name}"
+                Glide.with(this)
+                    .load(it.profilePicture)
+                    .circleCrop()
+                    .into(binding.Profile)
             }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

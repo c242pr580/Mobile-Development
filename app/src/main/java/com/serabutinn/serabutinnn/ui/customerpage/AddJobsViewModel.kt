@@ -20,8 +20,8 @@ import retrofit2.Response
 import java.io.File
 
 class AddJobsViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _message = MutableLiveData<String>()
-    val message: LiveData<String> = _message
+    private val _message = MutableLiveData<String?>()
+    val message: LiveData<String?> = _message
     private val _isSuccess = MutableLiveData<Boolean>()
     val isSuccess: LiveData<Boolean> = _isSuccess
     private val _jobId = MutableLiveData<String>()
@@ -47,10 +47,12 @@ class AddJobsViewModel(private val repository: UserRepository) : ViewModel() {
                     if (response.body()?.result == "Legal") {
                         addJobs(token, imageFile, description, title, deadline, price, location)
                     }else{
+                        _isSuccess.value = false
                         Log.e("TES",response.body()?.message.toString())
                         _message.value = response.body()?.message.toString()
                     }
                 } else {
+                    _isSuccess.value = false
                     Log.e("error", response.body()?.result.toString())
                     _message.value = response.body()?.message.toString()
                 }
