@@ -2,6 +2,7 @@ package com.serabutinn.serabutinnn.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -49,6 +50,29 @@ class DetailJobActivity : AppCompatActivity() {
                 .load(data?.image)
                 .centerInside()
                 .into(binding.imgJob)
+            if (data != null) {
+                if (data.image == null) {
+                    binding.imgJob.visibility = View.GONE
+                }
+                when (data.status) {
+                    "Pending" -> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                    }
+
+                    "In Progress" -> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
+                        binding.btnUpdate.visibility = View.GONE
+                    }
+
+                    "Completed" -> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+                        binding.btnUpdate.visibility = View.GONE
+                    }
+                }
+            }
 
             binding.imageButton4.setOnClickListener {
                 if (data != null) {
@@ -77,7 +101,8 @@ class DetailJobActivity : AppCompatActivity() {
         }
 
     }
-    private fun showLoading(isLoading:Boolean){
+
+    private fun showLoading(isLoading: Boolean) {
         binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
@@ -90,6 +115,7 @@ class DetailJobActivity : AppCompatActivity() {
         val decimalFormat = DecimalFormat("Rp #,###", decimalFormatSymbols)
         return decimalFormat.format(amount)
     }
+
     private fun openWhatsApp(phoneNumber: String, message: String) {
         try {
             // Encode the message
