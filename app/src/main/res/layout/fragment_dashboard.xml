@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="History"
+        android:textColor="@color/Paynesgray"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext"
-            android:backgroundTint="@color/pucet1"
+            android:backgroundTint="@color/Powderblue2"
             android:hint="Search" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -35,7 +35,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/login"
             android:textAlignment="viewStart"
-            android:textColor="@color/orange1"
+            android:textColor="@color/Paynesgray"
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/btn_register" />
 
@@ -72,7 +72,7 @@
                 android:id="@+id/txtInput_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:maxLength="50"
                 android:maxLines="1"
                 android:singleLine="true"/>
@@ -97,7 +97,7 @@
                 android:id="@+id/txt_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:inputType="textPassword"
                 android:maxLength="15"
                 android:maxLines="1" />
@@ -121,7 +121,7 @@
                 android:id="@+id/txtInput_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -145,7 +145,7 @@
                 android:id="@+id/txtInputUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -169,7 +169,7 @@
                 android:id="@+id/txtInput_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -193,7 +193,7 @@
                 android:id="@+id/txtInput_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -215,11 +215,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:backgroundTint="@color/orenmuda"
+            android:backgroundTint="@color/Paynesgray"
             android:backgroundTintMode="add"
             android:dropDownWidth="match_parent"
             android:padding="15dp"
-            android:popupBackground="@color/pucet1"
+            android:popupBackground="@color/Powderblue2"
             android:spinnerMode="dropdown"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

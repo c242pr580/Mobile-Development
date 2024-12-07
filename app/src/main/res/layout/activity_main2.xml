@@ -10,13 +10,16 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginTop="75dp"
+        android:foregroundTint="@color/Paynesgray"
+        android:foregroundTintMode="src_atop"
+        app:tint="@color/Paynesgray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@drawable/vertikal_hitam" />
 
     <TextView
         android:id="@+id/textView"
@@ -25,7 +28,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/start_your_journey"
         android:textAlignment="center"
-        android:textColor="@color/orange1"
+        android:textColor="@color/Paynesgray"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,10 +69,10 @@
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/white"
         android:text="@string/register"
-        android:textColor="@color/orange1"
+        android:textColor="@color/Paynesgray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnlogins"
-        app:strokeColor="@color/orange1"
+        app:strokeColor="@color/Paynesgray"
         app:strokeWidth="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/inputan"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/Powderblue2" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

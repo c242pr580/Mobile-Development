@@ -11,4 +11,10 @@
     <color name="pucet1">#FFFFF0E6</color>
     <color name="orange_tua1">#FFD35100</color>
     <color name="orenmuda">#FFFFBD95</color>
+    <color name="Slategray" >#FF597A8A</color>
+    <color name="Paynesgray" >#FF405E6F</color>
+    <color name="Powderblue1" >#FF9CBCDB </color>
+    <color name="Powderblue2" >#FFAEC6E2 </color>
+    <color name="Cadetgray" >#FF7B92A5 </color>
+
 </resources>

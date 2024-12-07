@@ -1,7 +1,4 @@
 package com.serabutinn.serabutinnn.data.api.methods
-import com.serabutinn.serabutinnn.data.api.request.CreateJobsRequest
-import com.serabutinn.serabutinnn.data.api.request.CreatePaymentRequest
-import com.serabutinn.serabutinnn.data.api.request.UpdateBioRequest
 import com.serabutinn.serabutinnn.data.api.response.BiodataResponse
 import com.serabutinn.serabutinnn.data.api.response.CompleteJobResponse
 import com.serabutinn.serabutinnn.data.api.response.CreateJobsResponse
@@ -13,7 +10,6 @@ import com.serabutinn.serabutinnn.data.api.response.ListCustomerJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.ListJobsMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.ListPendingJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
-import com.serabutinn.serabutinnn.data.api.response.LoginMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.SignupResponse
 import com.serabutinn.serabutinnn.data.api.response.TakeJobResponse
 import com.serabutinn.serabutinnn.data.api.response.TitleCheckResponse
@@ -22,7 +18,6 @@ import com.serabutinn.serabutinnn.data.api.response.UpdateJobsResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

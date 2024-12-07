@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eeeeee"
     tools:context=".ui.auth.MainActivity">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -32,7 +31,7 @@
             android:id="@+id/txtInput_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pucet1"
+            android:background="@color/Powderblue2"
             android:maxLength="50"
             android:maxLines="1"
             android:singleLine="true" />
@@ -60,7 +59,7 @@
             android:id="@+id/txt_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pucet1"
+            android:background="@color/Powderblue2"
             android:inputType="textPassword"
             android:maxLength="30"
             android:maxLines="1"
@@ -89,7 +88,7 @@
         android:fontFamily="@font/roboto_regular"
         android:text="@string/login_here"
         android:textAlignment="center"
-        android:textColor="@color/orange1"
+        android:textColor="@color/Paynesgray"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,7 +132,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/register"
         android:textAlignment="viewStart"
-        android:textColor="@color/orange1"
+        android:textColor="@color/Paynesgray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView11" />
 

@@ -45,7 +45,7 @@
                 android:id="@+id/txtInput_Location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:singleLine="true"
                 android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -57,7 +57,7 @@
             android:layout_marginTop="24dp"
             android:text="@string/ayo_buat_pekerjaan"
             android:textAlignment="center"
-            android:textColor="@color/orange_tua1"
+            android:textColor="@color/Slategray"
             android:textSize="34sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,7 +82,7 @@
                 android:id="@+id/txtInputTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -106,7 +106,7 @@
                 android:id="@+id/txtInput_Desc"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:singleLine="false"
                 android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -154,7 +154,7 @@
                 android:id="@+id/txtInput_Price"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/pucet1"
+                android:background="@color/Powderblue2"
                 android:inputType="number"
                 android:singleLine="true"
                 android:textAlignment="viewStart" />
