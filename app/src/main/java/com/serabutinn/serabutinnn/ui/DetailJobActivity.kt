@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -106,6 +107,7 @@ class DetailJobActivity : AppCompatActivity() {
                 startActivity(intent)
             } ?: run {
                 println("WhatsApp is not installed.")
+                Toast.makeText(this, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
