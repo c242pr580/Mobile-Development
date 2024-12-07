@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.databinding.FragmentHomeBinding
@@ -35,7 +38,8 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.Profile.setOnClickListener{
-            findNavController().navigate(R.id.navigation_notifications)
+            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            bottomNavigationView.selectedItemId = R.id.navigation_notifications
         }
         return root
 
