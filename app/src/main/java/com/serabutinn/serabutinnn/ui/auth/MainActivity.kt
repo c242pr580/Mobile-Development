@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityMainBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.utils.SessionManager
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
+        lightStatusBar(window)
         setContentView(view)
         viewModel.getSession().observe(this) { user ->
             if (user.roleid == "1") {

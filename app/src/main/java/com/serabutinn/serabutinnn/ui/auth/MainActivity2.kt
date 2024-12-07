@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityMain2Binding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.viewmodel.LoginViewModel
@@ -21,6 +22,7 @@ class MainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMain2Binding.inflate(layoutInflater)
         val view = binding.root
+        lightStatusBar(window)
         setContentView(view)
 
         viewModel.getSession().observe(this) { user ->

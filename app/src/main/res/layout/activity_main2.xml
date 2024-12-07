@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_150sdp"
         android:layout_marginTop="75dp"
-        android:foregroundTint="@color/Paynesgray"
+        android:foregroundTint="@color/Powderblue2"
         android:foregroundTintMode="src_atop"
-        app:tint="@color/Paynesgray"
+        android:src="@drawable/serabutinn_notext"
+        app:tint="@color/Powderblue2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/vertikal_hitam" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/textView"
@@ -28,7 +28,7 @@
         android:layout_marginTop="40dp"
         android:text="@string/start_your_journey"
         android:textAlignment="center"
-        android:textColor="@color/Paynesgray"
+        android:textColor="@color/Powderblue2"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,6 +43,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/front_page_welcome"
         android:textAlignment="center"
+        android:textColor="@color/greydark"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +56,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
+        android:textColor="@color/white"
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnregisters"
@@ -69,10 +71,10 @@
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/white"
         android:text="@string/register"
-        android:textColor="@color/Paynesgray"
+        android:textColor="@color/Powderblue2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnlogins"
-        app:strokeColor="@color/Paynesgray"
+        app:strokeColor="@color/Powderblue2"
         app:strokeWidth="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Window
 import androidx.core.content.FileProvider
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -105,4 +107,9 @@ fun rotateImage(source: Bitmap, angle: Float): Bitmap {
     return Bitmap.createBitmap(
         source, 0, 0, source.width, source.height, matrix, true
     )
+}
+
+fun lightStatusBar(window: Window, isLight: Boolean = true) {
+    val wic = WindowInsetsControllerCompat(window, window.decorView)
+    wic.isAppearanceLightStatusBars = isLight
 }

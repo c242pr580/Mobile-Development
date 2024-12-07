@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivitySignupBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.viewmodel.SignupViewModel
@@ -25,6 +27,7 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         val view = binding.root
+        lightStatusBar(window)
         setContentView(view)
         viewModel.getSession().observe(this) { user ->
             if (user.isLogin) {
@@ -48,7 +51,7 @@ class SignupActivity : AppCompatActivity() {
 
 
         // Creating adapter for spinner
-        val dataAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        val dataAdapter = ArrayAdapter(this, R.layout.simple_spinner, categories)
 
         // attaching data adapter to spinner
         binding.spinner.adapter = dataAdapter

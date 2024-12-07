@@ -1,13 +1,20 @@
 <resources>
     <string name="app_name">SerabutInn</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
+    <string name="register">Sign Up</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="name">Name</string>
     <string name="Username">Username</string>
     <string name="location">Location</string>
     <string name="phone">Phone Number</string>
+    <string name="input_password">Enter your password</string>
+    <string name="input_email">Enter your email address</string>
+    <string name="input_name">Enter your full name</string>
+    <string name="input_username">Enter your username</string>
+    <string name="input_location">Enter your location</string>
+    <string name="input_phone">Enter your phone number</string>
+    <string name="RememberPassword">Remember Password</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">History</string>
@@ -18,11 +25,11 @@
     <string name="profile">Profile</string>
     <string name="start_your_journey">Start Your\nJourney</string>
     <string name="front_page_welcome">Whether you\'re a customer or a partner,\n your next great opportunity is just a few\n clicks away. Let\'s get started!</string>
-    <string name="login_here">Login Here</string>
-    <string name="welcome_back">Welcome back you\'ve\n been missed!</string>
+    <string name="login_here">Welcome</string>
+    <string name="welcome_back">Welcome back you\'ve been missed!\nPlease login to continue</string>
     <string name="don_t_have_account">Don\'t Have account?</string>
     <string name="create_an_account">Create an Account!</string>
-    <string name="fill_your_information_below_nor_else">Fill your information below\nOr else!</string>
+    <string name="fill_your_information_below_nor_else">Fill in all required fields to complete your registration.</string>
     <string name="pick_a_role">Pick a Role</string>
     <string name="log_out">Log Out</string>
     <string name="title_activity_main_customer">MainCustomerActivity</string>
