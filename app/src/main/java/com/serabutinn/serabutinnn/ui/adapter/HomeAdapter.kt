@@ -40,6 +40,7 @@ class HomeAdapter(private val id:UserModel) : ListAdapter<DataAllJobs, HomeAdapt
             binding.tvDuit.text = formatToRupiah(data.cost.toString())
             binding.tvWaktu.text = data.deadline
             binding.tvStatus.text = data.status
+            binding.lokasi.text = data.location
             Glide.with(binding.root)
                 .load(data.image)
                 .centerCrop()
