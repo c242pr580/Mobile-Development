@@ -1,5 +1,6 @@
 package com.serabutinn.serabutinnn.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -32,6 +33,7 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
 
     class MyViewHolder(private val binding: ItemsBinding,private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(data: DataJobsCustomer) {
             binding.root.setOnClickListener {
                 val intent = Intent(binding.root.context, DetailJobActivity::class.java)
@@ -40,7 +42,7 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
             }
             binding.tvJudul.text = data.title
             binding.tvDuit.text = formatToRupiah(data.cost.toString())
-            binding.tvWaktu.text = data.deadline
+            binding.tvWaktu.text = "Deadline | ${data.deadline}"
             binding.tvStatus.text = data.status
             Glide.with(binding.root)
                 .load(data.image)
@@ -51,7 +53,7 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
             }else{binding.takenbyyou.visibility= View.GONE}
             if (data.status == "Pending") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
             } else if (data.status == "In Progress") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
                 binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))

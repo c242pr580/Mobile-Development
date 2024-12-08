@@ -5,7 +5,6 @@
     android:layout_height="250dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp"
-    app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -45,38 +44,19 @@
                     android:layout_height="wrap_content"
                     android:text="Ambil Makanan Di Rumah"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cvStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:cardBackgroundColor="@color/pucet1"
-                    app:cardCornerRadius="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tvStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:text="Status" />
-                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        app:tint="@color/greydark"
                         android:src="@drawable/ic_location" />
 
                     <TextView
@@ -85,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="Pangkalpinang"
-                        android:textColor="@color/black"
+                        android:textColor="@color/greydark"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -97,25 +77,42 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tvDuit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:text="Rp 485.806"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
                         android:id="@+id/tvWaktu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="2024-12-05"
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:text="Deadline | 2024-12-05"
+                        android:textColor="@color/greydark"
+                        android:textSize="14sp"/>
 
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="@color/pucet1"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:layout_gravity="center"
+                            android:text="Status" />
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tvDuit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Rp 485.806"
+                        android:textColor="@color/Powderblue2"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -123,8 +120,8 @@
                     android:id="@+id/takenbyyou"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="40dp"
                     android:visibility="visible"
                     app:cardBackgroundColor="@color/greenyoung"
                     app:cardCornerRadius="10dp"
@@ -135,7 +132,7 @@
                         android:id="@+id/tvbyyou"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="2dp"
+                        android:padding="5dp"
                         android:text="Taken By You" />
                 </androidx.cardview.widget.CardView>
 

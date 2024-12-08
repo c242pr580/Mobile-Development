@@ -43,7 +43,7 @@ class HomeCustomerAdapter(private val id: UserModel) :
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#F0FF0101"))
             }
             binding.tvDuit.text = data.cost?.let { formatToRupiah(it) }
-            binding.tvWaktu.text = data.deadline
+            binding.tvWaktu.text = "Deadline | ${data.deadline}"
             binding.tvJudul.text = data.title
             binding.lokasi.text = data.location
             Glide.with(binding.root)
@@ -57,13 +57,13 @@ class HomeCustomerAdapter(private val id: UserModel) :
             }
             if (data.status == "Pending") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
             } else if (data.status == "In Progress") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
                 binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
             } else if (data.status == "Completed") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
-                binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
+                binding.tvStatus.setTextColor(Color.parseColor("#188018"))
             }
         }
 

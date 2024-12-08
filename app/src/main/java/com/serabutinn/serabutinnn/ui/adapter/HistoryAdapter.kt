@@ -50,7 +50,7 @@ class HistoryAdapter(private val id:UserModel) : ListAdapter<DataJobsMitra, Hist
             }else{binding.takenbyyou.visibility= View.GONE}
             if (data.status == "Pending") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
             } else if (data.status == "In Progress") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
                 binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
