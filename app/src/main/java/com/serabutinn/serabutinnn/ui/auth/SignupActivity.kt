@@ -62,13 +62,7 @@ class SignupActivity : AppCompatActivity() {
                 val pwd = binding.txtPass.text.toString()
                 val roleId = if (binding.spinner.selectedItem.toString() == "Customer") 1 else 2
                 Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_LONG).show()
-                if(roleId == 1){
-
-                }
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+                    viewModel.loginCustomer(email, pwd)
             } else {
                 AlertDialog.Builder(this).apply {
                     setTitle("Oops!")
@@ -89,6 +83,37 @@ class SignupActivity : AppCompatActivity() {
         binding.btnRegister.setOnClickListener {
             showLoading()
             doSignup()
+        }
+        viewModel.loggedIn.observe(this) {
+            if (it) {
+                stopLoading()
+                navigateToHome()
+            } else {
+                stopLoading()
+                AlertDialog.Builder(this).apply {
+                    setTitle("Oops!")
+                    setMessage("Login Gagal")
+                    setPositiveButton("OK") { _, _ ->
+                    }
+                }.show()
+            }
+        }
+    }
+    private fun navigateToHome() {
+        viewModel.getSession().observe(this) { user ->
+            if (user.roleid == "1") {
+                val intent = Intent(this, FaceCameraActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
+                finish()
+            } else if (user.roleid == "2") {
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 

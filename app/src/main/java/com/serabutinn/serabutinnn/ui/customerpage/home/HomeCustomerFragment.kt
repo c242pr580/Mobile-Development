@@ -42,7 +42,7 @@ class HomeCustomerFragment : Fragment() {
             startActivity(intent)
         }
         binding.Profile.setOnClickListener{
-            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
                 bottomNavigationView.selectedItemId = R.id.navigation_notifications2
 
         }

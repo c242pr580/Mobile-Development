@@ -1,28 +1,24 @@
 package com.serabutinn.serabutinnn.ui.mitrapage.Profile
 
+import android.Manifest
 import android.content.Intent
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.text.SimpleDateFormat
-import java.util.Date
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.ListItem
@@ -30,10 +26,22 @@ import com.serabutinn.serabutinnn.databinding.FragmentProfileBinding
 import com.serabutinn.serabutinnn.ui.UpdateBioActivity
 import com.serabutinn.serabutinnn.ui.adapter.CustomAdapter
 import com.serabutinn.serabutinnn.ui.auth.MainActivity2
+import com.serabutinn.serabutinnn.ui.customerpage.AddJobsActivity.Companion.REQUIRED_PERMISSION
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class ProfileFragment : Fragment() {
     private lateinit var photoFile: File
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(
+            requireContext(),
+            REQUIRED_PERMISSION
+        ) == PackageManager.PERMISSION_GRANTED
 
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -71,17 +79,27 @@ class ProfileFragment : Fragment() {
         binding.imageView2.setOnClickListener {
             showImagePickerDialog()
         }
+        if (!allPermissionsGranted()) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            }
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        }
         viewModel.isSuccess.observe(viewLifecycleOwner){
             if(it){
                 Toast.makeText(requireContext(), "Berhasil Update", Toast.LENGTH_SHORT).show()
                 viewModel.getSession().observe(viewLifecycleOwner) { user ->
 
-                    if(user.roleid=="1"){val navController = requireActivity().findNavController(R.id.nav_host_fragment_activity_main_customer)
+                    if(user.roleid=="1"){
+                        val navController = requireActivity().findNavController(R.id.fragmentContainerCust)
                         val navOptions = NavOptions.Builder()
                             .setPopUpTo(navController.graph.startDestinationId, false) // Clear stack up to start destination
                             .build()
                         navController.navigate(R.id.navigation_notifications2,null, navOptions)}
-                    else if(user.roleid=="2"){val navController = requireActivity().findNavController(R.id.nav_host_fragment_activity_home)
+                    else if(user.roleid=="2"){val navController = requireActivity().findNavController(R.id.fragmentContainer)
                         val navOptions = NavOptions.Builder()
                             .setPopUpTo(navController.graph.startDestinationId, false) // Clear stack up to start destination
                             .build()
@@ -141,7 +159,16 @@ class ProfileFragment : Fragment() {
             listViews.adapter = adapter
         }
     }
-
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(requireContext(), "Permission request granted", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireContext(), "Permission request denied", Toast.LENGTH_LONG).show()
+            }
+        }
     private fun update(title: String, subtitle: String) {
         val intent = Intent(requireContext(), UpdateBioActivity::class.java)
         intent.putExtra(UpdateBioActivity.TITLE, title)
@@ -224,6 +251,21 @@ class ProfileFragment : Fragment() {
     private fun sendFile(file: File) {
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.updateBio(user.token, file, null, null, null)
+        }
+    }
+
+    private fun restartFragment() {
+        val currentFragment = childFragmentManager.findFragmentById(R.id.fragmentContainer)
+        currentFragment?.let {
+            val fragmentTransaction = childFragmentManager.beginTransaction()
+
+            // Clear the fragment from the back stack (if it exists)
+            childFragmentManager.popBackStack(it::class.java.name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+            // Replace with a new instance
+            fragmentTransaction.replace(R.id.fragmentContainer, it::class.java.newInstance())
+            fragmentTransaction.addToBackStack(it::class.java.name) // Optionally add the new one to the back stack
+            fragmentTransaction.commit()
         }
     }
 

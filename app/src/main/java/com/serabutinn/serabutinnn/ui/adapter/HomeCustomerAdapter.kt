@@ -32,7 +32,7 @@ class HomeCustomerAdapter(private val id: UserModel) :
     class MyViewHolder(private val binding: ItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataJobsCustomer,id: UserModel) {
-            binding.cardView.setOnClickListener {
+            binding.root.setOnClickListener {
                 val intent = Intent(binding.root.context, DetailJobCustomerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra("id", data.jobId)
@@ -40,12 +40,12 @@ class HomeCustomerAdapter(private val id: UserModel) :
             }
             binding.tvStatus.text = data.status
             if (data.status == "Pending") {
-
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#F0FF0101"))
             }
             binding.tvDuit.text = data.cost?.let { formatToRupiah(it) }
             binding.tvWaktu.text = data.deadline
             binding.tvJudul.text = data.title
+            binding.lokasi.text = data.location
             Glide.with(binding.root)
                 .load(data.image)
                 .centerInside()

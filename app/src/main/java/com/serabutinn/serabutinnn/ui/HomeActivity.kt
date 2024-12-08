@@ -4,12 +4,17 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivityHomeBinding
+import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerFragment
+import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileFragment
+import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardFragment
+import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeFragment
 
 class HomeActivity : AppCompatActivity() {
 
@@ -23,15 +28,21 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
         enableEdgeToEdge()
 
-        val navView: BottomNavigationView = binding.navView
+        val navView: BottomNavigationView = binding.bottomNavigation
 
-        val navController = findNavController(R.id.nav_host_fragment_activity_home)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        loadFragment(HomeFragment())
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> loadFragment(HomeFragment())
+                R.id.navigation_dashboard -> loadFragment(DashboardFragment())
+                R.id.navigation_notifications -> loadFragment(ProfileFragment())
+            }
+            true
+        }
+    }
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }

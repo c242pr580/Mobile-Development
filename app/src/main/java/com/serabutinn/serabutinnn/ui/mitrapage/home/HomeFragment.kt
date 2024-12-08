@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.Profile.setOnClickListener{
-            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
             bottomNavigationView.selectedItemId = R.id.navigation_notifications
         }
         return root

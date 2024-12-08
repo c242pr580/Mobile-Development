@@ -30,6 +30,7 @@ class SignupViewModel(private val repository: UserRepository) : ViewModel() {
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
+
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
@@ -67,19 +68,18 @@ class SignupViewModel(private val repository: UserRepository) : ViewModel() {
             override fun onResponse(
                 call: Call<SignupResponse>, response: Response<SignupResponse>
             ) {
-                var errorBodys = "ASdf"
-                response.errorBody()?.let { errorBodys = it.string() }
 
-                Log.e("error2", errorBodys)
+                response.errorBody()?.let { val errorBodys = it.string()
                 try {
                     val jsonObject = JSONObject(errorBodys)
                     _error.value = jsonObject.getString("message")
                     // Handle the error message
                 } catch (e: JSONException) {
                     // Handle JSON parsing error
-                }
+                }}
                 if (response.isSuccessful) {
                     _signed.value = true
+                    Log.e("success", response.body()?.message.toString())
                 }
             }
         })
