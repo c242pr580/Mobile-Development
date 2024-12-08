@@ -58,7 +58,13 @@ class SignupActivity : AppCompatActivity() {
         viewModel.signed.observe(this) {
             stopLoading()
             if (it) {
+                val email = binding.txtInputEmail.text.toString()
+                val pwd = binding.txtPass.text.toString()
+                val roleId = if (binding.spinner.selectedItem.toString() == "Customer") 1 else 2
                 Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_LONG).show()
+                if(roleId == 1){
+
+                }
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

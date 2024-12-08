@@ -57,6 +57,9 @@ class ViewModelFactory (private val repository: UserRepository) : ViewModelProvi
             modelClass.isAssignableFrom(UpdateJobViewModel::class.java) -> {
                 UpdateJobViewModel(repository) as T
             }
+            modelClass.isAssignableFrom(FaceCameraViewModel::class.java) -> {
+                FaceCameraViewModel(repository) as T
+            }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }

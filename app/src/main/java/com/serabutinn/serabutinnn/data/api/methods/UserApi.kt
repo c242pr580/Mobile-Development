@@ -73,6 +73,13 @@ interface UserApi {
 
     @Multipart
     @POST("/customer/jobs/create")
+    fun uploadFace(
+        @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part?
+    ): Call<SignupResponse>
+
+    @Multipart
+    @POST("/customer/jobs/create")
     fun createJob(
         @Header("Authorization") token: String,
         @Part("title") title: RequestBody,
