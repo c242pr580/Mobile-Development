@@ -15,6 +15,7 @@ import com.serabutinn.serabutinnn.data.api.response.TakeJobResponse
 import com.serabutinn.serabutinnn.data.api.response.TitleCheckResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateBioResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateJobsResponse
+import com.serabutinn.serabutinnn.data.api.response.VerifyFaceResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -72,11 +73,18 @@ interface UserApi {
     ):Call<TitleCheckResponse>
 
     @Multipart
-    @POST("/customer/jobs/create")
+    @POST("/upload-face")
     fun uploadFace(
         @Header("Authorization") token: String,
         @Part image: MultipartBody.Part?
     ): Call<SignupResponse>
+
+    @Multipart
+    @POST("/verify-face")
+    fun verifyFace(
+        @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part?
+    ): Call<VerifyFaceResponse>
 
     @Multipart
     @POST("/customer/jobs/create")
