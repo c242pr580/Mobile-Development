@@ -92,8 +92,6 @@ class HomeCustomerFragment : Fragment() {
         }
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvJobs.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
-        binding.rvJobs.addItemDecoration(itemDecoration)
     }
     private fun showLoading(isLoading:Boolean){
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
