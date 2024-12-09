@@ -85,10 +85,10 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
 
     fun uploadFace(token: String, image: File) {
         var multipartBody: MultipartBody.Part? = null
-        val requestImageFile = image.asRequestBody("image/jpeg".toMediaType())
+        val requestImageFile = image.asRequestBody("image/jpg".toMediaType())
         multipartBody = requestImageFile.let {
             MultipartBody.Part.createFormData(
-                "image", image.name, it
+                "input_image", image.name, it
             )
         }
         val client = ApiClient.getApiService().verifyFace(token = "Bearer $token", multipartBody)

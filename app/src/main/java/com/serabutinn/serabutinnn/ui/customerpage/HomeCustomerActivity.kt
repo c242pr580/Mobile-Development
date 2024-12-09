@@ -1,6 +1,9 @@
 package com.serabutinn.serabutinnn.ui.customerpage
 
 import android.os.Bundle
+import android.os.Handler
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +31,16 @@ class HomeCustomerActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         enableEdgeToEdge()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerCust)
+                if (currentFragment is HomeCustomerFragment) {
+                    currentFragment.handleBackPress()
+                } else {
+                    finishAffinity() // Exit the app for other fragments
+                }
+            }
+        })
 
         val navView: BottomNavigationView = binding.bottomNavigation
 
@@ -41,6 +54,7 @@ class HomeCustomerActivity : AppCompatActivity() {
             true
         }
     }
+
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerCust, fragment)

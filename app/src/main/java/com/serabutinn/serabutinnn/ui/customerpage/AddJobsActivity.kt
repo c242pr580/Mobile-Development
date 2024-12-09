@@ -4,6 +4,8 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -23,6 +25,8 @@ import com.serabutinn.serabutinnn.getImageUri
 import com.serabutinn.serabutinnn.reduceFileImage
 import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -165,6 +169,28 @@ class AddJobsActivity : AppCompatActivity() {
     private fun showImage() {
         currentImageUri?.let { binding.ivJobs.setImageURI(it) }
     }
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(cacheDir, "compressed_${file.name}")
+        val outputStream = FileOutputStream(compressedFile)
+
+        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Verify the size is under 1MB, reduce quality further if needed
+        while (compressedFile.length() > 1_000_000) {
+            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
+            compressedFile.delete()
+            val reducedStream = FileOutputStream(compressedFile)
+            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
+            reducedStream.flush()
+            reducedStream.close()
+        }
+
+        return compressedFile
+    }
 
     private fun uploadImage() {
         showLoading(true)
@@ -197,7 +223,7 @@ class AddJobsActivity : AppCompatActivity() {
                     )
                 }
                 currentImageUri?.let { uri ->
-                    val imageFile = uriToFile(uri, this).reduceFileImage()
+                    val imageFile =compressImage(uriToFile(uri, this).reduceFileImage())
                     Log.d("Image File", "showImage: ${imageFile.path}")
                     val description = binding.txtInputDesc.text.toString()
                     viewModel.checkTitle(

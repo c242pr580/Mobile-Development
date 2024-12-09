@@ -1,116 +1,139 @@
 package com.serabutinn.serabutinnn.ui.auth
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.widget.Button
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.serabutinn.serabutinnn.databinding.ActivityFaceCameraBinding
+import com.serabutinn.serabutinnn.getImageUri
 import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
+import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.FaceCameraViewModel
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import java.io.FileOutputStream
 
 class FaceCameraActivity : AppCompatActivity() {
-    private val REQUEST_CAMERA_PERMISSION = 100
-    private val REQUEST_CAMERA = 101
-    private lateinit var photoFile: File
-    private lateinit var photoUri: Uri
+    private var currentImageUri: Uri? = null
+
+    companion object {
+        const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+    }
+
+    private fun allPermissionsGranted() = ContextCompat.checkSelfPermission(
+        this, REQUIRED_PERMISSION
+    ) == PackageManager.PERMISSION_GRANTED
 
     private val viewModel: FaceCameraViewModel by viewModels {
         ViewModelFactory.getInstance(this)
     }
-
     private lateinit var binding: ActivityFaceCameraBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFaceCameraBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        val button: Button = binding.button
-        button.setOnClickListener {
-            if (checkAndRequestPermissions()) {
-                openCamera()
+        setContentView(binding.root)
+        if (!allPermissionsGranted()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
             }
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
-        binding.btnUpload.setOnClickListener {
-            sendFile(photoFile)
-        }
-        viewModel.isSuccess.observe(this){
-            if(it){
+        viewModel.isSuccess.observe(this) {
+            if (it) {
+                Toast.makeText(this, "Upload Success", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeCustomerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()
+            } else {
+                Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+        val captureButton = binding.captureButton
 
-    private fun checkAndRequestPermissions(): Boolean {
-        val permissions = arrayOf(Manifest.permission.CAMERA)
-        val permissionGranted = ContextCompat.checkSelfPermission(
-            this, Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (!permissionGranted) {
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_CAMERA_PERMISSION)
-        }
-        return permissionGranted
-    }
-
-    private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            photoFile = createImageFile()
-            photoUri = FileProvider.getUriForFile(this, "$packageName.fileprovider", photoFile)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-            startActivityForResult(intent, REQUEST_CAMERA)
+        captureButton.setOnClickListener {
+            showImagePickerDialog()
         }
     }
 
-    private fun createImageFile(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir = getExternalFilesDir(null)
-        return File.createTempFile("JPEG_${timestamp}_", ".jpg", storageDir).apply {
-            // Save the file path for further use
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
         }
     }
 
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
-            binding.btnUpload.setOnClickListener {
-                sendFile(photoFile)
+    private fun showImagePickerDialog() {
+        currentImageUri = getImageUri(this)
+        launcherIntentCamera.launch(currentImageUri!!)
+    }
+
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            showImage()
+        } else {
+            currentImageUri = null
+        }
+    }
+
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(cacheDir, "compressed_${file.name}")
+        val outputStream = FileOutputStream(compressedFile)
+
+        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Verify the size is under 1MB, reduce quality further if needed
+        while (compressedFile.length() > 1_000_000) {
+            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
+            compressedFile.delete()
+            val reducedStream = FileOutputStream(compressedFile)
+            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
+            reducedStream.flush()
+            reducedStream.close()
+        }
+
+        return compressedFile
+    }
+
+    private fun showImage() {
+        currentImageUri?.let { uri ->
+            val file: File = uriToFile(uri, this)
+            val compressedFile = compressImage(file)
+
+            val multipartBody: MultipartBody.Part?
+            val requestImageFile = compressedFile.asRequestBody("image/jpeg".toMediaType())
+            multipartBody = requestImageFile.let {
+                MultipartBody.Part.createFormData(
+                    "verification_image", compressedFile.name, it
+                )
             }
-        }
-    }
-
-    private fun sendFile(file: File) {
-        viewModel.getSession().observe(this){
-            viewModel.uploadFace(it.token,file)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera()
+            viewModel.getSession().observe(this) { user ->
+                viewModel.uploadFace(user.token, multipartBody)
             }
         }
     }

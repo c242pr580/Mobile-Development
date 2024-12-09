@@ -73,14 +73,14 @@ interface UserApi {
     ):Call<TitleCheckResponse>
 
     @Multipart
-    @POST("/upload-face")
+    @POST("/customer/upload-face")
     fun uploadFace(
         @Header("Authorization") token: String,
         @Part image: MultipartBody.Part?
     ): Call<SignupResponse>
 
     @Multipart
-    @POST("/verify-face")
+    @POST("/customer/verify-face")
     fun verifyFace(
         @Header("Authorization") token: String,
         @Part image: MultipartBody.Part?

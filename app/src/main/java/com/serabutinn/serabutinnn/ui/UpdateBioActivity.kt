@@ -42,7 +42,7 @@ class UpdateBioActivity : AppCompatActivity() {
                 else if(title=="No. Telepon"){
                     viewModel.updateBio(user.token,null,binding.inputan.text.toString(),null)
                 }
-                else if(title=="Alamat"){
+                else if(title=="Lokasi"){
                     viewModel.updateBio(user.token,null,null,binding.inputan.text.toString())
                 }
             }

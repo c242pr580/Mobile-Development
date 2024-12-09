@@ -29,26 +29,10 @@ class SignupActivity : AppCompatActivity() {
         val view = binding.root
         lightStatusBar(window)
         setContentView(view)
-        viewModel.getSession().observe(this) { user ->
-            if (user.isLogin) {
-                if (user.roleid == "1") {
-                    val intent = Intent(this, HomeCustomerActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.setFlags(FLAG_ACTIVITY_NO_HISTORY)
-                    startActivity(intent)
-                } else {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.setFlags(FLAG_ACTIVITY_NO_HISTORY)
-                    startActivity(intent)
-                }
-            }
-        }
         // Spinner Drop down elements
         val categories: MutableList<String> = ArrayList()
         categories.add("Customer")
         categories.add("Mitra")
-
 
         // Creating adapter for spinner
         val dataAdapter = ArrayAdapter(this, R.layout.simple_spinner, categories)
@@ -60,7 +44,6 @@ class SignupActivity : AppCompatActivity() {
             if (it) {
                 val email = binding.txtInputEmail.text.toString()
                 val pwd = binding.txtPass.text.toString()
-                val roleId = if (binding.spinner.selectedItem.toString() == "Customer") 1 else 2
                 Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_LONG).show()
                     viewModel.loginCustomer(email, pwd)
             } else {
@@ -103,14 +86,12 @@ class SignupActivity : AppCompatActivity() {
         viewModel.getSession().observe(this) { user ->
             if (user.roleid == "1") {
                 val intent = Intent(this, FaceCameraActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
             } else if (user.roleid == "2") {
                 val intent = Intent(this, HomeActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
             }

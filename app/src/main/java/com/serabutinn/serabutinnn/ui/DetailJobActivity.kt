@@ -71,6 +71,11 @@ class DetailJobActivity : AppCompatActivity() {
                         binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
                         binding.btnUpdate.visibility = View.GONE
                     }
+                    "Canceled"-> {
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                        binding.btnUpdate.visibility = View.GONE
+                    }
                 }
             }
 

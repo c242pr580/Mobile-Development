@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.serabutinn.retrofitlogin"
-        minSdk 21
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -45,7 +45,6 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.9.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.8.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.8.3'
-    implementation 'androidx.activity:activity:1.9.3'
     implementation 'com.google.android.gms:play-services-maps:19.0.0'
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation 'androidx.datastore:datastore-preferences-core-jvm:1.1.1'

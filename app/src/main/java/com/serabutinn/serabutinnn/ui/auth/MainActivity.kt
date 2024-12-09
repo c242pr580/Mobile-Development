@@ -97,7 +97,17 @@ class MainActivity : AppCompatActivity() {
     private fun doLogin() {
         val email = binding.txtInputEmail.text.toString()
         val pwd = binding.txtPass.text.toString()
-        viewModel.loginCustomer(email = email, password = pwd)
+        if (email.isEmpty() || pwd.isEmpty()) {
+            AlertDialog.Builder(this).apply {
+                setTitle("Oops!")
+                setMessage("Email dan Password tidak boleh kosong")
+                setPositiveButton("OK") { _, _ ->
+                }
+            }
+        } else {
+            viewModel.loginCustomer(email = email, password = pwd)
+        }
+
     }
 
     private fun doSignup() {

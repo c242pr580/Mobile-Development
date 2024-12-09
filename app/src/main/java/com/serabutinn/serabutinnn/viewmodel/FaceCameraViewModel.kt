@@ -9,13 +9,10 @@ import com.serabutinn.serabutinnn.data.api.ApiClient
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.SignupResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 
 class FaceCameraViewModel(private val repository: UserRepository) : ViewModel() {
     private val _isSuccess = MutableLiveData<Boolean>()
@@ -24,23 +21,17 @@ class FaceCameraViewModel(private val repository: UserRepository) : ViewModel() 
         return repository.getSession().asLiveData()
     }
 
-    fun uploadFace(token: String, image: File) {
-        var multipartBody: MultipartBody.Part? = null
-        val requestImageFile = image.asRequestBody("image/jpeg".toMediaType())
-        multipartBody = requestImageFile.let {
-            MultipartBody.Part.createFormData(
-                "image", image.name, it
-            )
-        }
-        val client = ApiClient.getApiService().uploadFace(token = "Bearer $token", multipartBody)
+    fun uploadFace(token: String, image: MultipartBody.Part) {
+        val client = ApiClient.getApiService().uploadFace(token = "Bearer $token", image)
         client.enqueue(object : Callback<SignupResponse> {
             override fun onResponse(
                 call: Call<SignupResponse>,
                 response: Response<SignupResponse>
             ) {
                 if(response.isSuccessful){
+                    Log.e("success22", response.body()?.message.toString())
                     _isSuccess.value = true
-                }
+                }else{Log.e("error2", response.body()?.message.toString())}
             }
 
             override fun onFailure(call: Call<SignupResponse>, t: Throwable) {

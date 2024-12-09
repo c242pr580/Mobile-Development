@@ -2,16 +2,19 @@ package com.serabutinn.serabutinnn.ui.customerpage
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +24,8 @@ import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityDetailJobCustomerBinding
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
@@ -39,6 +44,16 @@ class DetailJobCustomerActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityDetailJobCustomerBinding
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                // The file can now be sent directly
+                sendFile(photoFile)
+            } else {
+                Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +101,13 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                         binding.btnUpdate.visibility = View.GONE
                         binding.btnHapus.visibility = View.GONE
                     }
+                    "Canceled" ->{
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                        binding.btnCompleted.visibility = View.GONE
+                        binding.btnUpdate.visibility = View.GONE
+                        binding.btnHapus.visibility = View.GONE
+                    }
                 }
 
             }
@@ -108,7 +130,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         }
         binding.btnCompleted.setOnClickListener {
             if (checkAndRequestPermissions()) {
-                openCamera()
+                dispatchTakePictureIntent()
             }
             viewModel.isVerified.observe(this) {
                 if (!it) {
@@ -143,40 +165,68 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
 
         if (!permissionGranted) {
+            Log.e("Permission", "Permission not granted")
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CAMERA_PERMISSION)
         }
         return permissionGranted
     }
 
-    private fun openCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            photoFile = createImageFile()
-            photoUri = FileProvider.getUriForFile(this, "$packageName.fileprovider", photoFile)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-            startActivityForResult(intent, REQUEST_CAMERA)
+    private fun dispatchTakePictureIntent() {
+        val photoFile = try {
+            createImageFile()
+        } catch (ex: IOException) {
+            Toast.makeText(
+                this,
+                "Error occurred while creating the file",
+                Toast.LENGTH_SHORT
+            ).show()
+            null
+        }
+
+        photoFile?.also {
+            val photoUri = FileProvider.getUriForFile(
+                this,
+                "${this.packageName}.fileprovider",
+                it
+            )
+            takePictureLauncher.launch(photoUri)
         }
     }
 
     private fun createImageFile(): File {
-        val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir = getExternalFilesDir(null)
-        return File.createTempFile("JPEG_${timestamp}_", ".jpg", storageDir).apply {
-            // Save the file path for further use
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = this.getExternalFilesDir(null)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
+            photoFile = this
         }
     }
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(cacheDir, "compressed_${file.name}")
+        val outputStream = FileOutputStream(compressedFile)
 
-    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
-            sendFile(photoFile)
+        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Verify the size is under 1MB, reduce quality further if needed
+        while (compressedFile.length() > 1_000_000) {
+            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
+            compressedFile.delete()
+            val reducedStream = FileOutputStream(compressedFile)
+            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
+            reducedStream.flush()
+            reducedStream.close()
         }
+
+        return compressedFile
     }
 
     private fun sendFile(file: File) {
+        val compressedFile = compressImage(file)
         viewModel.getSession().observe(this){
-            viewModel.uploadFace(it.token,file)
+            viewModel.uploadFace(it.token,compressedFile)
         }
     }
 
@@ -186,7 +236,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera()
+                dispatchTakePictureIntent()
             }
         }
     }

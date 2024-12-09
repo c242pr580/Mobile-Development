@@ -3,6 +3,8 @@ package com.serabutinn.serabutinnn.ui.mitrapage.Profile
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -92,18 +94,7 @@ class ProfileFragment : Fragment() {
             if(it){
                 Toast.makeText(requireContext(), "Berhasil Update", Toast.LENGTH_SHORT).show()
                 viewModel.getSession().observe(viewLifecycleOwner) { user ->
-
-                    if(user.roleid=="1"){
-                        val navController = requireActivity().findNavController(R.id.fragmentContainerCust)
-                        val navOptions = NavOptions.Builder()
-                            .setPopUpTo(navController.graph.startDestinationId, false) // Clear stack up to start destination
-                            .build()
-                        navController.navigate(R.id.navigation_notifications2,null, navOptions)}
-                    else if(user.roleid=="2"){val navController = requireActivity().findNavController(R.id.fragmentContainer)
-                        val navOptions = NavOptions.Builder()
-                            .setPopUpTo(navController.graph.startDestinationId, false) // Clear stack up to start destination
-                            .build()
-                        navController.navigate(R.id.navigation_notifications,null, navOptions)}
+                    viewModel.getBiodata(user.token)
                 }
             }
         }
@@ -247,8 +238,31 @@ class ProfileFragment : Fragment() {
 
         return file
     }
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(requireContext().cacheDir, "compressed_${file.name}")
+        val outputStream = FileOutputStream(compressedFile)
+
+        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Verify the size is under 1MB, reduce quality further if needed
+        while (compressedFile.length() > 1_000_000) {
+            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
+            compressedFile.delete()
+            val reducedStream = FileOutputStream(compressedFile)
+            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
+            reducedStream.flush()
+            reducedStream.close()
+        }
+
+        return compressedFile
+    }
 
     private fun sendFile(file: File) {
+        val compressedFile = compressImage(file)
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.updateBio(user.token, file, null, null, null)
         }

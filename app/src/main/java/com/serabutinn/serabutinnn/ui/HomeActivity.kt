@@ -1,6 +1,7 @@
 package com.serabutinn.serabutinnn.ui
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,16 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
         enableEdgeToEdge()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+                if (currentFragment is HomeFragment) {
+                    currentFragment.handleBackPress()
+                } else {
+                    finishAffinity() // Exit the app for other fragments
+                }
+            }
+        })
 
         val navView: BottomNavigationView = binding.bottomNavigation
 
