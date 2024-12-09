@@ -13,6 +13,8 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+
+
         // Register ActivityLifecycleCallbacks
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override

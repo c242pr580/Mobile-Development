@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -36,9 +35,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         const val ID = "id"
     }
     private val REQUEST_CAMERA_PERMISSION = 100
-    private val REQUEST_CAMERA = 101
     private lateinit var photoFile: File
-    private lateinit var photoUri: Uri
     private val viewModel by viewModels<DetailJobCustomerViewModel> {
         ViewModelFactory.getInstance(this)
     }
@@ -139,13 +136,6 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-
-        }
-
-        onBackPressedDispatcher.addCallback(this) {
-            val intent = Intent(this@DetailJobCustomerActivity, HomeCustomerActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 

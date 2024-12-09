@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.serabutinn.serabutinnn">
-
     <uses-feature android:name="android.hardware.camera" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
@@ -54,7 +52,27 @@
             android:exported="false" />
         <activity
             android:name=".ui.customerpage.PaymentActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="www.serabutinn.com"
+                    android:pathPrefix="/transaction" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.AUTOVERIFY" />
+                <data
+                    android:scheme="https"
+                    android:host="www.serabutinn.com"
+                    android:pathPrefix="/transaction" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.customerpage.DetailJobCustomerActivity"
             android:exported="false" />
@@ -87,5 +105,4 @@
             android:name=".ui.customerpage.HomeCustomerActivity"
             android:exported="false" />
     </application>
-
 </manifest>

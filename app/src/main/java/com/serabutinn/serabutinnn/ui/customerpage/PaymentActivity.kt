@@ -2,6 +2,7 @@ package com.serabutinn.serabutinnn.ui.customerpage
 
 import android.os.Bundle
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,10 +26,7 @@ class PaymentActivity : AppCompatActivity() {
             binding.PaymentWebview.loadUrl(it.toString())
             binding.PaymentWebview.settings.javaScriptEnabled = true
             binding.PaymentWebview.settings.supportZoom()
+
         }
-
-//        viewModel
-//
-
     }
 }

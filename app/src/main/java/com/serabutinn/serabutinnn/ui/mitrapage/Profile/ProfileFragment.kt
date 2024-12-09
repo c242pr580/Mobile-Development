@@ -264,7 +264,7 @@ class ProfileFragment : Fragment() {
     private fun sendFile(file: File) {
         val compressedFile = compressImage(file)
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
-            viewModel.updateBio(user.token, file, null, null, null)
+            viewModel.updateBio(user.token, compressedFile, null, null, null)
         }
     }
 
