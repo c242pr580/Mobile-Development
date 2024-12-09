@@ -40,8 +40,6 @@ class UpdateJobActivity : AppCompatActivity() {
         const val ID = "id"
         const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
-
-    private var currentImageUri: Uri? = null
     private var datepicked: String? = ""
     private lateinit var tvSelectedDate: TextView
 
@@ -62,8 +60,6 @@ class UpdateJobActivity : AppCompatActivity() {
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }
-        binding.btnGalery.setOnClickListener { startGallery() }
-        binding.btnCamera.setOnClickListener { startCamera() }
         binding.buttonUpload.setOnClickListener { uploadImage() }
         if (!allPermissionsGranted()) {
 
@@ -101,9 +97,6 @@ class UpdateJobActivity : AppCompatActivity() {
                 binding.txtInputPrice.setText(it.cost)
                 binding.txtInputLocation.setText(it.location)
                 binding.tvSelectedDate.text = "Deadline : ${it.deadline}"
-                Glide.with(this)
-                    .load(it.image)
-                    .into(binding.ivJobs)
             }
 
         }
@@ -140,57 +133,6 @@ class UpdateJobActivity : AppCompatActivity() {
             }
         }
 
-    private fun startGallery() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        } else {
-            val intent = Intent(Intent.ACTION_PICK).apply {
-                type = "image/*"
-            }
-            legacyGalleryLauncher.launch(intent)
-        }
-    }
-
-    private val legacyGalleryLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            currentImageUri = result.data?.data
-            showImage()
-        } else {
-            Log.d("Photo Picker", "No media selected")
-        }
-    }
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            currentImageUri = uri
-            showImage()
-        } else {
-            Log.d("Photo Picker", "No media selected")
-        }
-    }
-
-    private fun startCamera() {
-        currentImageUri = getImageUri(this)
-        launcherIntentCamera.launch(currentImageUri!!)
-    }
-
-    private val launcherIntentCamera = registerForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { isSuccess ->
-        if (isSuccess) {
-            showImage()
-        } else {
-            currentImageUri = null
-        }
-    }
-
-    private fun showImage() {
-        currentImageUri?.let { binding.ivJobs.setImageURI(it) }
-    }
-
     private fun uploadImage() {
         showLoading(true)
         if (binding.txtInputDesc.text.toString().isEmpty() ||
@@ -210,9 +152,6 @@ class UpdateJobActivity : AppCompatActivity() {
             viewModel.getSession().observe(this) { user ->
                 val token = user.token
                 val id = intent.getStringExtra(ID)
-                currentImageUri?.let { uri ->
-                    val imageFile = uriToFile(uri, this).reduceFileImage()
-                    Log.d("Image File", "showImage: ${imageFile.path}")
                     val description = binding.txtInputDesc.text.toString()
                     viewModel.updateJob(
                         token,
@@ -221,17 +160,14 @@ class UpdateJobActivity : AppCompatActivity() {
                         datepicked.toString(),
                         binding.txtInputPrice.text.toString(),
                         binding.txtInputLocation.text.toString(),
-                        imageFile,
+                        null,
                         id.toString()
                     )
-                }
+
             }
         }
     }
-
     private fun showLoading(isLoading: Boolean) {
         binding.progressIndicator2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-
-
 }

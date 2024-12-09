@@ -40,7 +40,6 @@ class SignupActivity : AppCompatActivity() {
         // attaching data adapter to spinner
         binding.spinner.adapter = dataAdapter
         viewModel.signed.observe(this) {
-            stopLoading()
             if (it) {
                 val email = binding.txtInputEmail.text.toString()
                 val pwd = binding.txtPass.text.toString()

@@ -97,14 +97,7 @@ class DetailJobActivity : AppCompatActivity() {
                 viewModel.daftarKerja(token, id.toString())
                 recreate()
             }
-
         }
-        onBackPressedDispatcher.addCallback(this) {
-            val intent = Intent(this@DetailJobActivity, HomeActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
     }
 
     private fun showLoading(isLoading: Boolean) {

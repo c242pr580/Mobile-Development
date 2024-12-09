@@ -223,12 +223,12 @@ class AddJobsActivity : AppCompatActivity() {
                     )
                 }
                 currentImageUri?.let { uri ->
-                    val imageFile =compressImage(uriToFile(uri, this).reduceFileImage())
+                    val imageFile =compressImage(uriToFile(uri, this))
                     Log.d("Image File", "showImage: ${imageFile.path}")
                     val description = binding.txtInputDesc.text.toString()
                     viewModel.checkTitle(
                         token,
-                        null,
+                        imageFile,
                         description,
                         binding.txtInputTitle.text.toString(),
                         datepicked.toString(),
