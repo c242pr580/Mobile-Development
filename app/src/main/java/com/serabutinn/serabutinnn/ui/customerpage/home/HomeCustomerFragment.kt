@@ -73,6 +73,7 @@ class HomeCustomerFragment : Fragment() {
 
         }
         viewModel.dataBio.observe(viewLifecycleOwner){
+            showItems()
             if (it != null) {
                 binding.tvHiNama.text="Hi, ${it.name}"
                 Glide.with(this)
@@ -96,12 +97,20 @@ class HomeCustomerFragment : Fragment() {
     private fun showLoading(isLoading:Boolean){
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+    private fun showItems(){
+        binding.cview.visibility=View.VISIBLE
+        binding.LLItems.visibility=View.VISIBLE
+        binding.cardView2.visibility=View.VISIBLE
+    }
+
     private fun showError(message: String) {
         AlertDialog.Builder(requireActivity())
             .setTitle("Terjadi Kesalahan")
             .setMessage(message)
             .setPositiveButton("Okay"){_,_ -> }
     }
+
     private fun setJobsData(consumerReviews: List<DataJobsCustomer>) {
         viewModel.getSession().observe(viewLifecycleOwner){
             val adapter = HomeCustomerAdapter(it)
