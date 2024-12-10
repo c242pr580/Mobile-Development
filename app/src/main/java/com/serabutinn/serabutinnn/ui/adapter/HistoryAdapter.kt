@@ -2,6 +2,7 @@ package com.serabutinn.serabutinnn.ui.adapter
 
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataJobsMitra
-import com.serabutinn.serabutinnn.data.api.response.ListJobsMitraResponse
 import com.serabutinn.serabutinnn.databinding.ItemsBinding
 import com.serabutinn.serabutinnn.ui.DetailJobActivity
 import com.serabutinn.serabutinnn.ui.adapter.HistoryAdapter.MyViewHolder.Companion.DIFF_CALLBACK
@@ -20,6 +20,7 @@ import java.text.DecimalFormatSymbols
 
 class HistoryAdapter(private val id:UserModel) : ListAdapter<DataJobsMitra, HistoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
+    private val originalList = mutableListOf<DataJobsMitra>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding,id)
@@ -94,7 +95,18 @@ class HistoryAdapter(private val id:UserModel) : ListAdapter<DataJobsMitra, Hist
         }
     }
     fun filter(query: String) {
-        val filteredList = currentList.filter { it.title?.contains(query, ignoreCase = true)?:false }
+        val filteredList = if (query.isEmpty()) {
+            originalList // No filtering, return the original list
+        } else {
+            originalList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
+        }
         submitList(filteredList)  // Update the list using submitList
+    }
+    fun setData(list: List<DataJobsMitra>) {
+        originalList.clear()
+        originalList.addAll(list)
+        submitList(list)
+        Log.d("HistoryCustomerAdapter", "Original List Size: ${originalList.size}")
+    // Display the original data initially
     }
 }
