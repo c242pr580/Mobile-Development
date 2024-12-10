@@ -10,7 +10,7 @@ import com.serabutinn.serabutinnn.databinding.ActivityMainCustomerBinding
 import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerFragment
 import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileFragment
-import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardFragment
+import com.serabutinn.serabutinnn.ui.mitrapage.history.HistoryFragment
 import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeFragment
 
 class HomeCustomerActivity : AppCompatActivity() {
@@ -47,7 +47,7 @@ class HomeCustomerActivity : AppCompatActivity() {
                 }
                 R.id.navigation_dashboard2 -> {
                     currentFragmentId = R.id.navigation_dashboard2
-                    replaceFragment(DashboardFragment())
+                    replaceFragment(HistoryFragment())
                     true
                 }
                 R.id.navigation_notifications2 -> {
@@ -64,7 +64,7 @@ class HomeCustomerActivity : AppCompatActivity() {
         }
         when (currentFragmentId) {
             R.id.navigation_home_customer -> replaceFragment(HomeCustomerFragment())
-            R.id.navigation_dashboard2 -> replaceFragment(DashboardFragment())
+            R.id.navigation_dashboard2 -> replaceFragment(HistoryFragment())
             R.id.navigation_notifications2 -> replaceFragment(ProfileFragment())
         }
     }

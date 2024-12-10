@@ -1,4 +1,4 @@
-package com.serabutinn.serabutinnn.ui.mitrapage.dashboard
+package com.serabutinn.serabutinnn.ui.mitrapage.history
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,18 +13,19 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.DataJobsMitra
-import com.serabutinn.serabutinnn.databinding.FragmentDashboardBinding
+import com.serabutinn.serabutinnn.databinding.FragmentHistoryBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.adapter.HistoryAdapter
 import com.serabutinn.serabutinnn.ui.adapter.HistoryCustomerAdapter
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
-class DashboardFragment : Fragment() {
-    private val viewModel by viewModels<DashboardViewModel> {
+class HistoryFragment : Fragment() {
+    private val viewModel by viewModels<HistoryViewModel> {
         ViewModelFactory.getInstance(
             requireActivity()
         )
     }
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentHistoryBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -35,8 +36,9 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        lightStatusBar(requireActivity().window)
         return root
     }
 
@@ -62,10 +64,6 @@ class DashboardFragment : Fragment() {
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvJobs.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
-        binding.rvJobs.addItemDecoration(itemDecoration)
-
-
     }
 
     private fun setJobsData(consumerReviews: List<DataJobsMitra?>?) {

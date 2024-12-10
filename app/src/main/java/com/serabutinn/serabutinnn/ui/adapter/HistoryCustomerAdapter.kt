@@ -15,6 +15,7 @@ import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.databinding.ItemsBinding
 import com.serabutinn.serabutinnn.ui.DetailJobActivity
+import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerActivity
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -37,8 +38,8 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
         @SuppressLint("SetTextI18n")
         fun bind(data: DataJobsCustomer) {
             binding.root.setOnClickListener {
-                val intent = Intent(binding.root.context, DetailJobActivity::class.java)
-                intent.putExtra(DetailJobActivity.ID, data.jobId.toString())
+                val intent = Intent(binding.root.context, DetailJobCustomerActivity::class.java)
+                intent.putExtra(DetailJobCustomerActivity.ID, data.jobId.toString())
                 binding.root.context.startActivity(intent)
             }
             binding.tvJudul.text = data.title

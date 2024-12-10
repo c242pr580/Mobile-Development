@@ -13,6 +13,7 @@ import com.serabutinn.serabutinnn.data.api.response.DataBio
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.ListCustomerJobsResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
+import com.serabutinn.serabutinnn.ui.adapter.HomeCustomerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +27,9 @@ class HomeCustomerViewModel(private val repository: UserRepository) : ViewModel(
     val message: LiveData<String> = _message
     private val _dataBio = MutableLiveData<DataBio?>()
     val dataBio: LiveData<DataBio?> = _dataBio
+    private val _filteredJobs = MutableLiveData<List<DataJobsCustomer>>()
+    val filteredJobs: LiveData<List<DataJobsCustomer>> = _filteredJobs
+
 
     fun getSession(): LiveData<UserModel> { return repository.getSession().asLiveData() }
     fun getBiodata(token:String){
@@ -64,6 +68,9 @@ class HomeCustomerViewModel(private val repository: UserRepository) : ViewModel(
             ) {
                 _isLoading.value=false
                 if (!response.isSuccessful){
+                    val jobs = response.body()?.data?.filterNotNull()
+                    _data.value = jobs!!
+                    filterJobs(jobs) //
                     _message.value = response.message().toString()
                 }else{
                     _data.value = response.body()?.data?.filterNotNull()
@@ -75,6 +82,11 @@ class HomeCustomerViewModel(private val repository: UserRepository) : ViewModel(
             }
 
         })
+    }
 
+    private fun filterJobs(originalList: List<DataJobsCustomer>?) {
+        _filteredJobs.value = originalList?.filter {
+            it.status == "In Progress" || it.status == "Pending"
+        }
     }
 }

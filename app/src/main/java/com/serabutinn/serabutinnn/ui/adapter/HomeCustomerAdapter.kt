@@ -20,6 +20,11 @@ import java.text.DecimalFormatSymbols
 class HomeCustomerAdapter(private val id: UserModel) :
     ListAdapter<DataJobsCustomer, HomeCustomerAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
+    fun submitFilteredList(list: List<DataJobsCustomer>) {
+        val filteredList = list.filter { it.status == "In Progress" || it.status == "Pending" }
+        submitList(filteredList)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)

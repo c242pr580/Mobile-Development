@@ -6,15 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivityHomeBinding
-import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerFragment
 import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileFragment
-import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardFragment
+import com.serabutinn.serabutinnn.ui.mitrapage.history.HistoryFragment
 import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeFragment
 
 class HomeActivity : AppCompatActivity() {
@@ -45,7 +40,7 @@ class HomeActivity : AppCompatActivity() {
         navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> loadFragment(HomeFragment())
-                R.id.navigation_dashboard -> loadFragment(DashboardFragment())
+                R.id.navigation_dashboard -> loadFragment(HistoryFragment())
                 R.id.navigation_notifications -> loadFragment(ProfileFragment())
             }
             true

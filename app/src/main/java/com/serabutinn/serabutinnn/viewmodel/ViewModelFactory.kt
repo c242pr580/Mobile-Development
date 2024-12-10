@@ -11,7 +11,7 @@ import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.PaymentViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileViewModel
-import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardViewModel
+import com.serabutinn.serabutinnn.ui.mitrapage.history.HistoryViewModel
 import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeViewModel
 import com.serabutinn.serabutinnn.ui.UpdateBioViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.CompletedJobsViewModel
@@ -43,8 +43,8 @@ class ViewModelFactory (private val repository: UserRepository) : ViewModelProvi
             modelClass.isAssignableFrom(DetailJobCustomerViewModel::class.java) -> {
                 DetailJobCustomerViewModel(repository) as T
             }
-            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> {
-                DashboardViewModel(repository) as T
+            modelClass.isAssignableFrom(HistoryViewModel::class.java) -> {
+                HistoryViewModel(repository) as T
             }
             modelClass.isAssignableFrom(PaymentViewModel::class.java) -> {
                 PaymentViewModel(repository) as T

@@ -1,4 +1,4 @@
-package com.serabutinn.serabutinnn.ui.mitrapage.dashboard
+package com.serabutinn.serabutinnn.ui.mitrapage.history
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.serabutinn.serabutinnn.data.api.ApiClient
-import com.serabutinn.serabutinnn.data.api.response.DataDetail
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.DataJobsMitra
 import com.serabutinn.serabutinnn.data.api.response.ListCustomerJobsResponse
@@ -16,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DashboardViewModel(private val repository: UserRepository) : ViewModel() {
+class HistoryViewModel(private val repository: UserRepository) : ViewModel() {
     private val _data = MutableLiveData<List<DataJobsMitra?>?>()
     val data: LiveData<List<DataJobsMitra?>?> = _data
     private val _dataCustomer = MutableLiveData<List<DataJobsCustomer?>?>()

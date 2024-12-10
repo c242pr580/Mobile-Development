@@ -6,9 +6,9 @@
     android:id="@+id/customer_navigation">
     <fragment
         android:id="@+id/navigation_dashboard2"
-        android:name="com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardFragment"
+        android:name="com.serabutinn.serabutinnn.ui.mitrapage.history.HistoryFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/navigation_notifications2"

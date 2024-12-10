@@ -68,5 +68,6 @@
     <string name="confirm">Confirm</string>
     <string name="information">Information!</string>
     <string name="close">Close</string>
+    <string name="search">Search</string>
     <string name="profile_picture_url">https://storage.googleapis.com/serabutinn-bucket/imageApps/imageapps.png</string>
 </resources>
