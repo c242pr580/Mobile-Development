@@ -13,7 +13,6 @@ import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivitySignupBinding
 import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.HomeActivity
-import com.serabutinn.serabutinnn.ui.customerpage.HomeCustomerActivity
 import com.serabutinn.serabutinnn.viewmodel.SignupViewModel
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 

@@ -78,7 +78,7 @@ class AddJobsViewModel(private val repository: UserRepository) : ViewModel() {
         var multipartBody: MultipartBody.Part? = null
         if (imageFile != null) {
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            multipartBody = requestImageFile?.let {
+            multipartBody = requestImageFile.let {
                 MultipartBody.Part.createFormData(
                     "image",
                     imageFile.name,

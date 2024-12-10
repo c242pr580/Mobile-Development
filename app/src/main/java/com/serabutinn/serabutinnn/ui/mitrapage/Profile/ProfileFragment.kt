@@ -19,8 +19,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.ListItem
@@ -105,6 +103,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.getBiodata(user.token)
+            viewModel.getDetailMitra(user.token, user.id)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
@@ -119,37 +118,50 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
-            showItems()
-            Log.e("Data", it.toString())
-            if (it != null) {
-                binding.tvname.text = it.name
-                binding.tvemail.text = it.email
-                binding.tvphone.text = it.phone
+            viewModel.dataMitra.observe(viewLifecycleOwner){mitra->
+                showItems()
+                Log.e("Data", it.toString())
+                if (it != null) {
+                    binding.tvname.text = it.name
+                    binding.tvemail.text = it.email
+                    binding.tvphone.text = it.phone
+                }
+                Glide.with(this)
+                    .load(it?.profilePicture)
+                    .circleCrop()
+                    .into(binding.imageView2)
+                val listViews = binding.lvBio
+                val item = listOf(
+                    ListItem("Name", it?.name.toString()) { update("Name", it?.name.toString()) },
+                    ListItem("Username", it?.username.toString()) {},
+                    ListItem("Email", it?.email.toString()) {},
+                    ListItem("Phone", it?.phone.toString()) {
+                        update(
+                            "Phone",
+                            it?.phone.toString()
+                        )
+                    },
+                    ListItem("Address", it?.location.toString()) {
+                        update(
+                            "Location",
+                            it?.location.toString()
+                        )
+                    },
+                    ListItem("Business Name", mitra?.businessName.toString()) {
+                        update(
+                            "Nama Bisnis",
+                            mitra?.businessName.toString()
+                        )},
+                    ListItem("Business Address", mitra?.businessAddress.toString()) {
+                        update(
+                            "Alamat Bisnis",
+                            mitra?.businessAddress.toString()
+                        )
+                    }
+                )
+                val adapter = CustomAdapter(requireContext(), R.layout.item_list, item)
+                listViews.adapter = adapter
             }
-            Glide.with(this)
-                .load(it?.profilePicture)
-                .circleCrop()
-                .into(binding.imageView2)
-            val listViews = binding.lvBio
-            val item = listOf(
-                ListItem("Name", it?.name.toString()) { update("Name", it?.name.toString()) },
-                ListItem("Username", it?.username.toString()) {},
-                ListItem("Email", it?.email.toString()) {},
-                ListItem("Phone", it?.phone.toString()) {
-                    update(
-                        "Phone",
-                        it?.phone.toString()
-                    )
-                },
-                ListItem("Address", it?.location.toString()) {
-                    update(
-                        "Location",
-                        it?.location.toString()
-                    )
-                },
-            )
-            val adapter = CustomAdapter(requireContext(), R.layout.item_list, item)
-            listViews.adapter = adapter
         }
     }
     private val requestPermissionLauncher =

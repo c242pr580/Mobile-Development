@@ -9,7 +9,6 @@ import com.serabutinn.serabutinnn.data.api.response.GetDetailMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.ListAllJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.ListCustomerJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.ListJobsMitraResponse
-import com.serabutinn.serabutinnn.data.api.response.ListPendingJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.LoginCustResponse
 import com.serabutinn.serabutinnn.data.api.response.SignupResponse
 import com.serabutinn.serabutinnn.data.api.response.TakeJobResponse
@@ -128,6 +127,7 @@ interface UserApi {
         @Field("job_id") jobId:String
     ): Call<CreatePaymentResponse>
 
+    @Multipart
     @POST("/customer/jobs/update/{job_id}")
     fun updateJob(
         @Header("Authorization") token: String,
@@ -172,11 +172,6 @@ interface UserApi {
     fun getHome(
         @Header("Authorization") token: String
     ): Call<ListAllJobsResponse>
-
-    @GET("/jobs/pending")
-    fun getPending(
-        @Header("Authorization") token: String
-    ): Call<ListPendingJobsResponse>
 
     @GET("/jobs/detail/{job_id}")
     fun getDetail(

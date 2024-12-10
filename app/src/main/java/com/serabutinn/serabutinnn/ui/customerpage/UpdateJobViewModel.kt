@@ -30,8 +30,6 @@ class UpdateJobViewModel(private val repository: UserRepository) : ViewModel() {
     private val _isSuccess = MutableLiveData<Boolean>()
     val isSuccess: LiveData<Boolean> = _isSuccess
 
-
-
     fun getSession() = repository.getSession().asLiveData()
 
     fun updateJob(
@@ -48,7 +46,7 @@ class UpdateJobViewModel(private val repository: UserRepository) : ViewModel() {
         var multipartBody: MultipartBody.Part? = null
         if (image != null) {
             val requestImageFile = image.asRequestBody("image/jpeg".toMediaType())
-            multipartBody = requestImageFile?.let {
+            multipartBody = requestImageFile.let {
                 MultipartBody.Part.createFormData(
                     "image",
                     image.name,

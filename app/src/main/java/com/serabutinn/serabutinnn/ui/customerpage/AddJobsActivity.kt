@@ -22,7 +22,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.serabutinn.serabutinnn.databinding.ActivityAddJobsBinding
 import com.serabutinn.serabutinnn.getImageUri
-import com.serabutinn.serabutinnn.reduceFileImage
 import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import java.io.File

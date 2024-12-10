@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivityPaymentBinding
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 

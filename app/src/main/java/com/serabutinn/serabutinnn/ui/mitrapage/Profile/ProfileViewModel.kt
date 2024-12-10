@@ -11,7 +11,6 @@ import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.BiodataResponse
 import com.serabutinn.serabutinnn.data.api.response.DataBio
 import com.serabutinn.serabutinnn.data.api.response.Datamitra3
-import com.serabutinn.serabutinnn.data.api.response.DeleteJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.GetDetailMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateBioResponse
 import com.serabutinn.serabutinnn.repository.UserRepository

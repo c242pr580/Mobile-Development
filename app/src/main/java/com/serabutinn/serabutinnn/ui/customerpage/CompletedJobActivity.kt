@@ -1,5 +1,6 @@
 package com.serabutinn.serabutinnn.ui.customerpage
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -50,6 +51,15 @@ class CompletedJobActivity : AppCompatActivity() {
         }
         viewModel.message.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.isSuccess2.observe(this) {
+            if (it) {
+                val intent2= Intent(this, DetailJobCustomerActivity::class.java)
+                intent2.putExtra("id",id)
+                intent2.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent2)
+                finish()
+            }
         }
     }
 

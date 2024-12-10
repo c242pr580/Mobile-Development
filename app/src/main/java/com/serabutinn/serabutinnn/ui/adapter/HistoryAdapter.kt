@@ -42,6 +42,7 @@ class HistoryAdapter(private val id:UserModel) : ListAdapter<DataJobsMitra, Hist
             binding.tvDuit.text = formatToRupiah(data.cost.toString())
             binding.tvWaktu.text = data.deadline
             binding.tvStatus.text = data.status
+            binding.lokasi.text = data.location
             Glide.with(binding.root)
                 .load(data.image)
                 .centerCrop()
@@ -107,6 +108,5 @@ class HistoryAdapter(private val id:UserModel) : ListAdapter<DataJobsMitra, Hist
         originalList.addAll(list)
         submitList(list)
         Log.d("HistoryCustomerAdapter", "Original List Size: ${originalList.size}")
-    // Display the original data initially
     }
 }
