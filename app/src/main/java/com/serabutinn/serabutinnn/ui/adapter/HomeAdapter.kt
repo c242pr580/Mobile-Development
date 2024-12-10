@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
-import com.serabutinn.serabutinnn.databinding.ItemsBinding
+import com.serabutinn.serabutinnn.databinding.ItemsHorizontalBinding
 import com.serabutinn.serabutinnn.ui.DetailJobActivity
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -22,7 +22,7 @@ class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdap
     private val originalList = mutableListOf<DataAllJobs>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemsHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding, id)
     }
 
@@ -30,7 +30,7 @@ class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdap
         holder.bind(getItem(position))
     }
 
-    class MyViewHolder(private val binding: ItemsBinding, private val id: UserModel) :
+    class MyViewHolder(private val binding: ItemsHorizontalBinding, private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: DataAllJobs) {

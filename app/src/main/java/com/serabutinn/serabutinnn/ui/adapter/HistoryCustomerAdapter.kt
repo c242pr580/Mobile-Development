@@ -13,19 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
-import com.serabutinn.serabutinnn.databinding.ItemsBinding
-import com.serabutinn.serabutinnn.ui.DetailJobActivity
+import com.serabutinn.serabutinnn.databinding.ItemsVerticalBinding
 import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerActivity
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCustomer, HistoryCustomerAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    // Store the original unaltered list
     private val originalList = mutableListOf<DataJobsCustomer>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemsVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding, id)
     }
 
@@ -33,7 +31,7 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
         holder.bind(getItem(position))
     }
 
-    class MyViewHolder(private val binding: ItemsBinding, private val id: UserModel) :
+    class MyViewHolder(private val binding: ItemsVerticalBinding, private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: DataJobsCustomer) {
@@ -46,6 +44,7 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
             binding.tvDuit.text = formatToRupiah(data.cost.toString())
             binding.tvWaktu.text = "Deadline | ${data.deadline}"
             binding.tvStatus.text = data.status
+            binding.lokasi.text = data.location
             Glide.with(binding.root)
                 .load(data.image)
                 .centerCrop()

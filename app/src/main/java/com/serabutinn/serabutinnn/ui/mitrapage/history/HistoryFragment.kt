@@ -10,7 +10,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.DataJobsMitra
 import com.serabutinn.serabutinnn.databinding.FragmentHistoryBinding
@@ -61,8 +63,7 @@ class HistoryFragment : Fragment() {
         }
         viewModel.data.observe(viewLifecycleOwner) { data -> setJobsData(data) }
         viewModel.dataCustomer.observe(viewLifecycleOwner) { data -> setJobsDataCustomer(data) }
-        val layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvJobs.layoutManager = layoutManager
     }
 

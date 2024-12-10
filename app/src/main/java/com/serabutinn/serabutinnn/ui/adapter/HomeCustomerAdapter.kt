@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
-import com.serabutinn.serabutinnn.databinding.ItemsBinding
+import com.serabutinn.serabutinnn.databinding.ItemsHorizontalBinding
 import com.serabutinn.serabutinnn.ui.adapter.HomeCustomerAdapter.MyViewHolder.Companion.DIFF_CALLBACK
 import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerActivity
 import java.text.DecimalFormat
@@ -26,7 +26,7 @@ class HomeCustomerAdapter(private val id: UserModel) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemsHorizontalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
@@ -34,7 +34,7 @@ class HomeCustomerAdapter(private val id: UserModel) :
         holder.bind(getItem(position),id)
     }
 
-    class MyViewHolder(private val binding: ItemsBinding) :
+    class MyViewHolder(private val binding: ItemsHorizontalBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataJobsCustomer,id: UserModel) {
             binding.root.setOnClickListener {
