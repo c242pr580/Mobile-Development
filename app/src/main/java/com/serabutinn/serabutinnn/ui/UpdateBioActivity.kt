@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityUpdateBioBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class UpdateBioActivity : AppCompatActivity() {
@@ -26,6 +27,7 @@ class UpdateBioActivity : AppCompatActivity() {
 
         binding = ActivityUpdateBioBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lightStatusBar(window)
         hideLoading()
         val subtitle = intent.getStringExtra("subtitle")
         val title = intent.getStringExtra("title")
@@ -36,13 +38,13 @@ class UpdateBioActivity : AppCompatActivity() {
         binding.buttonconfirm.setOnClickListener {
             showLoading()
             viewModel.getSession().observe(this) { user ->
-                if(title=="Nama"){
+                if(title=="Name"){
                     viewModel.updateBio(user.token,binding.inputan.text.toString(),null,null)
                 }
-                else if(title=="No. Telepon"){
+                else if(title=="Phone"){
                     viewModel.updateBio(user.token,null,binding.inputan.text.toString(),null)
                 }
-                else if(title=="Lokasi"){
+                else if(title=="Location"){
                     viewModel.updateBio(user.token,null,null,binding.inputan.text.toString())
                 }
             }

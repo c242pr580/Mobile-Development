@@ -26,7 +26,6 @@ class CustomAdapter(
         titleView.text = item.title
         subtitleView.text = item.subtitle
 
-        // Set the click listener
         view.setOnClickListener {
             item.onClickAction()
         }

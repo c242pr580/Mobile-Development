@@ -92,7 +92,7 @@ class ProfileFragment : Fragment() {
         }
         viewModel.isSuccess.observe(viewLifecycleOwner){
             if(it){
-                Toast.makeText(requireContext(), "Berhasil Update", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Updated Biodata Successfully", Toast.LENGTH_SHORT).show()
                 viewModel.getSession().observe(viewLifecycleOwner) { user ->
                     viewModel.getBiodata(user.token)
                 }
@@ -119,10 +119,12 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
+            showItems()
             Log.e("Data", it.toString())
             if (it != null) {
-                binding.textView12.text = it.name
-                binding.textView13.text = it.username
+                binding.tvname.text = it.name
+                binding.tvemail.text = it.email
+                binding.tvphone.text = it.phone
             }
             Glide.with(this)
                 .load(it?.profilePicture)
@@ -130,18 +132,18 @@ class ProfileFragment : Fragment() {
                 .into(binding.imageView2)
             val listViews = binding.lvBio
             val item = listOf(
-                ListItem("Nama", it?.name.toString()) { update("Nama", it?.name.toString()) },
+                ListItem("Name", it?.name.toString()) { update("Name", it?.name.toString()) },
                 ListItem("Username", it?.username.toString()) {},
                 ListItem("Email", it?.email.toString()) {},
-                ListItem("No. Telepon", it?.phone.toString()) {
+                ListItem("Phone", it?.phone.toString()) {
                     update(
-                        "No. Telepon",
+                        "Phone",
                         it?.phone.toString()
                     )
                 },
-                ListItem("Alamat", it?.location.toString()) {
+                ListItem("Address", it?.location.toString()) {
                     update(
-                        "Lokasi",
+                        "Location",
                         it?.location.toString()
                     )
                 },
@@ -169,6 +171,12 @@ class ProfileFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar3.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showItems(){
+        binding.cardView4.visibility=View.VISIBLE
+        binding.tvakun.visibility=View.VISIBLE
+        binding.buttonLogout.visibility=View.VISIBLE
     }
 
     private fun showImagePickerDialog() {
