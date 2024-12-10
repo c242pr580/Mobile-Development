@@ -62,6 +62,7 @@ class FaceCameraActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             } else {
+                finish()
                 Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
             }
         }

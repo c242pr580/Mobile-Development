@@ -5,6 +5,7 @@ import com.serabutinn.serabutinnn.data.api.response.CreateJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.CreatePaymentResponse
 import com.serabutinn.serabutinnn.data.api.response.DeleteJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.DetailJobResponse
+import com.serabutinn.serabutinnn.data.api.response.GetDetailMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.ListAllJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.ListCustomerJobsResponse
 import com.serabutinn.serabutinnn.data.api.response.ListJobsMitraResponse
@@ -55,6 +56,20 @@ interface UserApi {
         @Header("Authorization") token: String
     ): Call<BiodataResponse>
 
+    @GET("/mitra/detail/{mitra_id}")
+    fun getMitraDetail(
+        @Header("Authorization") token: String,
+        @Path("mitra_id") mitraId: String
+    ): Call<GetDetailMitraResponse>
+
+    @FormUrlEncoded
+    @POST("/mitra/biodata/update")
+    fun updateMitraBiodata(
+        @Header("Authorization") token: String,
+        @Field("business_name") businessName: String,
+        @Field("business_address") businessAddress: String
+    ):Call<DeleteJobsResponse>
+
     @Multipart
     @POST("/biodata/update")
     fun updateBiodata(
@@ -85,6 +100,14 @@ interface UserApi {
         @Header("Authorization") token: String,
         @Part image: MultipartBody.Part?
     ): Call<VerifyFaceResponse>
+
+    @FormUrlEncoded
+    @POST("/customer/jobs/rating/{job_id}")
+    fun ratingJob(
+        @Header("Authorization") token: String,
+        @Field("rating") rating: String,
+        @Path("job_id") jobId: String
+    ): Call<DeleteJobsResponse>
 
     @Multipart
     @POST("/customer/jobs/create")

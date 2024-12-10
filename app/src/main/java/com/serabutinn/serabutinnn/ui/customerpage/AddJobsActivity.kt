@@ -78,6 +78,7 @@ class AddJobsActivity : AppCompatActivity() {
             }
         }
         viewModel.message.observe(this) {
+            showLoading(false)
             if (it != null) {
                 Log.e("Tes Activity", it)
                 AlertDialog.Builder(this).apply {

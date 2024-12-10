@@ -55,8 +55,12 @@ class HomeAdapter(private val id:UserModel) : ListAdapter<DataAllJobs, HomeAdapt
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
                 binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
             } else if (data.status == "Completed") {
+                binding.root.visibility=View.GONE
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
                 binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+            }
+            else if(data.status == "Canceled"){
+                binding.root.visibility=View.GONE
             }
         }
         private fun formatToRupiah(number: String): String {

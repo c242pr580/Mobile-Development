@@ -55,18 +55,22 @@ class HomeCustomerAdapter(private val id: UserModel) :
             }else{
                 binding.takenbyyou.visibility=View.GONE
             }
-            if (data.status == "Pending") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
-                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
-            } else if (data.status == "In Progress") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
-                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
-            } else if (data.status == "Completed") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
-                binding.tvStatus.setTextColor(Color.parseColor("#188018"))
-            } else if (data.status == "Canceled") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
-                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+            when (data.status) {
+                "Pending" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                }
+                "In Progress" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                }
+                "Completed" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#188018"))
+                }
+                "Canceled" ->{
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF")) }
             }
         }
         private fun formatToRupiah(number: String): String {

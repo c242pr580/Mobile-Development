@@ -31,7 +31,8 @@ class FaceCameraViewModel(private val repository: UserRepository) : ViewModel() 
                 if(response.isSuccessful){
                     Log.e("success22", response.body()?.message.toString())
                     _isSuccess.value = true
-                }else{Log.e("error2", response.body()?.message.toString())}
+                }else{Log.e("error2", response.body()?.message.toString())
+                _isSuccess.value = false}
             }
 
             override fun onFailure(call: Call<SignupResponse>, t: Throwable) {

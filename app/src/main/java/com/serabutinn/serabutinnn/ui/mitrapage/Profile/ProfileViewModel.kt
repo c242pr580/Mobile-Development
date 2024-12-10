@@ -10,6 +10,9 @@ import com.serabutinn.serabutinnn.data.api.ApiClient
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.BiodataResponse
 import com.serabutinn.serabutinnn.data.api.response.DataBio
+import com.serabutinn.serabutinnn.data.api.response.Datamitra3
+import com.serabutinn.serabutinnn.data.api.response.DeleteJobsResponse
+import com.serabutinn.serabutinnn.data.api.response.GetDetailMitraResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateBioResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -32,22 +35,25 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
     val message: LiveData<String> = _message
     private val _isSuccess = MutableLiveData<Boolean>()
     val isSuccess: LiveData<Boolean> = _isSuccess
+    private val _dataMitra = MutableLiveData<Datamitra3?>()
+    val dataMitra: LiveData<Datamitra3?> = _dataMitra
 
     fun logout() {
         viewModelScope.launch {
             repository.logout()
         }
     }
+
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
-    fun getBiodata(token:String){
+
+    fun getBiodata(token: String) {
         _isLoading.value = true
         val client = ApiClient.getApiService().getBiodata("Bearer $token")
         client.enqueue(object : Callback<BiodataResponse> {
             override fun onResponse(
-                call: Call<BiodataResponse>,
-                response: Response<BiodataResponse>
+                call: Call<BiodataResponse>, response: Response<BiodataResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -66,27 +72,50 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
         })
 
     }
-    fun updateBio(token: String, imageFile: File?, name: String?, phone: String?, location: String?) {
+
+    fun getDetailMitra(token: String, id: String) {
+        _isLoading.value = true
+        val client = ApiClient.getApiService().getMitraDetail(token = "Bearer $token", mitraId = id)
+        client.enqueue(object : Callback<GetDetailMitraResponse> {
+            override fun onResponse(
+                call: Call<GetDetailMitraResponse>, response: Response<GetDetailMitraResponse>
+            ) {
+                if(response.isSuccessful){
+                    _dataMitra.value = response.body()?.data
+                }else{
+                    _message.value = response.message()
+                }
+            }
+
+            override fun onFailure(call: Call<GetDetailMitraResponse>, t: Throwable) {
+                Log.e("error", t.message.toString())
+                _message.value = t.message.toString()
+            }
+        })
+    }
+
+    fun updateBio(
+        token: String, imageFile: File?, name: String?, phone: String?, location: String?
+    ) {
         var multipartBody: MultipartBody.Part? = null
         if (imageFile != null) {
             val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            multipartBody = requestImageFile?.let {
+            multipartBody = requestImageFile.let {
                 MultipartBody.Part.createFormData(
-                    "image",
-                    imageFile.name,
-                    it
+                    "image", imageFile.name, it
                 )
             }
         }
-        val client = ApiClient.getApiService().updateBiodata("Bearer $token",
+        val client = ApiClient.getApiService().updateBiodata(
+            "Bearer $token",
             name?.toRequestBody("text/plain".toMediaTypeOrNull()),
             phone?.toRequestBody("text/plain".toMediaTypeOrNull()),
             location?.toRequestBody("text/plain".toMediaTypeOrNull()),
-            multipartBody)
+            multipartBody
+        )
         client.enqueue(object : Callback<UpdateBioResponse> {
             override fun onResponse(
-                call: Call<UpdateBioResponse>,
-                response: Response<UpdateBioResponse>
+                call: Call<UpdateBioResponse>, response: Response<UpdateBioResponse>
             ) {
                 if (response.isSuccessful) {
                     _message.value = response.body()?.message.toString()
@@ -103,6 +132,6 @@ class ProfileViewModel(private val repository: UserRepository) : ViewModel() {
                 _isSuccess.value = false
             }
         })
-
     }
+
 }

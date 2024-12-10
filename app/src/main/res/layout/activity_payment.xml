@@ -15,4 +15,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_closeSnap"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_x="189dp"
+        android:layout_y="631dp"
+        android:background="@drawable/pay_button"
+        android:text="@string/close"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/PaymentWebview"
+        app:layout_constraintTop_toTopOf="@+id/PaymentWebview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

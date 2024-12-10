@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,17 +12,12 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityUpdateJobBinding
-import com.serabutinn.serabutinnn.getImageUri
-import com.serabutinn.serabutinnn.reduceFileImage
-import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -57,6 +51,9 @@ class UpdateJobActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding.imageButton.setOnClickListener { showDatePicker() }
         tvSelectedDate = binding.tvSelectedDate
+        viewModel.getSession().observe(this){
+            viewModel.getJobDetail(it.token,intent.getStringExtra(ID).toString())
+        }
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -67,6 +68,7 @@ class DashboardFragment : Fragment() {
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvJobs.addItemDecoration(itemDecoration)
 
+
     }
 
     private fun setJobsData(consumerReviews: List<DataJobsMitra?>?) {
@@ -74,6 +76,9 @@ class DashboardFragment : Fragment() {
             val adapter = HistoryAdapter(user)
             adapter.submitList(consumerReviews)
             binding.rvJobs.adapter = adapter
+            binding.textInputEditText.addTextChangedListener{ text ->
+                adapter.filter(text.toString())
+            }
         }
 
     }
@@ -82,6 +87,9 @@ class DashboardFragment : Fragment() {
             val adapter = HistoryCustomerAdapter(it)
             adapter.submitList(consumerReviews)
             binding.rvJobs.adapter = adapter
+            binding.textInputEditText.addTextChangedListener{ text ->
+                adapter.filter(text.toString())
+            }
         }
 
     }

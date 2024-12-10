@@ -31,6 +31,7 @@ class UpdateJobViewModel(private val repository: UserRepository) : ViewModel() {
     val isSuccess: LiveData<Boolean> = _isSuccess
 
 
+
     fun getSession() = repository.getSession().asLiveData()
 
     fun updateJob(

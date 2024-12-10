@@ -95,7 +95,7 @@ class DetailJobActivity : AppCompatActivity() {
             viewModel.getJobDetailMitra(token, id.toString())
             binding.btnUpdate.setOnClickListener {
                 viewModel.daftarKerja(token, id.toString())
-                recreate()
+                viewModel.getJobDetailMitra(token,id.toString())
             }
         }
     }

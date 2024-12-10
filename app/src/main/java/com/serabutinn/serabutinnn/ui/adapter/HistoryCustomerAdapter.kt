@@ -21,7 +21,6 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCustomer, HistoryCustomerAdapter.MyViewHolder>(DIFF_CALLBACK) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding,id)
@@ -51,15 +50,22 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
             if(data.mitraId == id.id && id.roleid=="2" ){
                 binding.takenbyyou.visibility= View.VISIBLE
             }else{binding.takenbyyou.visibility= View.GONE}
-            if (data.status == "Pending") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
-            } else if (data.status == "In Progress") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
-                binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
-            } else if (data.status == "Completed") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
-                binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+            when (data.status) {
+                "Pending" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                }
+                "In Progress" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                }
+                "Completed" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#188018"))
+                }
+                "Canceled" ->{
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF")) }
             }
         }
         private fun formatToRupiah(number: String): String {
@@ -88,5 +94,9 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
                 }
             }
         }
+    }
+    fun filter(query: String) {
+        val filteredList = currentList.filter { it.title?.contains(query, ignoreCase = true)?:false }
+        submitList(filteredList)  // Update the list using submitList
     }
 }

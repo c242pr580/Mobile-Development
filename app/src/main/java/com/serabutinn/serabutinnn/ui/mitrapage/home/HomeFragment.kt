@@ -1,6 +1,8 @@
 package com.serabutinn.serabutinnn.ui.mitrapage.home
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -42,8 +44,10 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.Profile.setOnClickListener{
-            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-            bottomNavigationView.selectedItemId = R.id.navigation_notifications
+            val intents=Intent(Intent.ACTION_DEFAULT, Uri.parse("https://serabutinn.com/transaction"))
+            startActivity(intents)
+//            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
+//            bottomNavigationView.selectedItemId = R.id.navigation_notifications
         }
         return root
 

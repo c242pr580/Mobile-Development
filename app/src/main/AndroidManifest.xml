@@ -62,19 +62,10 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="http"
-                    android:host="www.serabutinn.com"
-                    android:pathPrefix="/transaction" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="www.serabutinn.com"
-                    android:pathPrefix="/transaction" />
+                    android:host="transaction"
+                    android:scheme="serabutinn" />
             </intent-filter>
         </activity>
         <activity
