@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
@@ -58,18 +59,20 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityDetailJobCustomerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
         val id = intent.getStringExtra("id")
         viewModel.data.observe(this) {
             val data = it
             binding.judulJob.text = data?.title
-            binding.description.text = "Deskripsi : \n" + data?.description
-            binding.location.text = "Lokasi : " + data?.location
+            binding.description.text = data?.description
+            binding.location.text = data?.location
             if (data != null) {
-                binding.biaya.text = "Cost : " + data.cost?.let { it1 -> formatToRupiah(it1) }
+                binding.biaya.text = data.cost?.let { it1 -> formatToRupiah(it1) }
             }
             binding.tvStatus.text = data?.status
-            binding.deadline.text = "Deadline : " + data?.deadline
+            binding.deadline.text = "Deadline | " + data?.deadline
             Glide.with(this)
                 .load(data?.image)
                 .centerInside()
@@ -80,30 +83,27 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 }
                 when (data.status) {
                     "Pending" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
-                        binding.btnCompleted.visibility = View.GONE
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                        binding.btnUpdate.visibility = View.VISIBLE
+                        binding.btnHapus.visibility = View.VISIBLE
+                        showItems()
                     }
                     "In Progress" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
                         binding.btnCompleted.visibility = View.VISIBLE
-                        binding.btnUpdate.visibility = View.GONE
-                        binding.btnHapus.visibility = View.GONE
+                        showItems()
                     }
                     "Completed" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
-                        binding.btnCompleted.visibility = View.GONE
-                        binding.btnUpdate.visibility = View.GONE
-                        binding.btnHapus.visibility = View.GONE
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#188018"))
+                        showItems()
                     }
                     "Canceled" ->{
                         binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
-                        binding.btnCompleted.visibility = View.GONE
-                        binding.btnUpdate.visibility = View.GONE
-                        binding.btnHapus.visibility = View.GONE
+                        binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                        showItems()
                     }
                 }
 
@@ -137,6 +137,18 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showItems(){
+        binding.tvloc.visibility=View.VISIBLE
+        binding.tvdesc.visibility=View.VISIBLE
+        binding.imgJob.visibility=View.VISIBLE
+        binding.vwLine.visibility=View.VISIBLE
+        binding.cvStatus.visibility=View.VISIBLE
     }
 
     private fun formatToRupiah(number: String): String {

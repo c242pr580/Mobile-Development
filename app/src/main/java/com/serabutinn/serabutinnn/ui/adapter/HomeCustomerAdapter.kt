@@ -40,7 +40,7 @@ class HomeCustomerAdapter(private val id: UserModel) :
             }
             binding.tvStatus.text = data.status
             if (data.status == "Pending") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#F0FF0101"))
+                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
             }
             binding.tvDuit.text = data.cost?.let { formatToRupiah(it) }
             binding.tvWaktu.text = "Deadline | ${data.deadline}"
@@ -56,17 +56,19 @@ class HomeCustomerAdapter(private val id: UserModel) :
                 binding.takenbyyou.visibility=View.GONE
             }
             if (data.status == "Pending") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
+                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
                 binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
             } else if (data.status == "In Progress") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
-                binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
+                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
             } else if (data.status == "Completed") {
                 binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
                 binding.tvStatus.setTextColor(Color.parseColor("#188018"))
+            } else if (data.status == "Canceled") {
+                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
+                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
             }
         }
-
         private fun formatToRupiah(number: String): String {
             val amount = number.toLongOrNull() ?: 0L
             val decimalFormatSymbols = DecimalFormatSymbols().apply {

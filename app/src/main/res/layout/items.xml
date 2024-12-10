@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="230dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
@@ -42,9 +42,10 @@
                     android:id="@+id/tvJudul"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ambil Makanan Di Rumah"
+                    android:text="Ambil Makanan Di Rumah Krisna"
                     android:textColor="@color/black"
                     android:textSize="20sp"
+                    android:maxLines="2"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -65,6 +66,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="Pangkalpinang"
+                        android:maxLines="1"
                         android:textColor="@color/greydark"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -121,7 +123,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginTop="40dp"
                     android:visibility="visible"
                     app:cardBackgroundColor="@color/greenyoung"
                     app:cardCornerRadius="10dp"

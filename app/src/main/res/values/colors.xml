@@ -14,6 +14,8 @@
     <color name="orangebg">#FFF0E6</color>
     <color name="grey">#E6E2E2</color>
     <color name="greenyoung">#ECFFEC</color>
+    <color name="green">#5cb85c</color>
+    <color name="red">#FF0000</color>
     <color name="greydark">#BDBDBD</color>
     <color name="Slategray" >#FF597A8A</color>
     <color name="Paynesgray" >#FF405E6F</color>
