@@ -65,6 +65,7 @@
 package com.serabutinn.serabutinnn.ui.customerpage
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -74,6 +75,7 @@ import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.ui.customerpage.home.HomeCustomerFragment
 import com.serabutinn.serabutinnn.ui.mitrapage.Profile.ProfileFragment
 import com.serabutinn.serabutinnn.ui.mitrapage.dashboard.DashboardFragment
+import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeFragment
 
 class HomeCustomerActivity : AppCompatActivity() {
 
@@ -89,6 +91,16 @@ class HomeCustomerActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
         enableEdgeToEdge()
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerCust)
+                if (currentFragment is HomeFragment) {
+                    currentFragment.handleBackPress()
+                } else {
+                    finishAffinity() // Exit the app for other fragments
+                }
+            }
+        })
 
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

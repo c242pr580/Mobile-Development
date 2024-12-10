@@ -56,7 +56,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_edittext"
             android:backgroundTint="@color/Powderblue2"
-            android:hint="Search" />
+            android:hint="Search"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -13,23 +13,26 @@ import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.databinding.ItemsBinding
 import com.serabutinn.serabutinnn.ui.DetailJobActivity
-import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter.MyViewHolder.Companion.DIFF_CALLBACK
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-class HomeAdapter(private val id:UserModel) : ListAdapter<DataAllJobs, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
+    // Store the original unaltered list
+    private val originalList = mutableListOf<DataAllJobs>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding,id)
+        return MyViewHolder(binding, id)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class MyViewHolder(private val binding: ItemsBinding,private val id:UserModel) :
+    class MyViewHolder(private val binding: ItemsBinding, private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(data: DataAllJobs) {
             binding.root.setOnClickListener {
                 val intent = Intent(binding.root.context, DetailJobActivity::class.java)
@@ -45,24 +48,33 @@ class HomeAdapter(private val id:UserModel) : ListAdapter<DataAllJobs, HomeAdapt
                 .load(data.image)
                 .centerCrop()
                 .into(binding.imgJobs)
-            if(data.mitraId == id.id && id.roleid=="2" ){
-                binding.takenbyyou.visibility= View.VISIBLE
-            }else{binding.takenbyyou.visibility=View.GONE}
-            if (data.status == "Pending") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
-            } else if (data.status == "In Progress") {
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
-                binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
-            } else if (data.status == "Completed") {
-                binding.root.visibility=View.GONE
-                binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
-                binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+
+            if (data.mitraId == id.id && id.roleid == "2") {
+                binding.takenbyyou.visibility = View.VISIBLE
+            } else {
+                binding.takenbyyou.visibility = View.GONE
             }
-            else if(data.status == "Canceled"){
-                binding.root.visibility=View.GONE
+
+            when (data.status) {
+                "Pending" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                }
+                "In Progress" -> {
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
+                }
+                "Completed" -> {
+                    binding.root.visibility = View.GONE
+                    binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
+                    binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+                }
+                "Canceled" -> {
+                    binding.root.visibility = View.GONE
+                }
             }
         }
+
         private fun formatToRupiah(number: String): String {
             val amount = number.toLongOrNull() ?: 0L
             val decimalFormatSymbols = DecimalFormatSymbols().apply {
@@ -72,22 +84,40 @@ class HomeAdapter(private val id:UserModel) : ListAdapter<DataAllJobs, HomeAdapt
             val decimalFormat = DecimalFormat("Rp #,###", decimalFormatSymbols)
             return decimalFormat.format(amount)
         }
-        companion object {
-            val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataAllJobs>() {
-                override fun areItemsTheSame(
-                    oldItem: DataAllJobs,
-                    newItem: DataAllJobs
-                ): Boolean {
-                    return oldItem == newItem
-                }
+    }
 
-                override fun areContentsTheSame(
-                    oldItem: DataAllJobs,
-                    newItem: DataAllJobs
-                ): Boolean {
-                    return oldItem == newItem
-                }
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataAllJobs>() {
+            override fun areItemsTheSame(
+                oldItem: DataAllJobs,
+                newItem: DataAllJobs
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: DataAllJobs,
+                newItem: DataAllJobs
+            ): Boolean {
+                return oldItem == newItem
             }
         }
+    }
+
+    // Filter function
+    fun filter(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            originalList // Use the original list when query is empty
+        } else {
+            originalList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
+        }
+        submitList(filteredList)  // Update the list using submitList
+    }
+
+    // Set data method to store original list
+    fun setData(list: List<DataAllJobs>) {
+        originalList.clear() // Clear the original list
+        originalList.addAll(list) // Add all items to the original list
+        submitList(list)  // Display the original data initially
     }
 }

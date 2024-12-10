@@ -9,16 +9,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.DataJobsMitra
 import com.serabutinn.serabutinnn.databinding.FragmentDashboardBinding
 import com.serabutinn.serabutinnn.ui.adapter.HistoryAdapter
 import com.serabutinn.serabutinnn.ui.adapter.HistoryCustomerAdapter
-import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class DashboardFragment : Fragment() {
@@ -75,6 +72,7 @@ class DashboardFragment : Fragment() {
         viewModel.getSession().observe(viewLifecycleOwner){user->
             val adapter = HistoryAdapter(user)
             adapter.submitList(consumerReviews)
+            adapter.setData(consumerReviews as List<DataJobsMitra>)
             binding.rvJobs.adapter = adapter
             binding.textInputEditText.addTextChangedListener{ text ->
                 adapter.filter(text.toString())
@@ -86,6 +84,7 @@ class DashboardFragment : Fragment() {
         viewModel.getSession().observe(viewLifecycleOwner){
             val adapter = HistoryCustomerAdapter(it)
             adapter.submitList(consumerReviews)
+            adapter.setData(consumerReviews as List<DataJobsCustomer>)
             binding.rvJobs.adapter = adapter
             binding.textInputEditText.addTextChangedListener{ text ->
                 adapter.filter(text.toString())

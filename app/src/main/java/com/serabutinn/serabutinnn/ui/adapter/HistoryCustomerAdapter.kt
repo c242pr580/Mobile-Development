@@ -3,6 +3,7 @@ package com.serabutinn.serabutinnn.ui.adapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,26 +12,27 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.UserModel
-import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.databinding.ItemsBinding
 import com.serabutinn.serabutinnn.ui.DetailJobActivity
-import com.serabutinn.serabutinnn.ui.adapter.HistoryCustomerAdapter.MyViewHolder.Companion.DIFF_CALLBACK
-import com.serabutinn.serabutinnn.ui.customerpage.DetailJobCustomerActivity
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCustomer, HistoryCustomerAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
+    // Store the original unaltered list
+    private val originalList = mutableListOf<DataJobsCustomer>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding,id)
+        return MyViewHolder(binding, id)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class MyViewHolder(private val binding: ItemsBinding,private val id: UserModel) :
+    class MyViewHolder(private val binding: ItemsBinding, private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(data: DataJobsCustomer) {
@@ -47,9 +49,11 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
                 .load(data.image)
                 .centerCrop()
                 .into(binding.imgJobs)
-            if(data.mitraId == id.id && id.roleid=="2" ){
-                binding.takenbyyou.visibility= View.VISIBLE
-            }else{binding.takenbyyou.visibility= View.GONE}
+            if (data.mitraId == id.id && id.roleid == "2") {
+                binding.takenbyyou.visibility = View.VISIBLE
+            } else {
+                binding.takenbyyou.visibility = View.GONE
+            }
             when (data.status) {
                 "Pending" -> {
                     binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
@@ -63,11 +67,13 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
                     binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
                     binding.tvStatus.setTextColor(Color.parseColor("#188018"))
                 }
-                "Canceled" ->{
+                "Canceled" -> {
                     binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
-                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF")) }
+                    binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                }
             }
         }
+
         private fun formatToRupiah(number: String): String {
             val amount = number.toLongOrNull() ?: 0L
             val decimalFormatSymbols = DecimalFormatSymbols().apply {
@@ -77,26 +83,41 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
             val decimalFormat = DecimalFormat("Rp #,###", decimalFormatSymbols)
             return decimalFormat.format(amount)
         }
-        companion object {
-            val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataJobsCustomer>() {
-                override fun areItemsTheSame(
-                    oldItem: DataJobsCustomer,
-                    newItem: DataJobsCustomer
-                ): Boolean {
-                    return oldItem == newItem
-                }
+    }
 
-                override fun areContentsTheSame(
-                    oldItem: DataJobsCustomer,
-                    newItem: DataJobsCustomer
-                ): Boolean {
-                    return oldItem == newItem
-                }
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataJobsCustomer>() {
+            override fun areItemsTheSame(
+                oldItem: DataJobsCustomer,
+                newItem: DataJobsCustomer
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: DataJobsCustomer,
+                newItem: DataJobsCustomer
+            ): Boolean {
+                return oldItem == newItem
             }
         }
     }
+
+    // Filter function
     fun filter(query: String) {
-        val filteredList = currentList.filter { it.title?.contains(query, ignoreCase = true)?:false }
+        val filteredList = if (query.isEmpty()) {
+            originalList // Use the original list when query is empty
+        } else {
+            originalList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
+        }
         submitList(filteredList)  // Update the list using submitList
+    }
+
+    // Set data method to store original list
+    fun setData(list: List<DataJobsCustomer>) {
+        originalList.clear()
+        originalList.addAll(list)
+        submitList(list)
+        Log.d("HistoryCustomerAdapter", "Original List Size: ${originalList.size}")
     }
 }
