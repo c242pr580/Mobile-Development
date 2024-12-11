@@ -80,6 +80,9 @@ class UpdateJobActivity : AppCompatActivity() {
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }
+        viewModel.message.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
 
         binding.buttonUpload.setOnClickListener { uploadImage() }
 
@@ -89,7 +92,7 @@ class UpdateJobActivity : AppCompatActivity() {
 
         viewModel.isSuccess.observe(this) {
             if (it) {
-                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Job Updated Successfully", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -273,7 +276,6 @@ class UpdateJobActivity : AppCompatActivity() {
         viewModel.getSession().observe(this) { user ->
             val token = user.token
             val id = intent.getStringExtra(ID)
-
             lifecycleScope.launch {
                 val imageFile = if (isRemoteUri(currentImageUri!!)) {
                     val downloadedFile = downloadFile(currentImageUri!!)
@@ -284,7 +286,7 @@ class UpdateJobActivity : AppCompatActivity() {
                 }
 
                 if (imageFile != null) {
-                    viewModel.updateJob(
+                    viewModel.checkTitle(
                         token,
                         binding.txtInputTitle.text.toString(),
                         binding.txtInputDesc.text.toString(),

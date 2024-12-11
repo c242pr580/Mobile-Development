@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import com.serabutinn.serabutinnn.data.api.ApiClient
 import com.serabutinn.serabutinnn.data.api.response.DataDetail
 import com.serabutinn.serabutinnn.data.api.response.DetailJobResponse
+import com.serabutinn.serabutinnn.data.api.response.TitleCheckResponse
 import com.serabutinn.serabutinnn.data.api.response.UpdateJobsResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
 import okhttp3.MediaType.Companion.toMediaType
@@ -106,6 +107,45 @@ class UpdateJobViewModel(private val repository: UserRepository) : ViewModel() {
                 Log.e("error",t.message.toString())
                 _isLoading.value = false
                 _message.value = t.message.toString()
+            }
+        })
+    }
+    fun checkTitle(
+        token: String,
+        title: String,
+        description: String,
+        deadline: String,
+        price: String,
+        location: String,
+        imageFile: File?,
+        id: String
+    ) {
+        val client = ApiClient.getApiService().checkTitle(token = "Bearer $token", title = title)
+        client.enqueue(object : Callback<TitleCheckResponse> {
+            override fun onResponse(
+                call: Call<TitleCheckResponse>,
+                response: Response<TitleCheckResponse>
+            ) {
+                if (response.isSuccessful) {
+                    Log.e("success", response.body()?.result.toString())
+                    if (response.body()?.result == "Legal") {
+                        updateJob(token,title,description,deadline,price,location,imageFile,id)
+                    }else{
+                        _isSuccess.value = false
+                        Log.e("TES",response.body()?.message.toString())
+                        _message.value = response.body()?.message.toString()
+                    }
+                } else {
+                    _isSuccess.value = false
+                    Log.e("error", response.body()?.result.toString())
+                    _message.value = response.body()?.message.toString()
+                }
+            }
+
+            override fun onFailure(call: Call<TitleCheckResponse>, t: Throwable) {
+                Log.e("error", t.message.toString())
+                _message.value = t.message.toString()
+                _isSuccess.value = false
             }
         })
     }
