@@ -16,8 +16,10 @@
     <string name="input_phone">Enter your phone number</string>
     <string name="RememberPassword">Remember Password</string>
     <string name="makeyourjob">Make Your Work Real!</string>
+    <string name="takeyourjob">Get The Jobs Real!</string>
     <string name="recentjobs">Recent Jobs</string>
     <string name="makeyoursubjob">Making, cleaning, or helping with daily chores.</string>
+    <string name="takeyoursubjobs">Taking tasks off your hands, simplifying your day-to-day life.</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">History</string>

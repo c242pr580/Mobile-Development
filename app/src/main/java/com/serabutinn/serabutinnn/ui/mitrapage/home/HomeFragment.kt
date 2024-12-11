@@ -86,11 +86,12 @@ class HomeFragment : Fragment() {
         }
         viewModel.data.observe(viewLifecycleOwner) { data ->
             if(data.isEmpty()){
-                binding.nojobs.visibility=View.VISIBLE
+                binding.ivListKosong.visibility=View.VISIBLE
             }else{
-                binding.nojobs.visibility=View.GONE
+                binding.ivListKosong.visibility=View.GONE
             }
             viewModel.getSession().observe(viewLifecycleOwner) { user ->
+                showItems()
                 val pending: MutableList<DataAllJobs> = data.filter { it.status == "Pending" }.toMutableList()
                 val inProgress: MutableList<DataAllJobs> =
                     data.filter { it.status == "In Progress" && it.mitraId != user.id.trim() }.toMutableList()
@@ -118,9 +119,9 @@ class HomeFragment : Fragment() {
     private fun setJobsData(consumerReviews: List<DataAllJobs>) {
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             val adapter = HomeAdapter(user)
-            binding.textInputEditText22.addTextChangedListener{ text ->
-                adapter.filter(text.toString())
-            }
+//            binding.textInputEditText22.addTextChangedListener{ text ->
+//                adapter.filter(text.toString())
+//            }
             adapter.submitList(consumerReviews)
             adapter.setData(consumerReviews)
             binding.rvJobs.adapter = adapter
@@ -130,6 +131,17 @@ class HomeFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+    private fun showItems() {
+        binding.apply {
+            cview.visibility = View.VISIBLE
+            Llitems.visibility = View.VISIBLE
+            cardView2.visibility = View.VISIBLE
+            horizontalScrollViewHome2.visibility =  View.VISIBLE
+            tvPromo.visibility = View.VISIBLE
+        }
+    }
+
 
     private fun showError(message: String) {
         AlertDialog.Builder(requireActivity())
