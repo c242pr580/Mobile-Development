@@ -85,6 +85,11 @@ class HomeFragment : Fragment() {
             showError(message)
         }
         viewModel.data.observe(viewLifecycleOwner) { data ->
+            if(data.isEmpty()){
+                binding.nojobs.visibility=View.VISIBLE
+            }else{
+                binding.nojobs.visibility=View.GONE
+            }
             viewModel.getSession().observe(viewLifecycleOwner) { user ->
                 val pending: MutableList<DataAllJobs> = data.filter { it.status == "Pending" }.toMutableList()
                 val inProgress: MutableList<DataAllJobs> =

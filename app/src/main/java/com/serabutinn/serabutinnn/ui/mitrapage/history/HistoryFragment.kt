@@ -61,7 +61,15 @@ class HistoryFragment : Fragment() {
         viewModel.message.observe(viewLifecycleOwner) { message ->
             showError(message)
         }
-        viewModel.data.observe(viewLifecycleOwner) { data -> setJobsData(data) }
+        viewModel.data.observe(viewLifecycleOwner) { data ->
+            if (data != null) {
+                if(data.isEmpty()){
+                    binding.nojob2.visibility = View.VISIBLE
+                }else{
+                    binding.nojob2.visibility = View.GONE
+                }
+            }
+            setJobsData(data) }
         viewModel.dataCustomer.observe(viewLifecycleOwner) { data -> setJobsDataCustomer(data) }
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvJobs.layoutManager = layoutManager

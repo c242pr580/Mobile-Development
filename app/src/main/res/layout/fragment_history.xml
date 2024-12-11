@@ -28,6 +28,28 @@
         app:layout_constraintWidth_percent="0.9"
         tools:ignore="SpeakableTextPresentCheck" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvJobs"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+
+    <ImageView
+        android:id="@+id/nojob2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/kerjaoren"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvJobs" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -35,23 +57,10 @@
         android:layout_height="wrap_content"
         android:progressTint="@color/orange1"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvJobs"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/textInputEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
