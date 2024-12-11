@@ -134,7 +134,7 @@
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
-            <TextView
+        <TextView
                 android:id="@+id/tvPromo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -233,7 +233,10 @@
                 app:srcCompat="@drawable/kerjaoren"
                 tools:visibility="visible" />
         </LinearLayout>
+
+
     </androidx.core.widget.NestedScrollView>
+
 
     <!-- ProgressBar -->
     <ProgressBar

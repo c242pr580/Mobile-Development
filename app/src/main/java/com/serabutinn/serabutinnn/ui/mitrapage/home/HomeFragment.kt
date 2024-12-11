@@ -67,7 +67,6 @@ class HomeFragment : Fragment() {
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.findJobs(user)
             viewModel.getBiodata(user.token)
-            showItems()
         }
         viewModel.dataBio.observe(viewLifecycleOwner){
             if (it != null) {
@@ -85,6 +84,7 @@ class HomeFragment : Fragment() {
             showError(message)
         }
         viewModel.data.observe(viewLifecycleOwner) { data ->
+            showItems()
             if(data.isEmpty()){
                 binding.ivListKosong.visibility=View.VISIBLE
             }else{
@@ -96,8 +96,6 @@ class HomeFragment : Fragment() {
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvJobs.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
-        binding.rvJobs.addItemDecoration(itemDecoration)
 
 
     }
