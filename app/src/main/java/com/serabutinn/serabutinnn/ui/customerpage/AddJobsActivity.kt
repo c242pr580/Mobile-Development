@@ -54,8 +54,8 @@ class AddJobsActivity : AppCompatActivity() {
         _binding = ActivityAddJobsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         lightStatusBar(window)
-        binding.imageButton.setOnClickListener { showDatePicker() }
-        tvSelectedDate = binding.tvSelectedDate
+        binding.txtinputDeadline.setOnClickListener { showDatePicker() }
+        tvSelectedDate = binding.txtinputDeadline
         setContentView(binding.root)
         binding.btnGalery.setOnClickListener { startGallery() }
         binding.btnCamera.setOnClickListener { startCamera() }
@@ -99,7 +99,7 @@ class AddJobsActivity : AppCompatActivity() {
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
                 datepicked = formattedDate.toString()
-                tvSelectedDate.text = "Deadline : $datepicked"
+                tvSelectedDate.text = "$datepicked"
             },
             today.get(Calendar.YEAR),
             today.get(Calendar.MONTH),
