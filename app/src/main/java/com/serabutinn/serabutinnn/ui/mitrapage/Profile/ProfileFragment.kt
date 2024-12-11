@@ -171,12 +171,17 @@ class ProfileFragment : Fragment() {
                             ListItem("Business Name", mitra?.businessName.toString()) {
                                 update(
                                     "Nama Bisnis",
-                                    mitra?.businessName.toString()
+                                    if(mitra?.businessName.isNullOrEmpty()){
+                                        ""
+                                    }else{mitra?.businessName.toString()}
                                 )},
                             ListItem("Business Address", mitra?.businessAddress.toString()) {
                                 update(
                                     "Alamat Bisnis",
-                                    mitra?.businessAddress.toString()
+                                    if(mitra?.businessAddress.isNullOrEmpty()){
+                                        ""
+                                    }else{mitra?.businessAddress.toString()}
+
                                 )
                             }
                         )
