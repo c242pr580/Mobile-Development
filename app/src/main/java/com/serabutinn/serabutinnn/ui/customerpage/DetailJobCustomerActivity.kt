@@ -128,7 +128,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 dispatchTakePictureIntent()
             }
             viewModel.isVerified.observe(this) {
-                if (!it) {
+                if (it) {
                     val intent = Intent(this, PaymentActivity::class.java)
                     intent.putExtra("id", id)
                     startActivity(intent)

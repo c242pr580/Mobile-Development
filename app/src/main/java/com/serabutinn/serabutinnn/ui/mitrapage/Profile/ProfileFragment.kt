@@ -17,7 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.R
@@ -103,7 +102,10 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.getBiodata(user.token)
-            viewModel.getDetailMitra(user.token, user.id)
+            if(user.roleid=="2"){
+                viewModel.getDetailMitra(user.token, user.id)
+            }
+
         }
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
@@ -118,7 +120,6 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
-            viewModel.dataMitra.observe(viewLifecycleOwner){mitra->
                 showItems()
                 Log.e("Data", it.toString())
                 if (it != null) {
@@ -147,21 +148,51 @@ class ProfileFragment : Fragment() {
                             it?.location.toString()
                         )
                     },
-                    ListItem("Business Name", mitra?.businessName.toString()) {
-                        update(
-                            "Nama Bisnis",
-                            mitra?.businessName.toString()
-                        )},
-                    ListItem("Business Address", mitra?.businessAddress.toString()) {
-                        update(
-                            "Alamat Bisnis",
-                            mitra?.businessAddress.toString()
-                        )
-                    }
                 )
-                val adapter = CustomAdapter(requireContext(), R.layout.item_list, item)
-                listViews.adapter = adapter
-            }
+                viewModel.getSession().observe(viewLifecycleOwner){user ->
+                    if(user.roleid=="2"){
+                        viewModel.dataMitra.observe(viewLifecycleOwner){mitra->
+                        val item2 = listOf(
+                            ListItem("Name", it?.name.toString()) { update("Name", it?.name.toString()) },
+                            ListItem("Username", it?.username.toString()) {},
+                            ListItem("Email", it?.email.toString()) {},
+                            ListItem("Phone", it?.phone.toString()) {
+                                update(
+                                    "Phone",
+                                    it?.phone.toString()
+                                )
+                            },
+                            ListItem("Address", it?.location.toString()) {
+                                update(
+                                    "Location",
+                                    it?.location.toString()
+                                )
+                            },
+                            ListItem("Business Name", mitra?.businessName.toString()) {
+                                update(
+                                    "Nama Bisnis",
+                                    mitra?.businessName.toString()
+                                )},
+                            ListItem("Business Address", mitra?.businessAddress.toString()) {
+                                update(
+                                    "Alamat Bisnis",
+                                    mitra?.businessAddress.toString()
+                                )
+                            }
+                        )
+                        val adapter = CustomAdapter(requireContext(), R.layout.item_list, item2)
+                        listViews.adapter = adapter
+                        }
+                    }
+                    else{
+                        val adapter = CustomAdapter(requireContext(), R.layout.item_list, item)
+                        listViews.adapter = adapter
+                    }
+                }
+
+
+
+
         }
     }
     private val requestPermissionLauncher =
@@ -285,21 +316,6 @@ class ProfileFragment : Fragment() {
         val compressedFile = compressImage(file)
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.updateBio(user.token, compressedFile, null, null, null)
-        }
-    }
-
-    private fun restartFragment() {
-        val currentFragment = childFragmentManager.findFragmentById(R.id.fragmentContainer)
-        currentFragment?.let {
-            val fragmentTransaction = childFragmentManager.beginTransaction()
-
-            // Clear the fragment from the back stack (if it exists)
-            childFragmentManager.popBackStack(it::class.java.name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-            // Replace with a new instance
-            fragmentTransaction.replace(R.id.fragmentContainer, it::class.java.newInstance())
-            fragmentTransaction.addToBackStack(it::class.java.name) // Optionally add the new one to the back stack
-            fragmentTransaction.commit()
         }
     }
 
