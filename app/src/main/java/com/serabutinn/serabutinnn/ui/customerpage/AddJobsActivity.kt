@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.serabutinn.serabutinnn.databinding.ActivityAddJobsBinding
 import com.serabutinn.serabutinnn.getImageUri
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import java.io.File
@@ -50,9 +51,9 @@ class AddJobsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         _binding = ActivityAddJobsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lightStatusBar(window)
         binding.imageButton.setOnClickListener { showDatePicker() }
         tvSelectedDate = binding.tvSelectedDate
         setContentView(binding.root)

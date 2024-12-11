@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityDetailJobCustomerBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import java.io.File
 import java.io.FileOutputStream
@@ -54,12 +54,17 @@ class DetailJobCustomerActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        lightStatusBar(window)
         binding = ActivityDetailJobCustomerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }
+
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         val id = intent.getStringExtra("id")
         viewModel.data.observe(this) {
             val data = it
@@ -167,11 +172,15 @@ class DetailJobCustomerActivity : AppCompatActivity() {
     }
 
     private fun showItems() {
-        binding.tvloc.visibility = View.VISIBLE
-        binding.tvdesc.visibility = View.VISIBLE
-        binding.imgJob.visibility = View.VISIBLE
-        binding.vwLine.visibility = View.VISIBLE
-        binding.cvStatus.visibility = View.VISIBLE
+        binding.apply {
+            btnBack.visibility = View.VISIBLE
+            tvDetailJobs.visibility = View.VISIBLE
+            tvloc.visibility = View.VISIBLE
+            tvdesc.visibility = View.VISIBLE
+            imgJob.visibility = View.VISIBLE
+            vwLine.visibility = View.VISIBLE
+            cvStatus.visibility = View.VISIBLE
+        }
     }
 
     private fun formatToRupiah(number: String): String {

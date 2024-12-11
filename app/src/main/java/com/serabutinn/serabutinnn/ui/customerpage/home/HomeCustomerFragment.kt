@@ -96,9 +96,13 @@ class HomeCustomerFragment : Fragment() {
     }
 
     private fun showItems() {
-        binding.cview.visibility = View.VISIBLE
-        binding.LLItems.visibility = View.VISIBLE
-        binding.cardView2.visibility = View.VISIBLE
+        binding.apply {
+            cview.visibility = View.VISIBLE
+            Llitems.visibility = View.VISIBLE
+            cardView2.visibility = View.VISIBLE
+            horizontalScrollViewHome2.visibility =  View.VISIBLE
+            tvPromo.visibility = View.VISIBLE
+        }
     }
 
     private fun showError(message: String) {

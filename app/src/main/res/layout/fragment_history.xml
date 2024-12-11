@@ -18,6 +18,8 @@
         android:maxLines="1"
         android:padding="12dp"
         android:singleLine="true"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
         android:textColorHint="@color/greydark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"

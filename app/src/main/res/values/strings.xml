@@ -34,11 +34,14 @@
     <string name="create_an_account">Create an Account!</string>
     <string name="fill_your_information_below_nor_else">Fill in all required fields to complete your registration.</string>
     <string name="pick_a_role">Pick a Role</string>
+    <string name="back">Back</string>
+    <string name="promojobs">Don’t Miss Out on These Exciting Opportunities!</string>
+    <string name="detailjobs">Detail Jobs</string>
     <string name="log_out">Log Out</string>
     <string name="title_activity_main_customer">MainCustomerActivity</string>
     <string name="add_jobs">add Jobs</string>
     <string name="add_new_jobs">Add New Jobs</string>
-    <string name="ayo_buat_pekerjaan">Ciptakan\nPekerjaan!</string>
+    <string name="ayo_buat_pekerjaan">Create Your Jobs</string>
     <string name="deadline">Deadline :</string>
     <string name="pilih_tanggal">Pilih tanggal</string>
     <string name="harga">Harga :</string>

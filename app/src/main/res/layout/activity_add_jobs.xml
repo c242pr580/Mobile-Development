@@ -4,86 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFFBF6"
+    android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.customerpage.AddJobsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="55dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="32dp"
-            android:contentDescription="TODO"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@color/white" />
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/txtLay_Location"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:hint="@string/alamat"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtInput_Location"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/Powderblue2"
-                android:singleLine="true"
-                android:textAlignment="viewStart" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/atasMakeJob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/ayo_buat_pekerjaan"
-            android:textAlignment="center"
-            android:textColor="@color/Paynesgray"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+        <!-- Header -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            app:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tvDetailJobs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/ayo_buat_pekerjaan"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/btnBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnBack"
+            app:layout_constraintBottom_toBottomOf="@id/btnBack" />
+
+        <!-- Form Input -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtLay_Title"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
             android:hint="@string/judul_pekerjaan"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/atasMakeJob">
+            app:layout_constraintTop_toBottomOf="@id/tvDetailJobs">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtInputTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/Powderblue2"
-                android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,49 +66,84 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="16dp"
             android:hint="@string/deskripsi_pekerjaan"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSelectedDate">
+            app:layout_constraintTop_toBottomOf="@id/txtLay_Title">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtInput_Desc"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:background="@color/Powderblue2"
-                android:singleLine="false"
-                android:textAlignment="viewStart" />
+                android:inputType="textMultiLine" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Deadline -->
         <TextView
             android:id="@+id/tvSelectedDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:padding="16dp"
+            android:layout_marginTop="16dp"
             android:text="@string/deadline"
-            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtLay_Title" />
+            app:layout_constraintTop_toBottomOf="@id/txtLay_Desc" />
 
         <ImageButton
             android:id="@+id/imageButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_calendar_month_24"
+            app:tint="@color/Powderblue2"
+            app:layout_constraintStart_toEndOf="@id/tvSelectedDate"
+            app:layout_constraintTop_toTopOf="@id/tvSelectedDate" />
+
+        <TextView
+            android:id="@+id/tvlocc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/harga"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSelectedDate" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtlocation"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/imageView3"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/tvSelectedDate"
-            app:layout_constraintTop_toTopOf="@+id/tvSelectedDate"
-            app:srcCompat="@drawable/baseline_calendar_month_24" />
+            android:hint="@string/Rp_20000"
+            app:endIconMode="clear_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvlocc">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtInput_Location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Harga -->
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/harga"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtlocation" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txtLay_Price"
@@ -142,89 +151,81 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
             android:hint="@string/Rp_20000"
             app:endIconMode="clear_text"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/textView17"
-            app:layout_constraintTop_toBottomOf="@+id/txtLay_Desc">
+            app:layout_constraintTop_toBottomOf="@id/textView17">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtInput_Price"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/Powderblue2"
-                android:inputType="number"
-                android:singleLine="true"
-                android:textAlignment="viewStart" />
+                android:layout_height="wrap_content"
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:padding="16dp"
-            android:text="@string/harga"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtLay_Desc" />
-
+        <!-- Upload Gambar -->
         <TextView
             android:id="@+id/textView18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
-            android:padding="16dp"
             android:text="@string/foto"
+            android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtLay_Location" />
+            app:layout_constraintTop_toBottomOf="@id/txtLay_Price" />
 
-        <Button
-            android:id="@+id/btnCamera"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:text="@string/kamera"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnGalery" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView18">
 
-        <Button
-            android:id="@+id/btnGalery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/galeri"
-            app:layout_constraintEnd_toStartOf="@+id/btnCamera"
-            app:layout_constraintStart_toEndOf="@+id/textView18"
-            app:layout_constraintTop_toTopOf="@+id/textView18" />
+            <Button
+                android:id="@+id/btnGalery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/Powderblue2"
+                android:text="@string/galeri"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/green"
+                android:text="@string/kamera"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <!-- Tombol Submit -->
 
         <ImageView
             android:id="@+id/ivJobs"
             android:layout_width="300dp"
             android:layout_height="200dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="40dp"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView18"
+            tools:layout_editor_absoluteY="497dp"
             tools:srcCompat="@drawable/baseline_image_24" />
 
         <Button
             android:id="@+id/buttonUpload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
             android:text="@string/create_jobs"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+            android:backgroundTint="@color/Powderblue2"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivJobs" />
+            app:layout_constraintTop_toBottomOf="@id/ivJobs" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progressIndicator"
@@ -236,6 +237,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="invisible" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
