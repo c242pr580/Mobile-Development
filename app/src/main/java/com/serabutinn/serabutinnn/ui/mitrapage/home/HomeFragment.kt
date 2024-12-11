@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
 //                adapter.filter(text.toString())
 //            }
             adapter.submitList(consumerReviews)
-            adapter.setData(consumerReviews)
+//            adapter.setData(consumerReviews)
             binding.rvJobs.adapter = adapter
         }
     }
