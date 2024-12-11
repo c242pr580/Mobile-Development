@@ -65,12 +65,10 @@ class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdap
                     binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
                 }
                 "Completed" -> {
-                    binding.root.visibility = View.GONE
                     binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
                     binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
                 }
                 "Canceled" -> {
-                    binding.root.visibility = View.GONE
                 }
             }
         }
