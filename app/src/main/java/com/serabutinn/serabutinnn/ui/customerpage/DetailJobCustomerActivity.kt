@@ -33,6 +33,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
     companion object {
         const val ID = "id"
     }
+
     private val REQUEST_CAMERA_PERMISSION = 100
     private lateinit var photoFile: File
     private val viewModel by viewModels<DetailJobCustomerViewModel> {
@@ -46,8 +47,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 // The file can now be sent directly
                 sendFile(photoFile)
             } else {
-                Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -71,10 +71,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
             }
             binding.tvStatus.text = data?.status
             binding.deadline.text = "Deadline | " + data?.deadline
-            Glide.with(this)
-                .load(data?.image)
-                .centerInside()
-                .into(binding.imgJob)
+            Glide.with(this).load(data?.image).centerInside().into(binding.imgJob)
             if (data != null) {
                 if (data.image == null) {
                     binding.imgJob.visibility = View.GONE
@@ -87,18 +84,21 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                         binding.btnHapus.visibility = View.VISIBLE
                         showItems()
                     }
+
                     "In Progress" -> {
                         binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
                         binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
                         binding.btnCompleted.visibility = View.VISIBLE
                         showItems()
                     }
+
                     "Completed" -> {
                         binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
                         binding.tvStatus.setTextColor(Color.parseColor("#188018"))
                         showItems()
                     }
-                    "Canceled" ->{
+
+                    "Canceled" -> {
                         binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
                         binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
                         showItems()
@@ -113,11 +113,17 @@ class DetailJobCustomerActivity : AppCompatActivity() {
                 finish()
             }
         }
-
         viewModel.getSession().observe(this) {
             viewModel.getJobDetailCust(it.token, id.toString())
         }
-
+        viewModel.message.observe(this) {
+            showToast(it)
+        }
+        viewModel.isSuccess.observe(this) {
+            if (!it) {
+                showToast("Gagal membuat pembayaran")
+            }
+        }
         binding.btnUpdate.setOnClickListener {
             val intent = Intent(this, UpdateJobActivity::class.java)
             intent.putExtra("id", id)
@@ -143,8 +149,8 @@ class DetailJobCustomerActivity : AppCompatActivity() {
             val deepLink = data.toString()
             // Handle the deep link accordingly
             Log.d("DeepLink", "App opened with deep link: $deepLink")
-            val moveIntent = Intent(this,CompletedJobActivity::class.java)
-            moveIntent.putExtra("id",intent.getStringExtra("id").toString())
+            val moveIntent = Intent(this, CompletedJobActivity::class.java)
+            moveIntent.putExtra("id", intent.getStringExtra("id").toString())
             startActivity(moveIntent)
         } else {
             // The app was opened without a deep link
@@ -156,12 +162,16 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun showItems(){
-        binding.tvloc.visibility=View.VISIBLE
-        binding.tvdesc.visibility=View.VISIBLE
-        binding.imgJob.visibility=View.VISIBLE
-        binding.vwLine.visibility=View.VISIBLE
-        binding.cvStatus.visibility=View.VISIBLE
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showItems() {
+        binding.tvloc.visibility = View.VISIBLE
+        binding.tvdesc.visibility = View.VISIBLE
+        binding.imgJob.visibility = View.VISIBLE
+        binding.vwLine.visibility = View.VISIBLE
+        binding.cvStatus.visibility = View.VISIBLE
     }
 
     private fun formatToRupiah(number: String): String {
@@ -173,6 +183,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         val decimalFormat = DecimalFormat("Rp #,###", decimalFormatSymbols)
         return decimalFormat.format(amount)
     }
+
     private fun checkAndRequestPermissions(): Boolean {
         val permissions = arrayOf(Manifest.permission.CAMERA)
         val permissionGranted = ContextCompat.checkSelfPermission(
@@ -191,18 +202,14 @@ class DetailJobCustomerActivity : AppCompatActivity() {
             createImageFile()
         } catch (ex: IOException) {
             Toast.makeText(
-                this,
-                "Error occurred while creating the file",
-                Toast.LENGTH_SHORT
+                this, "Error occurred while creating the file", Toast.LENGTH_SHORT
             ).show()
             null
         }
 
         photoFile?.also {
             val photoUri = FileProvider.getUriForFile(
-                this,
-                "${this.packageName}.fileprovider",
-                it
+                this, "${this.packageName}.fileprovider", it
             )
             takePictureLauncher.launch(photoUri)
         }
@@ -215,6 +222,7 @@ class DetailJobCustomerActivity : AppCompatActivity() {
             photoFile = this
         }
     }
+
     private fun compressImage(file: File): File {
         val bitmap = BitmapFactory.decodeFile(file.path)
         val compressedFile = File(cacheDir, "compressed_${file.name}")
@@ -240,8 +248,8 @@ class DetailJobCustomerActivity : AppCompatActivity() {
 
     private fun sendFile(file: File) {
         val compressedFile = compressImage(file)
-        viewModel.getSession().observe(this){
-            viewModel.uploadFace(it.token,compressedFile)
+        viewModel.getSession().observe(this) {
+            viewModel.uploadFace(it.token, compressedFile)
         }
     }
 

@@ -68,7 +68,8 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
                     _isSuccess.value = true
                     _message.value = response.body()?.message.toString()
                 } else {
-                    _message.value = response.message()
+                    _message.value = response.errorBody().toString()
+                    Log.e("error", response.errorBody().toString())
                 }
             }
 
@@ -84,6 +85,7 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
     }
 
     fun uploadFace(token: String, image: File) {
+        _isLoading.value=true
         var multipartBody: MultipartBody.Part? = null
         val requestImageFile = image.asRequestBody("image/jpg".toMediaType())
         multipartBody = requestImageFile.let {
@@ -96,6 +98,7 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
             override fun onResponse(
                 call: Call<VerifyFaceResponse>, response: Response<VerifyFaceResponse>
             ) {
+                _isLoading.value=false
                 if (response.isSuccessful) {
                     _isVerified.value = response.body()?.data?.verified == true
                     if (_isVerified.value == false) {
@@ -106,7 +109,9 @@ class DetailJobCustomerViewModel(private val repository: UserRepository) : ViewM
 
             override fun onFailure(call: Call<VerifyFaceResponse>, t: Throwable) {
                 Log.e("error", t.message.toString())
+                _isLoading.value = false
                 _isVerified.value = false
+                _message.value = t.message.toString()
             }
         })
     }
