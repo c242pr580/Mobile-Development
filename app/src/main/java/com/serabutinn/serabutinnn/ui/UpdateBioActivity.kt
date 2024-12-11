@@ -23,12 +23,14 @@ class UpdateBioActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdateBioBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         binding = ActivityUpdateBioBinding.inflate(layoutInflater)
         setContentView(binding.root)
         lightStatusBar(window)
         hideLoading()
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         val subtitle = intent.getStringExtra("subtitle")
         val title = intent.getStringExtra("title")
         binding.textView9.text=title

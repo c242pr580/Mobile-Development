@@ -40,8 +40,11 @@
     <string name="log_out">Log Out</string>
     <string name="title_activity_main_customer">MainCustomerActivity</string>
     <string name="add_jobs">add Jobs</string>
+    <string name="edit_jobs">Update Jobs</string>
     <string name="add_new_jobs">Add New Jobs</string>
     <string name="ayo_buat_pekerjaan">Create Your Jobs</string>
+    <string name="edit_buat_pekerjaan">Edit Your Jobs</string>
+    <string name="editbio">Edit Biodata</string>
     <string name="deadline">Deadline</string>
     <string name="pilih_tanggal">Choice Date</string>
     <string name="harga">Cost</string>

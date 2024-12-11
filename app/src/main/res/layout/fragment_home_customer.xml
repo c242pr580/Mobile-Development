@@ -161,8 +161,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="12dp">
+                    android:layout_marginTop="4dp"
+                    android:padding="12dp">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="wrap_content"

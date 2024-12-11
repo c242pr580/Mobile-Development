@@ -54,6 +54,9 @@ class AddJobsActivity : AppCompatActivity() {
         _binding = ActivityAddJobsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         lightStatusBar(window)
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         binding.txtinputDeadline.setOnClickListener { showDatePicker() }
         tvSelectedDate = binding.txtinputDeadline
         setContentView(binding.root)

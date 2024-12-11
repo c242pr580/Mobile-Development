@@ -12,9 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -25,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityUpdateJobBinding
 import com.serabutinn.serabutinnn.getImageUri
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +52,6 @@ class UpdateJobActivity : AppCompatActivity() {
     }
 
     private var datepicked: String? = ""
-    private lateinit var tvSelectedDate: TextView
 
     private fun allPermissionsGranted() =
         ContextCompat.checkSelfPermission(
@@ -66,12 +64,14 @@ class UpdateJobActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUpdateJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        enableEdgeToEdge()
+        lightStatusBar(window)
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         binding.btnGalery.setOnClickListener { startGallery() }
         binding.btnCamera.setOnClickListener { startCamera() }
-        binding.imageButton.setOnClickListener { showDatePicker() }
-        tvSelectedDate = binding.tvSelectedDate
+        binding.txtinputDeadline.setOnClickListener { showDatePicker() }
 
         viewModel.getSession().observe(this) {
             viewModel.getJobDetail(it.token, intent.getStringExtra(ID).toString())
@@ -100,7 +100,7 @@ class UpdateJobActivity : AppCompatActivity() {
                 binding.txtInputDesc.setText(it.description)
                 binding.txtInputPrice.setText(it.cost)
                 binding.txtInputLocation.setText(it.location)
-                binding.tvSelectedDate.text = "Deadline : ${it.deadline}"
+                binding.txtinputDeadline.text = "${it.deadline}"
                 currentImageUri = Uri.parse(it.image.toString())
                 showImage()
             }
@@ -114,10 +114,10 @@ class UpdateJobActivity : AppCompatActivity() {
             this, { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, monthOfYear, dayOfMonth)
-                val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
                 datepicked = formattedDate
-                tvSelectedDate.text = "Deadline : $datepicked"
+                binding.txtinputDeadline.text = "$datepicked"
             },
             today.get(Calendar.YEAR),
             today.get(Calendar.MONTH),
@@ -231,7 +231,7 @@ class UpdateJobActivity : AppCompatActivity() {
     private fun compressImage(file: File): File {
         var quality = 80
         val bitmap = BitmapFactory.decodeFile(file.path)
-        var compressedFile = File(cacheDir, "compressed_${file.name}")
+        var compressedFile: File
         do {
             compressedFile = File(cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
             val outputStream = FileOutputStream(compressedFile)
