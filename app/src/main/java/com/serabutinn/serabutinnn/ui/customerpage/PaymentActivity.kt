@@ -14,15 +14,24 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.serabutinn.serabutinnn.data.local.AppDataBase
+import com.serabutinn.serabutinnn.data.local.Job
 import com.serabutinn.serabutinnn.databinding.ActivityPaymentBinding
+import com.serabutinn.serabutinnn.repository.JobRepository
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class PaymentActivity : AppCompatActivity() {
     private val viewModel by viewModels<PaymentViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private lateinit var jobRepository: JobRepository
     private lateinit var binding: ActivityPaymentBinding
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,8 +67,26 @@ class PaymentActivity : AppCompatActivity() {
             }
 
         }
-        viewModel.getSession().observe(this) { user ->viewModel.createPayment(user.token,intent.getStringExtra("id").toString())}
+        viewModel.getSession().observe(this) { user ->
+            GlobalScope.launch(Dispatchers.IO) {
+                val job = jobRepository.getJobById(intent.getStringExtra("id").toString())
+                if (job != null) {
+                    Log.d("Job", "Job ID: ${job.job_id}")
+                    binding.PaymentWebview.webViewClient = WebViewClient()
+                    openUrlFromWebView(job.payment_link)
+                    binding.PaymentWebview.settings.javaScriptEnabled = true
+                    binding.PaymentWebview.settings.supportZoom()
+                }else{
+                    viewModel.createPayment(user.token,intent.getStringExtra("id").toString())}
+                }
+            }
+
         viewModel.linkPayment.observe(this){
+            val jobDao = AppDataBase.getDatabase(applicationContext).jobDao()
+            jobRepository = JobRepository(jobDao)
+            GlobalScope.launch(Dispatchers.IO) {
+                jobRepository.insertJob(Job(job_id = intent.getStringExtra("id").toString(), payment_link = it.toString()))
+            }
             binding.PaymentWebview.webViewClient = WebViewClient()
             openUrlFromWebView(it.toString())
             binding.PaymentWebview.settings.javaScriptEnabled = true

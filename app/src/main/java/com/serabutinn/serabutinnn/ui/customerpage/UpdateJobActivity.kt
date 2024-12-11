@@ -5,6 +5,9 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,19 +15,26 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityUpdateJobBinding
+import com.serabutinn.serabutinnn.getImageUri
+import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class UpdateJobActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdateJobBinding
+    private var currentImageUri: Uri? = null
 
     private val viewModel by viewModels<UpdateJobViewModel> {
         ViewModelFactory.getInstance(this)
@@ -49,6 +59,8 @@ class UpdateJobActivity : AppCompatActivity() {
         binding = ActivityUpdateJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+        binding.btnGalery.setOnClickListener { startGallery() }
+        binding.btnCamera.setOnClickListener { startCamera() }
         binding.imageButton.setOnClickListener { showDatePicker() }
         tvSelectedDate = binding.tvSelectedDate
         viewModel.getSession().observe(this){
@@ -94,6 +106,8 @@ class UpdateJobActivity : AppCompatActivity() {
                 binding.txtInputPrice.setText(it.cost)
                 binding.txtInputLocation.setText(it.location)
                 binding.tvSelectedDate.text = "Deadline : ${it.deadline}"
+                currentImageUri=Uri.parse(it.image.toString())
+                showImage()
             }
 
         }
@@ -130,6 +144,83 @@ class UpdateJobActivity : AppCompatActivity() {
             }
         }
 
+    private fun startGallery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        } else {
+            val intent = Intent(Intent.ACTION_PICK).apply {
+                type = "image/*"
+            }
+            legacyGalleryLauncher.launch(intent)
+        }
+    }
+
+    private val legacyGalleryLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            currentImageUri = result.data?.data
+            showImage()
+        } else {
+            Log.d("Photo Picker", "No media selected")
+        }
+    }
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            currentImageUri = uri
+            showImage()
+        } else {
+            Log.d("Photo Picker", "No media selected")
+        }
+    }
+
+    private fun startCamera() {
+        currentImageUri = getImageUri(this)
+        launcherIntentCamera.launch(currentImageUri!!)
+    }
+
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            showImage()
+        } else {
+            currentImageUri = null
+        }
+    }
+
+    private fun showImage() {
+        currentImageUri?.let {
+        Glide.with(this)
+            .load(it)
+            .into(binding.ivJobs)
+        }
+    }
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(cacheDir, "compressed_${file.name}")
+        val outputStream = FileOutputStream(compressedFile)
+
+        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        // Verify the size is under 1MB, reduce quality further if needed
+        while (compressedFile.length() > 1_000_000) {
+            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
+            compressedFile.delete()
+            val reducedStream = FileOutputStream(compressedFile)
+            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
+            reducedStream.flush()
+            reducedStream.close()
+        }
+
+        return compressedFile
+    }
+
     private fun uploadImage() {
         showLoading(true)
         if (binding.txtInputDesc.text.toString().isEmpty() ||
@@ -149,6 +240,8 @@ class UpdateJobActivity : AppCompatActivity() {
             viewModel.getSession().observe(this) { user ->
                 val token = user.token
                 val id = intent.getStringExtra(ID)
+                currentImageUri?.let { uri ->
+                    val imageFile =compressImage(uriToFile(uri, this))
                     val description = binding.txtInputDesc.text.toString()
                     viewModel.updateJob(
                         token,
@@ -157,9 +250,10 @@ class UpdateJobActivity : AppCompatActivity() {
                         datepicked.toString(),
                         binding.txtInputPrice.text.toString(),
                         binding.txtInputLocation.text.toString(),
-                        null,
+                        imageFile,
                         id.toString()
-                    )
+                    )}
+
 
             }
         }

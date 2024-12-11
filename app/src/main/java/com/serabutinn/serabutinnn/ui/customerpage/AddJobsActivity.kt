@@ -108,89 +108,89 @@ class AddJobsActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
+        private val requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                    Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        private fun startGallery() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             } else {
-                Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
+                val intent = Intent(Intent.ACTION_PICK).apply {
+                    type = "image/*"
+                }
+                legacyGalleryLauncher.launch(intent)
             }
         }
 
-    private fun startGallery() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        } else {
-            val intent = Intent(Intent.ACTION_PICK).apply {
-                type = "image/*"
+        private val legacyGalleryLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                currentImageUri = result.data?.data
+                showImage()
+            } else {
+                Log.d("Photo Picker", "No media selected")
             }
-            legacyGalleryLauncher.launch(intent)
         }
-    }
-
-    private val legacyGalleryLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK) {
-            currentImageUri = result.data?.data
-            showImage()
-        } else {
-            Log.d("Photo Picker", "No media selected")
-        }
-    }
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            currentImageUri = uri
-            showImage()
-        } else {
-            Log.d("Photo Picker", "No media selected")
-        }
-    }
-
-    private fun startCamera() {
-        currentImageUri = getImageUri(this)
-        launcherIntentCamera.launch(currentImageUri!!)
-    }
-
-    private val launcherIntentCamera = registerForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { isSuccess ->
-        if (isSuccess) {
-            showImage()
-        } else {
-            currentImageUri = null
-        }
-    }
-
-    private fun showImage() {
-        currentImageUri?.let { binding.ivJobs.setImageURI(it) }
-    }
-    private fun compressImage(file: File): File {
-        val bitmap = BitmapFactory.decodeFile(file.path)
-        val compressedFile = File(cacheDir, "compressed_${file.name}")
-        val outputStream = FileOutputStream(compressedFile)
-
-        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-        outputStream.flush()
-        outputStream.close()
-
-        // Verify the size is under 1MB, reduce quality further if needed
-        while (compressedFile.length() > 1_000_000) {
-            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
-            compressedFile.delete()
-            val reducedStream = FileOutputStream(compressedFile)
-            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
-            reducedStream.flush()
-            reducedStream.close()
+        private val launcherGallery = registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri: Uri? ->
+            if (uri != null) {
+                currentImageUri = uri
+                showImage()
+            } else {
+                Log.d("Photo Picker", "No media selected")
+            }
         }
 
-        return compressedFile
-    }
+        private fun startCamera() {
+            currentImageUri = getImageUri(this)
+            launcherIntentCamera.launch(currentImageUri!!)
+        }
+
+        private val launcherIntentCamera = registerForActivityResult(
+            ActivityResultContracts.TakePicture()
+        ) { isSuccess ->
+            if (isSuccess) {
+                showImage()
+            } else {
+                currentImageUri = null
+            }
+        }
+
+        private fun showImage() {
+            currentImageUri?.let { binding.ivJobs.setImageURI(it) }
+        }
+        private fun compressImage(file: File): File {
+            val bitmap = BitmapFactory.decodeFile(file.path)
+            val compressedFile = File(cacheDir, "compressed_${file.name}")
+            val outputStream = FileOutputStream(compressedFile)
+
+            // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+            outputStream.flush()
+            outputStream.close()
+
+            // Verify the size is under 1MB, reduce quality further if needed
+            while (compressedFile.length() > 1_000_000) {
+                val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
+                compressedFile.delete()
+                val reducedStream = FileOutputStream(compressedFile)
+                reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
+                reducedStream.flush()
+                reducedStream.close()
+            }
+
+            return compressedFile
+        }
 
     private fun uploadImage() {
         showLoading(true)
