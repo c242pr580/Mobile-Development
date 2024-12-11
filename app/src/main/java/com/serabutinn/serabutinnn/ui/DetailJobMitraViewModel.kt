@@ -60,9 +60,11 @@ class DetailJobMitraViewModel(private val repository: UserRepository) : ViewMode
                 if (response.isSuccessful) {
                     _message.value = response.body()?.message
                     _isSuccess.value = true
+                    _isLoading.value = false
                 } else {
                     _message.value = response.message()
                     _isSuccess.value = false
+                    _isLoading.value = false
                 }
             }
 

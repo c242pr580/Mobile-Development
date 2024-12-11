@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             viewModel.findJobs(user)
             viewModel.getBiodata(user.token)
-
+            showItems()
         }
         viewModel.dataBio.observe(viewLifecycleOwner){
             if (it != null) {
@@ -90,22 +90,8 @@ class HomeFragment : Fragment() {
             }else{
                 binding.ivListKosong.visibility=View.GONE
             }
-            viewModel.getSession().observe(viewLifecycleOwner) { user ->
-                showItems()
-                val pending: MutableList<DataAllJobs> = data.filter { it.status == "Pending" }.toMutableList()
-                val inProgress: MutableList<DataAllJobs> =
-                    data.filter { it.status == "In Progress" && it.mitraId != user.id.trim() }.toMutableList()
-                val completed: MutableList<DataAllJobs> = data.filter { it.status == "Completed" }.toMutableList()
-                val takenByMe: MutableList<DataAllJobs> =
-                    data.filter { it.mitraId == user.id.trim() && it.status == "In Progress" }.toMutableList()
-                val dataAllJobs: MutableList<DataAllJobs> = mutableListOf()
-                if (takenByMe.isNotEmpty()) {takenByMe.map {dataAllJobs.add(it)} }
-                if (pending.isNotEmpty()) {pending.map { dataAllJobs.add(it) }}
-                if (inProgress.isNotEmpty()) {inProgress.map { dataAllJobs.add(it) }}
-                if (completed.isNotEmpty()) { completed.map {dataAllJobs.add(it)} }
+            setJobsData(data)
 
-                setJobsData(dataAllJobs)
-            }
         }
         val layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

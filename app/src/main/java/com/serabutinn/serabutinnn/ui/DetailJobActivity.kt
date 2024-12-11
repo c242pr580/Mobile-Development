@@ -37,6 +37,11 @@ class DetailJobActivity : AppCompatActivity() {
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }
+        viewModel.isSuccess.observe(this){
+            if (it){
+                viewModel.getSession().observe(this){viewModel.getJobDetailMitra(it.token,id.toString())}
+            }
+        }
         viewModel.data.observe(this) {
             val data = it
             binding.judulJob.text = data?.title
