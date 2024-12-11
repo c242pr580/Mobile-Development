@@ -21,13 +21,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityUpdateJobBinding
 import com.serabutinn.serabutinnn.getImageUri
 import com.serabutinn.serabutinnn.uriToFile
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -44,6 +51,7 @@ class UpdateJobActivity : AppCompatActivity() {
         const val ID = "id"
         const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
+
     private var datepicked: String? = ""
     private lateinit var tvSelectedDate: TextView
 
@@ -59,46 +67,33 @@ class UpdateJobActivity : AppCompatActivity() {
         binding = ActivityUpdateJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
         binding.btnGalery.setOnClickListener { startGallery() }
         binding.btnCamera.setOnClickListener { startCamera() }
         binding.imageButton.setOnClickListener { showDatePicker() }
         tvSelectedDate = binding.tvSelectedDate
-        viewModel.getSession().observe(this){
-            viewModel.getJobDetail(it.token,intent.getStringExtra(ID).toString())
+
+        viewModel.getSession().observe(this) {
+            viewModel.getJobDetail(it.token, intent.getStringExtra(ID).toString())
         }
+
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }
-        binding.buttonUpload.setOnClickListener { uploadImage() }
-        if (!allPermissionsGranted()) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Manifest.permission.READ_MEDIA_IMAGES
-            } else {
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            }
-            requestPermissionLauncher.launch(AddJobsActivity.REQUIRED_PERMISSION)
+        binding.buttonUpload.setOnClickListener { uploadImage() }
+
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
+
         viewModel.isSuccess.observe(this) {
             if (it) {
                 Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeCustomerActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+                finish()
             }
         }
-        viewModel.isSuccess.observe(this) { it ->
-            if (!it) {
-                viewModel.message.observe(this) {
-                    Log.e("Tes Activity", it)
-                    AlertDialog.Builder(this).apply {
-                        setTitle("Oops")
-                        setMessage(it)
-                        setPositiveButton("OK") { _, _ -> }
-                    }
-                }
-            }
-        }
+
         viewModel.data.observe(this) {
             if (it != null) {
                 binding.txtInputTitle.setText(it.title)
@@ -106,10 +101,9 @@ class UpdateJobActivity : AppCompatActivity() {
                 binding.txtInputPrice.setText(it.cost)
                 binding.txtInputLocation.setText(it.location)
                 binding.tvSelectedDate.text = "Deadline : ${it.deadline}"
-                currentImageUri=Uri.parse(it.image.toString())
+                currentImageUri = Uri.parse(it.image.toString())
                 showImage()
             }
-
         }
     }
 
@@ -122,7 +116,7 @@ class UpdateJobActivity : AppCompatActivity() {
                 selectedDate.set(year, monthOfYear, dayOfMonth)
                 val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
-                datepicked = formattedDate.toString()
+                datepicked = formattedDate
                 tvSelectedDate.text = "Deadline : $datepicked"
             },
             today.get(Calendar.YEAR),
@@ -165,6 +159,7 @@ class UpdateJobActivity : AppCompatActivity() {
             Log.d("Photo Picker", "No media selected")
         }
     }
+
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
@@ -193,71 +188,124 @@ class UpdateJobActivity : AppCompatActivity() {
 
     private fun showImage() {
         currentImageUri?.let {
-        Glide.with(this)
-            .load(it)
-            .into(binding.ivJobs)
+            Glide.with(this)
+                .load(it)
+                .into(binding.ivJobs)
         }
     }
-    private fun compressImage(file: File): File {
-        val bitmap = BitmapFactory.decodeFile(file.path)
-        val compressedFile = File(cacheDir, "compressed_${file.name}")
-        val outputStream = FileOutputStream(compressedFile)
 
-        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-        outputStream.flush()
-        outputStream.close()
+    private fun isRemoteUri(uri: Uri): Boolean {
+        return uri.toString().startsWith("http") || uri.toString().startsWith("https")
+    }
 
-        // Verify the size is under 1MB, reduce quality further if needed
-        while (compressedFile.length() > 1_000_000) {
-            val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
-            compressedFile.delete()
-            val reducedStream = FileOutputStream(compressedFile)
-            reducedQualityBitmap.compress(Bitmap.CompressFormat.JPEG, 50, reducedStream)
-            reducedStream.flush()
-            reducedStream.close()
+    private suspend fun downloadFile(remoteUri: Uri): File? {
+        return withContext(Dispatchers.IO) { // Switch to IO thread for network operations
+            try {
+                val url = URL(remoteUri.toString())
+                val connection = url.openConnection() as HttpURLConnection
+                connection.connect()
+
+                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                    Log.e("DownloadFile", "Failed to connect: ${connection.responseCode}")
+                    return@withContext null
+                }
+
+                val inputStream: InputStream = connection.inputStream
+                val outputFile = File(cacheDir, "downloaded_image_${System.currentTimeMillis()}.jpg")
+                val outputStream = FileOutputStream(outputFile)
+
+                inputStream.use { input ->
+                    outputStream.use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                outputFile // Return the downloaded file
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
+    }
 
+    private fun compressImage(file: File): File {
+        var quality = 80
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        var compressedFile = File(cacheDir, "compressed_${file.name}")
+        do {
+            compressedFile = File(cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
+            val outputStream = FileOutputStream(compressedFile)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+            outputStream.close()
+            quality -= 10
+        } while (compressedFile.length() > 1_000_000 && quality > 10)
         return compressedFile
     }
 
     private fun uploadImage() {
         showLoading(true)
-        if (binding.txtInputDesc.text.toString().isEmpty() ||
-            binding.txtInputLocation.text.toString().isEmpty() ||
-            binding.txtInputPrice.text.toString().isEmpty() ||
-            binding.txtInputTitle.text.toString().isEmpty()
+
+        if (binding.txtInputDesc.text.isNullOrEmpty() ||
+            binding.txtInputLocation.text.isNullOrEmpty() ||
+            binding.txtInputPrice.text.isNullOrEmpty() ||
+            binding.txtInputTitle.text.isNullOrEmpty()
         ) {
             showLoading(false)
             AlertDialog.Builder(this).apply {
                 setTitle("Oops!")
                 setMessage("Please fill all fields")
                 setPositiveButton("OK") { _, _ -> }
-            }
+            }.show()
             return
-        } else {
-            showLoading(true)
-            viewModel.getSession().observe(this) { user ->
-                val token = user.token
-                val id = intent.getStringExtra(ID)
-                currentImageUri?.let { uri ->
-                    val imageFile =compressImage(uriToFile(uri, this))
-                    val description = binding.txtInputDesc.text.toString()
+        }
+
+        if (currentImageUri == null) {
+            showLoading(false)
+            AlertDialog.Builder(this).apply {
+                setTitle("Oops!")
+                setMessage("Please select an image before uploading.")
+                setPositiveButton("OK") { _, _ -> }
+            }.show()
+            return
+        }
+
+        // Launch a coroutine for background work
+        viewModel.getSession().observe(this) { user ->
+            val token = user.token
+            val id = intent.getStringExtra(ID)
+
+            lifecycleScope.launch {
+                val imageFile = if (isRemoteUri(currentImageUri!!)) {
+                    val downloadedFile = downloadFile(currentImageUri!!)
+                    if (downloadedFile != null) compressImage(downloadedFile) else null
+                } else {
+                    val tempFile = uriToFile(currentImageUri!!, this@UpdateJobActivity)
+                    compressImage(tempFile)
+                }
+
+                if (imageFile != null) {
                     viewModel.updateJob(
                         token,
                         binding.txtInputTitle.text.toString(),
-                        description,
+                        binding.txtInputDesc.text.toString(),
                         datepicked.toString(),
                         binding.txtInputPrice.text.toString(),
                         binding.txtInputLocation.text.toString(),
                         imageFile,
                         id.toString()
-                    )}
-
-
+                    )
+                } else {
+                    showLoading(false)
+                    AlertDialog.Builder(this@UpdateJobActivity).apply {
+                        setTitle("Error")
+                        setMessage("Failed to process the image.")
+                        setPositiveButton("OK") { _, _ -> }
+                    }.show()
+                }
             }
         }
     }
+
     private fun showLoading(isLoading: Boolean) {
         binding.progressIndicator2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
