@@ -142,10 +142,10 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/promojobs"
                 android:textColor="@color/black"
-                android:visibility="gone"
-                tools:visibility="visible"
                 android:textSize="16sp"
-                android:textStyle="bold |italic" />
+                android:textStyle="bold|italic"
+                android:visibility="gone"
+                tools:visibility="visible" />
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollViewHome2"

@@ -134,7 +134,8 @@
                     android:textStyle="bold" />
             </androidx.cardview.widget.CardView>
 
-        <TextView
+            <!--suppress AndroidDomInspection -->
+            <TextView
                 android:id="@+id/tvPromo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -143,7 +144,7 @@
                 android:text="@string/promojobs"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold |italic"
+                android:textStyle="bold|italic"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
