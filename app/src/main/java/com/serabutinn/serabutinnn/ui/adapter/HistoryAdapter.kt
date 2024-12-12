@@ -97,11 +97,11 @@ class HistoryAdapter(private val id:UserModel) : ListAdapter<DataJobsMitra, Hist
     }
     fun filter(query: String) {
         val filteredList = if (query.isEmpty()) {
-            originalList // No filtering, return the original list
+            originalList
         } else {
             originalList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
         }
-        submitList(filteredList)  // Update the list using submitList
+        submitList(filteredList)
     }
     fun setData(list: List<DataJobsMitra>) {
         originalList.clear()

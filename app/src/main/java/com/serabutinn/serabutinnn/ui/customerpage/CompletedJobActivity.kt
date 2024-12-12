@@ -47,7 +47,7 @@ class CompletedJobActivity : AppCompatActivity() {
             showLoading(true)
             if (point == 0) {
                 showLoading(false)
-                Toast.makeText(this, "Mohon Berikan Rating", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Fill up Rating", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.getSession().observe(this) { user ->
                     viewModel.completeJob(user.token, id)
@@ -65,6 +65,7 @@ class CompletedJobActivity : AppCompatActivity() {
         }
         viewModel.isSuccess2.observe(this) {
             if (it) {
+                Toast.makeText(this, "Success Giving Rating", Toast.LENGTH_SHORT).show()
                 val intent2= Intent(this, DetailJobCustomerActivity::class.java)
                 intent2.putExtra("id",id)
                 intent2.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

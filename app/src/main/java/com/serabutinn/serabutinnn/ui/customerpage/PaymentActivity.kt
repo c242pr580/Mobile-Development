@@ -41,15 +41,12 @@ class PaymentActivity : AppCompatActivity() {
         val action = intent.action
         val data = intent.data
         if (Intent.ACTION_VIEW == action && data != null) {
-            // The app was opened via a deep link
             val deepLink = data.toString()
-            // Handle the deep link accordingly
             Log.d("DeepLink", "App opened with deep link: $deepLink")
             val moveIntent = Intent(this,CompletedJobActivity::class.java)
             moveIntent.putExtra("id",intent.getStringExtra("id").toString())
             startActivity(moveIntent)
         } else {
-            // The app was opened without a deep link
             Log.d("DeepLink", "App opened without deep link")
         }
         binding = ActivityPaymentBinding.inflate(layoutInflater)

@@ -25,12 +25,7 @@ class HomeViewModel(private val repository: UserRepository) : ViewModel() {
     val message: LiveData<String> = _message
     private val _dataBio = MutableLiveData<DataBio?>()
     val dataBio: LiveData<DataBio?> = _dataBio
-    private val _filteredJobs = MutableLiveData<List<DataAllJobs>>()
 
-
-    init {
-
-    }
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }

@@ -62,7 +62,6 @@ class UpdateBioViewModel(private val repository: UserRepository) : ViewModel() {
                 response: Response<DeleteJobsResponse>
             ) {
                 if(response.isSuccessful){
-                    _message.value = response.body()?.message.toString()
                     _isSuccess.value = true
                     Log.e("Data", response.body()?.message.toString())
                 }

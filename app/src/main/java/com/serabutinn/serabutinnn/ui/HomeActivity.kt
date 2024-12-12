@@ -34,7 +34,7 @@ class HomeActivity : AppCompatActivity() {
                 if (currentFragment is HomeFragment) {
                     currentFragment.handleBackPress()
                 } else {
-                    finishAffinity() // Exit the app for other fragments
+                    finishAffinity()
                 }
             }
         })

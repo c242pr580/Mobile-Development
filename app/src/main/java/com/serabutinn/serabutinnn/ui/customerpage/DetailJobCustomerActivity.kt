@@ -222,12 +222,10 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         val compressedFile = File(cacheDir, "compressed_${file.name}")
         val outputStream = FileOutputStream(compressedFile)
 
-        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
         outputStream.flush()
         outputStream.close()
 
-        // Verify the size is under 1MB, reduce quality further if needed
         while (compressedFile.length() > 1_000_000) {
             val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
             compressedFile.delete()

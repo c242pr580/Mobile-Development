@@ -223,7 +223,7 @@ class UpdateJobActivity : AppCompatActivity() {
                     }
                 }
 
-                outputFile // Return the downloaded file
+                outputFile
             } catch (e: Exception) {
                 e.printStackTrace()
                 null
@@ -272,7 +272,6 @@ class UpdateJobActivity : AppCompatActivity() {
             return
         }
 
-        // Launch a coroutine for background work
         viewModel.getSession().observe(this) { user ->
             val token = user.token
             val id = intent.getStringExtra(ID)

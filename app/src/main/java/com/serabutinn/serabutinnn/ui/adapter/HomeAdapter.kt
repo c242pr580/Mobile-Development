@@ -18,9 +18,6 @@ import java.text.DecimalFormatSymbols
 
 class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    // Store the original unaltered list
-//    private val originalsearchList = mutableListOf<DataAllJobs>()
-
     fun submitFilteredList(list: List<DataAllJobs>) {
         submitList(list)
     }
@@ -106,21 +103,4 @@ class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdap
             }
         }
     }
-
-    // Filter function
-//    fun filter(query: String) {
-//        val filteredList = if (query.isEmpty()) {
-//            originalsearchList // Use the original list when query is empty
-//        } else {
-//            originalsearchList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
-//        }
-//        submitList(filteredList)  // Update the list using submitList
-//    }
-//
-//    // Set data method to store original list
-//    fun setData(list: List<DataAllJobs>) {
-//        originalsearchList.clear() // Clear the original list
-//        originalsearchList.addAll(list) // Add all items to the original list
-//        submitList(list)  // Display the original data initially
-//    }
 }

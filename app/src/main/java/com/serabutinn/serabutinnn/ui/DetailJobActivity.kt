@@ -142,7 +142,6 @@ class DetailJobActivity : AppCompatActivity() {
 
     private fun openWhatsApp(phoneNumber: String, message: String) {
         try {
-            // Encode the message to ensure proper URL formatting
             val encodedMessage = Uri.encode(message)
             val uri = Uri.parse("https://wa.me/62$phoneNumber?text=$encodedMessage")
 
