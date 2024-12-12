@@ -149,8 +149,8 @@ class HomeFragment : Fragment() {
             .setPositiveButton("Okay") { _, _ -> }
     }
 
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
