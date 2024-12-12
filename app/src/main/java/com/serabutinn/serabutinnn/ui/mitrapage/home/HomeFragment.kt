@@ -1,8 +1,6 @@
 package com.serabutinn.serabutinnn.ui.mitrapage.home
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,7 +19,6 @@ import com.serabutinn.serabutinnn.databinding.FragmentHomeBinding
 import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter
 import com.serabutinn.serabutinnn.ui.adapter.HomePendingAdapter
-import com.serabutinn.serabutinnn.ui.mitrapage.jobs.JobsFragment
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class HomeFragment : Fragment() {

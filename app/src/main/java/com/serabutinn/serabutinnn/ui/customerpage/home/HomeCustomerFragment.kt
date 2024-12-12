@@ -54,16 +54,16 @@ class HomeCustomerFragment : Fragment() {
         }
 
         viewModel.data.observe(viewLifecycleOwner) { jobs ->
-            if(jobs.isEmpty()){
+            originalList = jobs
+            val filteredList = originalList.filter { it.status == "In Progress" || it.status == "Pending" }
+            homeCustomerAdapter?.submitFilteredList(filteredList)
+            if(filteredList.isEmpty()){
                 binding.ivListKosong.visibility = View.VISIBLE
                 binding.rvJobs.visibility= View.GONE
             }else{
                 binding.rvJobs.visibility= View.VISIBLE
                 binding.ivListKosong.visibility = View.GONE
             }
-            originalList = jobs
-            val filteredList = originalList.filter { it.status == "In Progress" || it.status == "Pending" }
-            homeCustomerAdapter?.submitFilteredList(filteredList)
         }
 
         viewModel.dataBio.observe(viewLifecycleOwner) { biodata ->

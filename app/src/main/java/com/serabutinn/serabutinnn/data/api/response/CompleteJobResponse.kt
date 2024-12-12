@@ -1,7 +1,6 @@
 package com.serabutinn.serabutinnn.data.api.response
 
 import com.google.gson.annotations.SerializedName
-import java.io.File
 
 data class CompleteJobResponse(
 
@@ -21,7 +20,7 @@ data class CompleteJobResponse(
 data class DataCompletedJobs(
 
 	@field:SerializedName("image")
-	val image: File? = null,
+	val image: String? = null,
 
 	@field:SerializedName("completedAt")
 	val completedAt: String? = null,

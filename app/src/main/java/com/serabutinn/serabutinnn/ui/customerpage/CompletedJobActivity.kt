@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityCompletedJobBinding
@@ -32,15 +31,13 @@ class CompletedJobActivity : AppCompatActivity() {
         val data: Uri? = intent?.data
 
         if (data != null) {
-            id = data.getQueryParameter("id").toString() // Extract "id" parameter
+            id = data.getQueryParameter("id").toString()
         }else{
             Log.d("Data", "Data is null")
         }
         binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (fromUser) {
                 point = rating.toInt()
-                // This ensures the action is triggered by user interaction
-                // Do something when the user clicks or changes the rating
                 Log.d("Rating", "User rated: $rating")
             }
         }
@@ -66,7 +63,6 @@ class CompletedJobActivity : AppCompatActivity() {
         }
         viewModel.isSuccess2.observe(this) {
             if (it) {
-                Toast.makeText(this, "Success Giving Rating", Toast.LENGTH_SHORT).show()
                 val intent2= Intent(this, DetailJobCustomerActivity::class.java)
                 intent2.putExtra("id",id)
                 intent2.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
