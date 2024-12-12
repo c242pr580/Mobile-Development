@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityUpdateBioBinding

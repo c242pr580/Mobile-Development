@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -25,6 +24,7 @@ class CompletedJobActivity : AppCompatActivity() {
         binding = ActivityCompletedJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var id= ""
+        binding.ratingBar.rating = 0f
         viewModel.getSession().observe(this) {
             viewModel.completeJob(it.token, id)
         }

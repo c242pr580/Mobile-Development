@@ -12,7 +12,6 @@ import com.serabutinn.serabutinnn.data.api.response.DataBio
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.ListCustomerJobsResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
-import com.serabutinn.serabutinnn.ui.adapter.HomeCustomerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

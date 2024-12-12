@@ -110,6 +110,7 @@ class ProfileFragment : Fragment() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
+        binding.ratingBar2.visibility=View.GONE
         binding.buttonLogout.setOnClickListener {
             viewModel.logout()
             val intent = Intent(requireContext(), MainActivity2::class.java)
@@ -152,6 +153,8 @@ class ProfileFragment : Fragment() {
                 viewModel.getSession().observe(viewLifecycleOwner){user ->
                     if(user.roleid=="2"){
                         viewModel.dataMitra.observe(viewLifecycleOwner){mitra->
+                            binding.ratingBar2.visibility=View.VISIBLE
+                        binding.ratingBar2.rating = mitra?.rating?.toFloat() ?: 0f
                         val item2 = listOf(
                             ListItem("Name", it?.name.toString()) { update("Name", it?.name.toString()) },
                             ListItem("Username", it?.username.toString()) {},

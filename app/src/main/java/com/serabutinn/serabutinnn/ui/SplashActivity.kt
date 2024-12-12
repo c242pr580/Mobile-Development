@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.AnimationUtils
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivitySplashBinding
 import com.serabutinn.serabutinnn.ui.auth.MainActivity2
@@ -60,21 +57,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 }
             }
-            val isLoggedIn = checkUserLoggedIn()
-
-            // Navigate to the appropriate screen
-            if (isLoggedIn) {
-                startActivity(Intent(this, MainActivity2::class.java)) // Navigate to Main Screen
-            } else {
-                startActivity(Intent(this, MainActivity2::class.java)) // Navigate to Login Screen
-            }
             finish() // Close SplashActivity
         }, 2500) // 2-second delay
-    }
-
-    private fun checkUserLoggedIn(): Boolean {
-        // Replace with your actual logic to check login status
-        val sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
-        return sharedPreferences.getBoolean("isLoggedIn", false)
     }
 }

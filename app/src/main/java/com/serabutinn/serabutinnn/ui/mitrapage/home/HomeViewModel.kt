@@ -10,7 +10,6 @@ import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.BiodataResponse
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.data.api.response.DataBio
-import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.data.api.response.ListAllJobsResponse
 import com.serabutinn.serabutinnn.repository.UserRepository
 import retrofit2.Call
