@@ -36,11 +36,13 @@ class MainActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
                 startActivity(intent)
+                finish()
             } else if (user.roleid == "2") {
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
                 startActivity(intent)
+                finish()
             }
         }
         val token = SessionManager.getToken(this)

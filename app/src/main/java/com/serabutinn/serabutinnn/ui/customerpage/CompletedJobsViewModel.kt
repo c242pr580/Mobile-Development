@@ -25,34 +25,46 @@ class CompletedJobsViewModel(private val repository: UserRepository) : ViewModel
     val isSuccess2: LiveData<Boolean> = _isSuccess2
 
     fun getSession() = repository.getSession().asLiveData()
-    fun completeJob(token:String,id:String){
-        val client = ApiClient.getApiService().completeJob(token,id)
+    fun completeJob(token: String, id: String) {
+        val client = ApiClient.getApiService().completeJob(token, id)
         _isLoading.value = true
+
         client.enqueue(object : Callback<CompleteJobResponse> {
             override fun onResponse(
                 call: Call<CompleteJobResponse>,
                 response: Response<CompleteJobResponse>
             ) {
-                if(response.isSuccessful){
-                    _isLoading.value = false
-                    _isSuccess.value = true
-                    _message.value = response.body()?.message.toString()
-                }
-                else{
-                    _isLoading.value = false
-                    _message.value = response.message()
+                Log.d("Response", "onResponse: $response")
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        _isSuccess.value = true
+                        _message.value = responseBody.message ?: "Job completed successfully."
+                    } else {
+                        // Handle null body
+                        Log.e("ResponseError", "Response body is null")
+                        _message.value = "Unexpected error: Response body is null"
+                    }
+                } else {
+                    // Handle unsuccessful response
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ResponseError", "Error response: $errorBody")
+                    _message.value = errorBody ?: response.message()
                 }
             }
 
             override fun onFailure(call: Call<CompleteJobResponse>, t: Throwable) {
-                Log.e("error", t.message.toString())
+                // Log and handle failure
+                Log.e("NetworkError", "Request failed: ${t.message}")
                 _isLoading.value = false
-                _message.value = t.message.toString()
+                _message.value = "Request failed: ${t.message}"
             }
         })
     }
+
     fun ratejobs(token:String,rating:String,id:String){
-        val client = ApiClient.getApiService().ratingJob(token,rating,id)
+        val client = ApiClient.getApiService().ratingJob(token="Bearer $token",rating,id)
         client.enqueue(object : Callback<DeleteJobsResponse> {
             override fun onResponse(
                 call: Call<DeleteJobsResponse>,

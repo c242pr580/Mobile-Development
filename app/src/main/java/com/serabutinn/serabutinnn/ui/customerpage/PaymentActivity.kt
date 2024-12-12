@@ -23,6 +23,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PaymentActivity : AppCompatActivity() {
     private val viewModel by viewModels<PaymentViewModel> {
@@ -35,6 +36,8 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val jobDao = AppDataBase.getDatabase(applicationContext).jobDao()
+        jobRepository = JobRepository(jobDao)
         val intent = intent
         val action = intent.action
         val data = intent.data
@@ -53,29 +56,27 @@ class PaymentActivity : AppCompatActivity() {
         binding = ActivityPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.btnCloseSnap.setOnClickListener {
-            viewModel.getSession().observe(this){
-                viewModel.getJobDetailCust(it.token,intent.getStringExtra("id").toString())
-                viewModel.data.observe(this){data->
-                    if(data?.status=="Completed"){
-                        val intents=Intent(Intent.ACTION_VIEW, Uri.parse("serabutinn://transaction"))
-                        intents.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                    }else{
-                        Toast.makeText(this, "Finish Transaction", Toast.LENGTH_SHORT).show()
-                    }
+            viewModel.getSession().observe(this) { session ->
+                viewModel.getJobDetailCust(session.token, intent.getStringExtra("id").toString())
+                viewModel.data.observe(this) { data ->
+                    val deepLinkIntent = Intent(Intent.ACTION_VIEW, Uri.parse("serabutinn://transaction?id=${intent.getStringExtra("id").toString()}"))
+                    deepLinkIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(deepLinkIntent)
+                    finish() // Finish the current activity after starting the new one
                 }
             }
-
         }
         viewModel.getSession().observe(this) { user ->
             GlobalScope.launch(Dispatchers.IO) {
                 val job = jobRepository.getJobById(intent.getStringExtra("id").toString())
                 if (job != null) {
                     Log.d("Job", "Job ID: ${job.job_id}")
-                    binding.PaymentWebview.webViewClient = WebViewClient()
-                    openUrlFromWebView(job.payment_link)
-                    binding.PaymentWebview.settings.javaScriptEnabled = true
-                    binding.PaymentWebview.settings.supportZoom()
+                    withContext(Dispatchers.Main) {
+                        binding.PaymentWebview.webViewClient = WebViewClient()
+                        openUrlFromWebView(job.payment_link)
+                        binding.PaymentWebview.settings.javaScriptEnabled = true
+                        binding.PaymentWebview.settings.supportZoom()
+                    }
                 }else{
                     viewModel.createPayment(user.token,intent.getStringExtra("id").toString())}
                 }
@@ -134,5 +135,13 @@ class PaymentActivity : AppCompatActivity() {
         webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
         webView.loadUrl(url)
     }
-
+    override fun onDestroy() {
+        binding.PaymentWebview.apply {
+            clearCache(true)
+            clearHistory()
+            removeAllViews()
+            destroy()
+        }
+        super.onDestroy()
+    }
 }

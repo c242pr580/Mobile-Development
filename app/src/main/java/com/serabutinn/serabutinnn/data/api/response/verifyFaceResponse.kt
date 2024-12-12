@@ -26,5 +26,5 @@ data class Dataverif(
 	val threshold: Any? = null,
 
 	@field:SerializedName("verification_score")
-	val verificationScore: Int? = null
+	val verificationScore: String? = null
 )
