@@ -1,5 +1,6 @@
 package com.serabutinn.serabutinnn.ui.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -18,9 +19,6 @@ import java.text.DecimalFormatSymbols
 
 class HomePendingAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomePendingAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
-    // Store the original unaltered list
-//    private val originalsearchList = mutableListOf<DataAllJobs>()
-
     fun submitFilteredList(list: List<DataAllJobs>) {
         submitList(list)
     }
@@ -37,6 +35,7 @@ class HomePendingAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, H
     class MyViewHolder(private val binding: ItemsVertical1Binding, private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(data: DataAllJobs) {
             binding.root.setOnClickListener {
                 val intent = Intent(binding.root.context, DetailJobActivity::class.java)
@@ -106,21 +105,4 @@ class HomePendingAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, H
             }
         }
     }
-
-    // Filter function
-//    fun filter(query: String) {
-//        val filteredList = if (query.isEmpty()) {
-//            originalsearchList // Use the original list when query is empty
-//        } else {
-//            originalsearchList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
-//        }
-//        submitList(filteredList)  // Update the list using submitList
-//    }
-//
-//    // Set data method to store original list
-//    fun setData(list: List<DataAllJobs>) {
-//        originalsearchList.clear() // Clear the original list
-//        originalsearchList.addAll(list) // Add all items to the original list
-//        submitList(list)  // Display the original data initially
-//    }
 }

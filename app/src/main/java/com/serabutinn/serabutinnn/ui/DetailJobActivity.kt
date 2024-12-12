@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.databinding.ActivityDetailJobBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -32,7 +33,10 @@ class DetailJobActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        enableEdgeToEdge()
+        lightStatusBar(window)
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         val id = intent.getStringExtra("id")
         viewModel.isLoading.observe(this) {
             showLoading(it)
@@ -45,11 +49,11 @@ class DetailJobActivity : AppCompatActivity() {
         viewModel.data.observe(this) {
             val data = it
             binding.judulJob.text = data?.title
-            binding.description.text = "Deskripsi : \n" + data?.description
-            binding.location.text = "Lokasi : " + data?.location
+            binding.description.text = data?.description
+            binding.location.text = data?.location
             binding.biaya.text = data?.cost?.let { it1 -> formatToRupiah(it1) }
             binding.tvStatus.text = data?.status
-            binding.deadline.text = "Deadline : " + data?.deadline
+            binding.deadline.text = "Deadline | " + data?.deadline
             Glide.with(this)
                 .load(data?.image)
                 .centerInside()
@@ -60,40 +64,46 @@ class DetailJobActivity : AppCompatActivity() {
                 }
                 when (data.status) {
                     "Pending" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ffde21"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
+                        binding.btnUpdate.visibility = View.VISIBLE
+                        showItems()
                     }
 
                     "In Progress" -> {
                         binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
                         binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
                         binding.btnUpdate.visibility = View.GONE
+                        showItems()
                     }
 
                     "Completed" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#B2BEB5"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#36454F"))
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#ECFFEC"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#188018"))
                         binding.btnUpdate.visibility = View.GONE
+                        showItems()
                     }
                     "Canceled"-> {
                         binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FF0000"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#000000"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
                         binding.btnUpdate.visibility = View.GONE
+                        showItems()
                     }
                 }
             }
 
-            binding.imageButton4.setOnClickListener {
+            binding.ivWa.setOnClickListener {
                 if (data != null) {
                     data.phone?.let { it1 ->
                         openWhatsApp(
                             it1,
-                            "Halo saya tertarik dengan pekerjaan ${data.title}"
+                            "Halo, Saya tertarik dengan Pekerjaan ${data.title}"
                         )
                     }
                 }
             }
         }
+
         viewModel.getSession().observe(this) {
             val token = it.token
             viewModel.getJobDetailMitra(token, id.toString())
@@ -101,6 +111,19 @@ class DetailJobActivity : AppCompatActivity() {
                 viewModel.daftarKerja(token, id.toString())
                 viewModel.getJobDetailMitra(token,id.toString())
             }
+        }
+    }
+
+    private fun showItems() {
+        binding.apply {
+            btnBack.visibility = View.VISIBLE
+            tvDetailJobs.visibility = View.VISIBLE
+            ivWa.visibility = View.VISIBLE
+            tvloc.visibility = View.VISIBLE
+            tvdesc.visibility = View.VISIBLE
+            imgJob.visibility = View.VISIBLE
+            vwLine.visibility = View.VISIBLE
+            cvStatus.visibility = View.VISIBLE
         }
     }
 

@@ -16,6 +16,7 @@ import com.serabutinn.serabutinnn.ui.mitrapage.home.HomeViewModel
 import com.serabutinn.serabutinnn.ui.UpdateBioViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.CompletedJobsViewModel
 import com.serabutinn.serabutinnn.ui.customerpage.UpdateJobViewModel
+import com.serabutinn.serabutinnn.ui.mitrapage.jobs.JobsViewModel
 
 class ViewModelFactory (private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -36,6 +37,9 @@ class ViewModelFactory (private val repository: UserRepository) : ViewModelProvi
             }
             modelClass.isAssignableFrom(HomeCustomerViewModel::class.java) -> {
                 HomeCustomerViewModel(repository) as T
+            }
+            modelClass.isAssignableFrom(JobsViewModel::class.java) -> {
+                JobsViewModel(repository) as T
             }
             modelClass.isAssignableFrom(AddJobsViewModel::class.java) -> {
                 AddJobsViewModel(repository) as T

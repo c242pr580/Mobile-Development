@@ -24,7 +24,8 @@
     <string name="takeyoursubjobs">Taking tasks off your hands, simplifying your day-to-day life.</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">History</string>
+    <string name="title_history">History</string>
+    <string name="title_jobs">Jobs</string>
     <string name="title_notifications">Profile</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="action_settings">Settings</string>
@@ -64,7 +65,7 @@
     <string name="create_jobs">Create Jobs</string>
     <string name="get_jobs">Get Jobs</string>
     <string name="alamat">Location</string>
-    <string name="daftar_kerja">Daftar Kerja</string>
+    <string name="daftar_kerja">Take A Jobs</string>
     <string name="deskripsi">Deskripsi :</string>
     <string name="lokasi">Lokasi :</string>
     <string name="biaya">Biaya :</string>

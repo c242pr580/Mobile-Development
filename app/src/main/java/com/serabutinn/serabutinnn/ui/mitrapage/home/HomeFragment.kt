@@ -15,12 +15,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
-import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.FragmentHomeBinding
 import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter
 import com.serabutinn.serabutinnn.ui.adapter.HomePendingAdapter
+import com.serabutinn.serabutinnn.ui.mitrapage.jobs.JobsFragment
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class HomeFragment : Fragment() {
@@ -29,7 +29,6 @@ class HomeFragment : Fragment() {
     }
     private var homeAdapter: HomeAdapter? = null
     private var homePendingAdapter: HomePendingAdapter? = null
-    private var originalList: List<DataAllJobs> = emptyList()
     private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
@@ -92,10 +91,17 @@ class HomeFragment : Fragment() {
             showError(message)
         }
 
+        binding.ibAdd.setOnClickListener{
+            replaceFragment(JobsFragment())
+        }
 
         viewModel.data.observe(viewLifecycleOwner) { data ->
             if (data.isEmpty()) {
-                binding.ivListKosong.visibility = View.VISIBLE
+                binding.apply {
+                    ivListKosong.visibility = View.VISIBLE
+                    tvJobs.visibility = View.GONE
+                    tvJobsIn.visibility = View.GONE
+                }
             } else {
                 binding.ivListKosong.visibility = View.GONE
             }
@@ -130,6 +136,12 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+    }
+
     private fun showError(message: String) {
         AlertDialog.Builder(requireActivity())
             .setTitle("Terjadi Kesalahan")
@@ -137,8 +149,8 @@ class HomeFragment : Fragment() {
             .setPositiveButton("Okay") { _, _ -> }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        _binding = null
+//    }
 }

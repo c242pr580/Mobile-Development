@@ -5,9 +5,9 @@
     app:startDestination="@id/navigation_home_customer"
     android:id="@+id/customer_navigation">
     <fragment
-        android:id="@+id/navigation_dashboard2"
+        android:id="@+id/navigation_history2"
         android:name="com.serabutinn.serabutinnn.ui.mitrapage.history.HistoryFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_history"
         tools:layout="@layout/fragment_history" />
 
     <fragment
