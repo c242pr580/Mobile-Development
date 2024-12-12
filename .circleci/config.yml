@@ -12,14 +12,21 @@ jobs:
           name: Set Permissions for Gradle Wrapper
           command: sudo chmod +x ./gradlew
       - run:
-          name: Accept SDK Licenses
-          command: yes | sdkmanager --licenses
+          name: Accept Android SDK Licenses
+          command: (yes || true) | sdkmanager --licenses
+      - restore_cache:
+          key: gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
       - run:
           name: Dependencies Download
-          command: ./gradlew androidDependencies
+          command: ./gradlew androidDependencies --no-daemon --no-configuration-cache
+      - save_cache:
+          key: gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
+          paths:
+            - ~/.gradle/caches
+            - ~/.gradle/wrapper
       - run:
           name: Build and Test
-          command: ./gradlew lint build test
+          command: ./gradlew lint build test --no-daemon --no-configuration-cache
       - store_test_results:
           path: app/build/test-results
       - store_artifacts:
