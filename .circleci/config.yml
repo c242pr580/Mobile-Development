@@ -18,7 +18,7 @@ jobs:
           key: gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
       - run:
           name: Dependencies Download
-          command: ./gradlew --no-daemon androidDependencies
+          command: ./gradlew androidDependencies --no-daemon --no-configuration-cache
       - save_cache:
           key: gradle-cache-{{ checksum "build.gradle" }}-{{ checksum "settings.gradle" }}
           paths:
@@ -26,7 +26,7 @@ jobs:
             - ~/.gradle/wrapper
       - run:
           name: Build and Test
-          command: ./gradlew lint build test
+          command: ./gradlew lint build test --no-daemon --no-configuration-cache
       - store_test_results:
           path: app/build/test-results
       - store_artifacts:
@@ -38,3 +38,4 @@ workflows:
   build:
     jobs:
       - build-and-test
+    - build-and-test
