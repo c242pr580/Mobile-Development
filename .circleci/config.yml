@@ -12,8 +12,8 @@ jobs:
           name: Set Permissions for Gradle Wrapper
           command: sudo chmod +x ./gradlew
       - run:
-          name: Accept SDK Licenses
-          command: yes | sdkmanager --licenses
+          name: Accept Android SDK Licenses
+          command: (yes || true) | sdkmanager --licenses
       - run:
           name: Dependencies Download
           command: ./gradlew androidDependencies
