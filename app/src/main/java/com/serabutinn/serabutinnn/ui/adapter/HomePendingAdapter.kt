@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
-import com.serabutinn.serabutinnn.databinding.ItemsVerticalBinding
+import com.serabutinn.serabutinnn.databinding.ItemsVertical1Binding
 import com.serabutinn.serabutinnn.ui.DetailJobActivity
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class HomePendingAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomePendingAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     // Store the original unaltered list
 //    private val originalsearchList = mutableListOf<DataAllJobs>()
@@ -26,7 +26,7 @@ class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdap
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemsVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemsVertical1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding, id)
     }
 
@@ -34,7 +34,7 @@ class HomeAdapter(private val id: UserModel) : ListAdapter<DataAllJobs, HomeAdap
         holder.bind(getItem(position))
     }
 
-    class MyViewHolder(private val binding: ItemsVerticalBinding, private val id: UserModel) :
+    class MyViewHolder(private val binding: ItemsVertical1Binding, private val id: UserModel) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: DataAllJobs) {

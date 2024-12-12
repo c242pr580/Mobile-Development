@@ -27,8 +27,6 @@ class HomeCustomerViewModel(private val repository: UserRepository) : ViewModel(
     private val _dataBio = MutableLiveData<DataBio?>()
     val dataBio: LiveData<DataBio?> = _dataBio
     private val _filteredJobs = MutableLiveData<List<DataJobsCustomer>>()
-    val filteredJobs: LiveData<List<DataJobsCustomer>> = _filteredJobs
-
 
     fun getSession(): LiveData<UserModel> { return repository.getSession().asLiveData() }
     fun getBiodata(token:String){
@@ -69,7 +67,7 @@ class HomeCustomerViewModel(private val repository: UserRepository) : ViewModel(
                 if (!response.isSuccessful){
                     val jobs = response.body()?.data?.filterNotNull()
                     _data.value = jobs!!
-                    filterJobs(jobs) //
+                    filterJobs(jobs)
                     _message.value = response.message().toString()
                 }else{
                     _data.value = response.body()?.data?.filterNotNull()
