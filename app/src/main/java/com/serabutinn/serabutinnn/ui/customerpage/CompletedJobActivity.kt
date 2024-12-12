@@ -1,8 +1,10 @@
 package com.serabutinn.serabutinnn.ui.customerpage
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -22,9 +24,16 @@ class CompletedJobActivity : AppCompatActivity() {
         var point: Int = 0
         binding = ActivityCompletedJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val id = intent.getStringExtra("id").toString()
+        var id= ""
         viewModel.getSession().observe(this) {
             viewModel.completeJob(it.token, id)
+        }
+        val data: Uri? = intent?.data
+
+        if (data != null) {
+            id = data.getQueryParameter("id").toString() // Extract "id" parameter
+        }else{
+            Log.d("Data", "Data is null")
         }
         binding.ratingBar.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (fromUser) {
@@ -42,10 +51,12 @@ class CompletedJobActivity : AppCompatActivity() {
             } else {
                 viewModel.getSession().observe(this) { user ->
                     viewModel.completeJob(user.token, id)
-                    viewModel.ratejobs(user.token, point.toString(), id)
+                    viewModel.isSuccess.observe(this) {viewModel.ratejobs(user.token, point.toString(), id)}
+
                 }
             }
         }
+
         viewModel.isLoading.observe(this) {
             showLoading(it)
         }

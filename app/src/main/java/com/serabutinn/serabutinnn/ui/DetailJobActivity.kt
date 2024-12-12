@@ -120,23 +120,13 @@ class DetailJobActivity : AppCompatActivity() {
 
     private fun openWhatsApp(phoneNumber: String, message: String) {
         try {
-            // Encode the message
+            // Encode the message to ensure proper URL formatting
             val encodedMessage = Uri.encode(message)
+            val uri = Uri.parse("https://wa.me/62$phoneNumber?text=$encodedMessage")
 
-            // Create the WhatsApp URL
-            val url = "https://wa.me/$phoneNumber?text=$encodedMessage"
-
-            // Create the Intent
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-
-            // Start the activity
-            intent.resolveActivity(packageManager)?.let {
-                startActivity(intent)
-            } ?: run {
-                println("WhatsApp is not installed.")
-                Toast.makeText(this, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
-            }
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.setPackage("com.whatsapp")
+            startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
         }

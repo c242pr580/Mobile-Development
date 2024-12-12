@@ -151,7 +151,7 @@ interface UserApi {
         @Header("Authorization") token: String
     ): Call<ListCustomerJobsResponse>
 
-    @GET("/customer/jobs/complete/{job_id}")
+    @POST("/customer/jobs/complete/{job_id}")
     fun completeJob(
         @Header("Authorization") token: String,
         @Path("job_id") jobId: String
