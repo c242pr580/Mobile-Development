@@ -25,6 +25,7 @@ class CompletedJobActivity : AppCompatActivity() {
         binding = ActivityCompletedJobBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var id= ""
+        binding.ratingBar.rating = 0f
         viewModel.getSession().observe(this) {
             viewModel.completeJob(it.token, id)
         }
