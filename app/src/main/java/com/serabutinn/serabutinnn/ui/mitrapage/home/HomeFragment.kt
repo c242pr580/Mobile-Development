@@ -45,8 +45,6 @@ class HomeFragment : Fragment() {
             val intents =
                 Intent(Intent.ACTION_DEFAULT, Uri.parse("https://serabutinn.com/transaction"))
             startActivity(intents)
-//            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
-//            bottomNavigationView.selectedItemId = R.id.navigation_notifications
         }
         return root
 
@@ -67,7 +65,6 @@ class HomeFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Observe LiveData from the ViewModel
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             homeAdapter = HomeAdapter(user)
             homePendingAdapter = HomePendingAdapter(user)

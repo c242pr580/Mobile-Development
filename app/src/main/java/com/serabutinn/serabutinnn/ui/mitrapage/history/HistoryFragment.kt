@@ -26,8 +26,6 @@ class HistoryFragment : Fragment() {
     }
     private var _binding: FragmentHistoryBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -44,7 +42,6 @@ class HistoryFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Observe LiveData from the ViewModel
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             if (user.roleid == "1") {
                 viewModel.getCustomerJobs(user.token)

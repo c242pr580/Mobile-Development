@@ -28,12 +28,9 @@ class SplashActivity : AppCompatActivity() {
         val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         binding.logoImageView.startAnimation(fadeInAnimation)
 
-        // Simulate a delay for the splash screen (e.g., 2 seconds)
         Handler(Looper.getMainLooper()).postDelayed({
-            // Check if user is logged in
             viewModel.getSession().observe(this) { user ->
                 if (user.isLogin) {
-                    // User is logged in, navigate to Main Screen
                     when (user.roleid) {
                         "1" -> {
                             val intent = Intent(this,HomeCustomerActivity::class.java)
@@ -57,7 +54,7 @@ class SplashActivity : AppCompatActivity() {
                     finish()
                 }
             }
-            finish() // Close SplashActivity
-        }, 2500) // 2-second delay
+            finish()
+        }, 2500)
     }
 }

@@ -1,6 +1,7 @@
 package com.serabutinn.serabutinnn.ui.mitrapage.Profile
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -45,7 +46,6 @@ class ProfileFragment : Fragment() {
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                // The file can now be sent directly
                 sendFile(photoFile)
             } else {
                 Toast.makeText(requireContext(), "Failed to capture image", Toast.LENGTH_SHORT)
@@ -98,6 +98,7 @@ class ProfileFragment : Fragment() {
         return root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
@@ -105,8 +106,12 @@ class ProfileFragment : Fragment() {
             if(user.roleid=="2"){
                 viewModel.getDetailMitra(user.token, user.id)
             }
-
         }
+        val ratingBar2 = binding.ratingBar2
+        ratingBar2.isClickable = false
+        ratingBar2.isFocusable = false
+        ratingBar2.isFocusableInTouchMode = false
+        ratingBar2.setOnTouchListener { _, _ -> true }
         viewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
@@ -269,6 +274,7 @@ class ProfileFragment : Fragment() {
         pickImageLauncher.launch("image/*")
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = requireContext().getExternalFilesDir(null)
@@ -277,6 +283,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun copyUriToFile(uri: Uri): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = requireContext().getExternalFilesDir(null)
@@ -302,12 +309,10 @@ class ProfileFragment : Fragment() {
         val compressedFile = File(requireContext().cacheDir, "compressed_${file.name}")
         val outputStream = FileOutputStream(compressedFile)
 
-        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
         outputStream.flush()
         outputStream.close()
 
-        // Verify the size is under 1MB, reduce quality further if needed
         while (compressedFile.length() > 1_000_000) {
             val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
             compressedFile.delete()

@@ -59,6 +59,7 @@ class UpdateBioActivity : AppCompatActivity() {
         viewModel.isSuccess.observe(this){
             if(it){
                 hideLoading()
+                showToast("Berhasil Mengupdate Biodata")
                 finish()
             }
         }

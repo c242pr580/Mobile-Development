@@ -56,7 +56,7 @@ class FaceCameraActivity : AppCompatActivity() {
         }
         viewModel.isSuccess.observe(this) {
             if (it) {
-                Toast.makeText(this, "Upload Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Upload Face Success", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeCustomerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -103,12 +103,10 @@ class FaceCameraActivity : AppCompatActivity() {
         val compressedFile = File(cacheDir, "compressed_${file.name}")
         val outputStream = FileOutputStream(compressedFile)
 
-        // Compress the image to JPEG format and reduce quality to ensure it stays under 1MB
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
         outputStream.flush()
         outputStream.close()
 
-        // Verify the size is under 1MB, reduce quality further if needed
         while (compressedFile.length() > 1_000_000) {
             val reducedQualityBitmap = BitmapFactory.decodeFile(compressedFile.path)
             compressedFile.delete()

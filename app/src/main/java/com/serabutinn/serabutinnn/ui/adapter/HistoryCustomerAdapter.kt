@@ -103,17 +103,15 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
         }
     }
 
-    // Filter function
     fun filter(query: String) {
         val filteredList = if (query.isEmpty()) {
-            originalList // Use the original list when query is empty
+            originalList
         } else {
             originalList.filter { it.title?.contains(query, ignoreCase = true) ?: false }
         }
-        submitList(filteredList)  // Update the list using submitList
+        submitList(filteredList)
     }
 
-    // Set data method to store original list
     fun setData(list: List<DataJobsCustomer>) {
         originalList.clear()
         originalList.addAll(list)

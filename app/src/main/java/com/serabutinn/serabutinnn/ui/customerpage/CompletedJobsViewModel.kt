@@ -42,12 +42,10 @@ class CompletedJobsViewModel(private val repository: UserRepository) : ViewModel
                         _isSuccess.value = true
                         _message.value = responseBody.message ?: "Job completed successfully."
                     } else {
-                        // Handle null body
                         Log.e("ResponseError", "Response body is null")
                         _message.value = "Unexpected error: Response body is null"
                     }
                 } else {
-                    // Handle unsuccessful response
                     val errorBody = response.errorBody()?.string()
                     Log.e("ResponseError", "Error response: $errorBody")
                     _message.value = errorBody ?: response.message()

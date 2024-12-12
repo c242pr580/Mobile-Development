@@ -73,7 +73,7 @@ class AddJobsActivity : AppCompatActivity() {
         }
         viewModel.isSuccess.observe(this) {
             if (it) {
-                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Success creating Job", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeCustomerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)

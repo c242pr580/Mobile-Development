@@ -28,7 +28,7 @@ class SignupActivity : AppCompatActivity() {
         val view = binding.root
         lightStatusBar(window)
         setContentView(view)
-        // Spinner Drop down elements
+
         val categories: MutableList<String> = ArrayList()
         categories.add("Customer")
         categories.add("Mitra")
@@ -42,12 +42,12 @@ class SignupActivity : AppCompatActivity() {
             if (it) {
                 val email = binding.txtInputEmail.text.toString()
                 val pwd = binding.txtPass.text.toString()
-                Toast.makeText(this, "Berhasil daftar", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Registration Success", Toast.LENGTH_LONG).show()
                     viewModel.loginCustomer(email, pwd)
             } else {
                 AlertDialog.Builder(this).apply {
                     setTitle("Oops!")
-                    setMessage("Gagal Register")
+                    setMessage("Failed Register")
                     setPositiveButton("OK") { _, _ ->
                         finish()
                     }
@@ -67,13 +67,12 @@ class SignupActivity : AppCompatActivity() {
         }
         viewModel.loggedIn.observe(this) {
             if (it) {
-                stopLoading()
                 navigateToHome()
             } else {
                 stopLoading()
                 AlertDialog.Builder(this).apply {
                     setTitle("Oops!")
-                    setMessage("Login Gagal")
+                    setMessage("Login Failed")
                     setPositiveButton("OK") { _, _ ->
                     }
                 }.show()
@@ -83,11 +82,13 @@ class SignupActivity : AppCompatActivity() {
     private fun navigateToHome() {
         viewModel.getSession().observe(this) { user ->
             if (user.roleid == "1") {
+                stopLoading()
                 val intent = Intent(this, FaceCameraActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
             } else if (user.roleid == "2") {
+                stopLoading()
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
