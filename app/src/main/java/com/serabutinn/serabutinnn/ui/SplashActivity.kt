@@ -36,14 +36,12 @@ class SplashActivity : AppCompatActivity() {
                             val intent = Intent(this,HomeCustomerActivity::class.java)
                             intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)
-                            finish()
                         }
 
                         "2" -> {
                             val intent = Intent(this,HomeActivity::class.java)
                             intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)
-                            finish()
                         }
                     }
                 }
@@ -51,10 +49,9 @@ class SplashActivity : AppCompatActivity() {
                     val intent = Intent(this,MainActivity2::class.java)
                     intent.flags=Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
-                    finish()
+
                 }
             }
-            finish()
         }, 2500)
     }
 }
