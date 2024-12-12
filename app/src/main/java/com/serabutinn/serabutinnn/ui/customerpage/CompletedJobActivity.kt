@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.serabutinn.serabutinnn.databinding.ActivityCompletedJobBinding
+import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class CompletedJobActivity : AppCompatActivity() {
@@ -19,7 +20,7 @@ class CompletedJobActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCompletedJobBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        lightStatusBar(window)
         var point: Int = 0
         binding = ActivityCompletedJobBinding.inflate(layoutInflater)
         setContentView(binding.root)

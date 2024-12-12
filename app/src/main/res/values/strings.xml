@@ -42,6 +42,8 @@
     <string name="back">Back</string>
     <string name="promojobs">Don’t Miss Out on These Exciting Opportunities!</string>
     <string name="detailjobs">Detail Jobs</string>
+    <string name="ratingjobs">Add Rating</string>
+    <string name="addratingjobs">Add Rating Jobs</string>
     <string name="log_out">Log Out</string>
     <string name="title_activity_main_customer">MainCustomerActivity</string>
     <string name="add_jobs">add Jobs</string>

@@ -48,10 +48,10 @@ class UpdateBioActivity : AppCompatActivity() {
                 else if(title=="Location"){
                     viewModel.updateBio(user.token,null,null,binding.inputan.text.toString())
                 }
-                else if(title=="Nama Bisnis"){
+                else if(title=="Business Name"){
                     viewModel.updateMitra(user.token,binding.inputan.text.toString(),"")
                 }
-                else if(title=="Alamat Bisnis"){
+                else if(title=="Business Address"){
                     viewModel.updateMitra(user.token,"",binding.inputan.text.toString())
                 }
             }
