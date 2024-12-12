@@ -11,22 +11,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.data.api.response.DataAllJobs
 import com.serabutinn.serabutinnn.databinding.FragmentHomeBinding
 import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter
+import com.serabutinn.serabutinnn.ui.adapter.HomePendingAdapter
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
 
 class HomeFragment : Fragment() {
     private val viewModel by viewModels<HomeViewModel> {
         ViewModelFactory.getInstance(requireActivity())
     }
-
+    private var homeAdapter: HomeAdapter? = null
+    private var homePendingAdapter: HomePendingAdapter? = null
+    private var originalList: List<DataAllJobs> = emptyList()
     private var _binding: FragmentHomeBinding? = null
 
     private val binding get() = _binding!!
@@ -39,8 +42,9 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        binding.Profile.setOnClickListener{
-            val intents=Intent(Intent.ACTION_DEFAULT, Uri.parse("https://serabutinn.com/transaction"))
+        binding.Profile.setOnClickListener {
+            val intents =
+                Intent(Intent.ACTION_DEFAULT, Uri.parse("https://serabutinn.com/transaction"))
             startActivity(intents)
 //            val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigation)
 //            bottomNavigationView.selectedItemId = R.id.navigation_notifications
@@ -48,6 +52,7 @@ class HomeFragment : Fragment() {
         return root
 
     }
+
     fun handleBackPress() {
         if (backPressedOnce) {
             activity?.finishAffinity() // Exit the app
@@ -65,12 +70,15 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Observe LiveData from the ViewModel
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
+            homeAdapter = HomeAdapter(user)
+            homePendingAdapter = HomePendingAdapter(user)
             viewModel.findJobs(user)
             viewModel.getBiodata(user.token)
         }
-        viewModel.dataBio.observe(viewLifecycleOwner){
+        viewModel.dataBio.observe(viewLifecycleOwner) {
+            showItems()
             if (it != null) {
-                binding.tvHiNama.text="Hi, ${it.name}"
+                binding.tvHiNama.text = "Hi, ${it.name}"
                 Glide.with(this)
                     .load(it.profilePicture)
                     .circleCrop()
@@ -83,32 +91,28 @@ class HomeFragment : Fragment() {
         viewModel.message.observe(viewLifecycleOwner) { message ->
             showError(message)
         }
+
+
         viewModel.data.observe(viewLifecycleOwner) { data ->
-            showItems()
-            if(data.isEmpty()){
-                binding.ivListKosong.visibility=View.VISIBLE
-            }else{
-                binding.ivListKosong.visibility=View.GONE
+            if (data.isEmpty()) {
+                binding.ivListKosong.visibility = View.VISIBLE
+            } else {
+                binding.ivListKosong.visibility = View.GONE
             }
-            setJobsData(data)
+            val pendingJobs = data.filter { it.status == "Pending" }
+            val inProgressJobs = data.filter { it.status == "In Progress" }
 
+            homePendingAdapter?.submitFilteredList(pendingJobs)
+            homeAdapter?.submitFilteredList(inProgressJobs)
+            binding.apply {
+                rvJobs.adapter = homePendingAdapter
+                rvJobsIn.adapter = homeAdapter
+            }
         }
-        val layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvJobs.layoutManager = layoutManager
-
-
-    }
-
-    private fun setJobsData(consumerReviews: List<DataAllJobs>) {
-        viewModel.getSession().observe(viewLifecycleOwner) { user ->
-            val adapter = HomeAdapter(user)
-//            binding.textInputEditText22.addTextChangedListener{ text ->
-//                adapter.filter(text.toString())
-//            }
-            adapter.submitList(consumerReviews)
-//            adapter.setData(consumerReviews)
-            binding.rvJobs.adapter = adapter
+        binding.apply {
+            rvJobs.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            rvJobsIn.layoutManager = GridLayoutManager(context, 2)
         }
     }
 
@@ -121,11 +125,10 @@ class HomeFragment : Fragment() {
             cview.visibility = View.VISIBLE
             Llitems.visibility = View.VISIBLE
             cardView2.visibility = View.VISIBLE
-            horizontalScrollViewHome2.visibility =  View.VISIBLE
+            horizontalScrollViewHome2.visibility = View.VISIBLE
             tvPromo.visibility = View.VISIBLE
         }
     }
-
 
     private fun showError(message: String) {
         AlertDialog.Builder(requireActivity())

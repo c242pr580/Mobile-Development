@@ -18,6 +18,8 @@
     <string name="makeyourjob">Make Your Work Real!</string>
     <string name="takeyourjob">Get The Jobs Real!</string>
     <string name="recentjobs">Recent Jobs</string>
+    <string name="pendingjobs">All Available Jobs</string>
+    <string name="inprogressjobs">Jobs In Progress</string>
     <string name="makeyoursubjob">Making, cleaning, or helping with daily chores.</string>
     <string name="takeyoursubjobs">Taking tasks off your hands, simplifying your day-to-day life.</string>
     <string name="title_activity_home">HomeActivity</string>
@@ -60,6 +62,7 @@
     <string name="kamera">Camera</string>
     <string name="galeri">Galery</string>
     <string name="create_jobs">Create Jobs</string>
+    <string name="get_jobs">Get Jobs</string>
     <string name="alamat">Location</string>
     <string name="daftar_kerja">Daftar Kerja</string>
     <string name="deskripsi">Deskripsi :</string>
