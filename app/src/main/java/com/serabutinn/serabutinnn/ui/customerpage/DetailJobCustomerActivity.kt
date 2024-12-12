@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.ActivityDetailJobCustomerBinding
 import com.serabutinn.serabutinnn.lightStatusBar
 import com.serabutinn.serabutinnn.viewmodel.ViewModelFactory
@@ -76,7 +77,16 @@ class DetailJobCustomerActivity : AppCompatActivity() {
             }
             binding.tvStatus.text = data?.status
             binding.deadline.text = "Deadline | " + data?.deadline
-            Glide.with(this).load(data?.image).centerInside().into(binding.imgJob)
+            if(data?.image==null){
+                Glide.with(binding.root)
+                    .load(R.drawable.serabutinn_notext)
+                    .centerCrop()
+                    .into(binding.imgJob)
+            }
+            else{Glide.with(binding.root)
+                .load(data.image)
+                .centerCrop()
+                .into(binding.imgJob)}
             if (data != null) {
                 if (data.image == null) {
                     binding.imgJob.visibility = View.GONE

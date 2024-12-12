@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.databinding.FragmentHomeBinding
+import com.serabutinn.serabutinnn.ui.HomeActivity
 import com.serabutinn.serabutinnn.ui.adapter.HomeAdapter
 import com.serabutinn.serabutinnn.ui.adapter.HomePendingAdapter
 import com.serabutinn.serabutinnn.ui.mitrapage.jobs.JobsFragment
@@ -42,9 +43,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.Profile.setOnClickListener {
-            val intents =
-                Intent(Intent.ACTION_DEFAULT, Uri.parse("https://serabutinn.com/transaction"))
-            startActivity(intents)
+            (activity as? HomeActivity)?.switchToProfileTab()
         }
         return root
 
@@ -89,7 +88,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.ibAdd.setOnClickListener{
-            replaceFragment(JobsFragment())
+            (activity as? HomeActivity)?.switchToJobsTab()
         }
 
         viewModel.data.observe(viewLifecycleOwner) { data ->

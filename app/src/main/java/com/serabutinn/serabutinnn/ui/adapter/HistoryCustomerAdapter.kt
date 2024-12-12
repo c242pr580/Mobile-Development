@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.serabutinn.serabutinnn.R
 import com.serabutinn.serabutinnn.data.api.UserModel
 import com.serabutinn.serabutinnn.data.api.response.DataJobsCustomer
 import com.serabutinn.serabutinnn.databinding.ItemsVerticalBinding
@@ -45,10 +46,16 @@ class HistoryCustomerAdapter(private val id: UserModel) : ListAdapter<DataJobsCu
             binding.tvWaktu.text = "Deadline | ${data.deadline}"
             binding.tvStatus.text = data.status
             binding.lokasi.text = data.location
-            Glide.with(binding.root)
+            if(data.image==null){
+                Glide.with(binding.root)
+                    .load(R.drawable.serabutinn_notext)
+                    .centerInside()
+                    .into(binding.imgJobs)
+            }
+            else{Glide.with(binding.root)
                 .load(data.image)
-                .centerCrop()
-                .into(binding.imgJobs)
+                .centerInside()
+                .into(binding.imgJobs)}
             if (data.mitraId == id.id && id.roleid == "2") {
                 binding.takenbyyou.visibility = View.VISIBLE
             } else {

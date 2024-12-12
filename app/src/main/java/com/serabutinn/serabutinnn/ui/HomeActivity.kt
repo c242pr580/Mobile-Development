@@ -86,4 +86,15 @@ class HomeActivity : AppCompatActivity() {
             .replace(R.id.fragmentContainer, fragment)
             .commit()
     }
+
+    fun switchToProfileTab() {
+        currentFragmentId = R.id.navigation_notifications
+        binding.bottomNavigation.selectedItemId = R.id.navigation_notifications
+        replaceFragment(ProfileFragment())
+    }
+    fun switchToJobsTab() {
+        currentFragmentId = R.id.navigation_jobs
+        binding.bottomNavigation.selectedItemId = R.id.navigation_jobs
+        replaceFragment(JobsFragment())
+    }
 }
