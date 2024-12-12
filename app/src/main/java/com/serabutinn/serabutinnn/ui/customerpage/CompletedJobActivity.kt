@@ -50,7 +50,7 @@ class CompletedJobActivity : AppCompatActivity() {
                 Toast.makeText(this, "Fill up Rating", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.getSession().observe(this) { user ->
-                    viewModel.completeJob(user.token, id)
+                    viewModel.ratejobs(user.token,point.toString(), id)
                     viewModel.isSuccess.observe(this) {viewModel.ratejobs(user.token, point.toString(), id)}
 
                 }

@@ -26,7 +26,7 @@ class CompletedJobsViewModel(private val repository: UserRepository) : ViewModel
 
     fun getSession() = repository.getSession().asLiveData()
     fun completeJob(token: String, id: String) {
-        val client = ApiClient.getApiService().completeJob(token, id)
+        val client = ApiClient.getApiService().completeJob(token="Bearer $token", id)
         _isLoading.value = true
 
         client.enqueue(object : Callback<CompleteJobResponse> {

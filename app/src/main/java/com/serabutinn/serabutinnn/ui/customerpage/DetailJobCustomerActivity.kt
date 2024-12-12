@@ -59,6 +59,11 @@ class DetailJobCustomerActivity : AppCompatActivity() {
         binding = ActivityDetailJobCustomerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.isLoading.observe(this) {
+            viewModel.isSuccess.observe(this){success->
+                if(!success){
+                    showLoading(true)
+                }
+            }
             showLoading(it)
         }
 
