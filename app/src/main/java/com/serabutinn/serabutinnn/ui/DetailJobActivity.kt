@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -63,15 +62,15 @@ class DetailJobActivity : AppCompatActivity() {
                 }
                 when (data.status) {
                     "Pending" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFDA44"))
                         binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
                         binding.btnUpdate.visibility = View.VISIBLE
                         showItems()
                     }
 
                     "In Progress" -> {
-                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#5ce65c"))
-                        binding.tvStatus.setTextColor(Color.parseColor("#0f4d0f"))
+                        binding.cvStatus.setCardBackgroundColor(Color.parseColor("#FFA500"))
+                        binding.tvStatus.setTextColor(Color.parseColor("#FFFFFF"))
                         binding.btnUpdate.visibility = View.GONE
                         showItems()
                     }
