@@ -27,4 +27,3 @@ Mobile Development team responsibility is to Create an Android application, Coll
 
 ### Profile
 <img src="https://storage.googleapis.com/serabutinn-bucket/apps/PROFILE%20PAGE.jpeg" width="200">
-<img src="https://storage.googleapis.com/serabutinn-bucket/apps/PROFILE%20MITRA.jpeg" width="200">
